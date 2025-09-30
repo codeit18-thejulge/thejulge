@@ -1,6 +1,6 @@
 ---
 name: feat
-title: "[feat ] "
+title: "[feat] "
 labels: feature
 assignees: ""
 ---
