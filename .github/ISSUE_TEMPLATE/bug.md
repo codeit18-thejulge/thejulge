@@ -1,9 +1,9 @@
 ---
 name: bug
 title: "[bug] "
-about: 버그 수정
+about: 어떤 버그가 일어났는지
 labels: bug
 assignees: ""
 ---
 
-## 수정사항
+## 어떤 상황인지
