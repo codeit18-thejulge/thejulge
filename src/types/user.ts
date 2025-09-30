@@ -15,6 +15,20 @@ export interface User {
   phone?: string;
   address?: string;
   bio?: string;
+  shop?: {
+    item: Shop;
+  } | null;
+}
+
+export interface Shop {
+  id: string;
+  name: string;
+  category: string;
+  address1: string;
+  address2: string;
+  description: string;
+  imageUrl: string;
+  originalHourlyPay: number;
 }
 
 export interface SignupRequest extends Pick<User, "email" | "type"> {
