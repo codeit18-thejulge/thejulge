@@ -1,6 +1,7 @@
 ---
 name: feat
 title: "[feat] "
+about: 새로운 기능을 구현합니다
 labels: feature
 assignees: ""
 ---
