@@ -10,7 +10,9 @@ const postLogin = async ({ email, password }: LoginRequest): Promise<LoginRespon
 export const useLoginQuery = () => {
   return useMutation({
     mutationFn: postLogin,
-    onSuccess: () => {},
+    onSuccess: (res) => {
+      localStorage.setItem("accessToken", res.item.token);
+    },
     onError: () => {},
   });
 };
