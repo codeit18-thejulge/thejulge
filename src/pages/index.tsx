@@ -1,9 +1,11 @@
+import { useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInfoQuery";
 import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
 import { useLoginQuery } from "@/hooks/api/user/useLoginQuery";
 
 export default function Home() {
   const { mutate: postLogin } = useLoginQuery();
   const { mutate: postShop } = usePostShopQuery();
+  const { data: shopInfo } = useGetShopInfoQuery("63cf0bb8-f2a1-4ad4-89ad-a8d2dbf36687");
 
   const handlePostShop = () => {
     postShop({
