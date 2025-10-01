@@ -1,11 +1,12 @@
 import Logo from "@/assets/svgs/logo-md.svg";
-import IcSearch from "@/assets/svgs/ic_search.svg";
-import IcNoti from "@/assets/svgs/ic_notification.svg";
 import Link from "next/link";
 import { cn } from "@/utils";
+import SearchInput from "./SearchInput";
+import { useState } from "react";
+import UserHeader from "./UserHeader";
 
 const Header = () => {
-  const searchPhrase = "가게 이름으로 찾아보세요";
+  const [inputValue, setInputValue] = useState("");
 
   return (
     <header role="banner" className={cn("w-full sticky flex justify-center")}>
@@ -19,44 +20,8 @@ const Header = () => {
             <Logo className={cn("w-84 tablet:w-112")} />
           </Link>
 
-          {/* Search Component */}
-          <div
-            className={cn(
-              "bg-gray-10 rounded-10 w-full tablet:max-w-450 flex items-center p-8 tablet:p-10 gap-8 tablet:gap-10 order-3 tablet:order-2",
-            )}
-          >
-            <IcSearch className={cn("w-16 tablet:w-20")} />
-            <input
-              type="text"
-              id="search"
-              placeholder={searchPhrase}
-              className={cn(
-                "w-full h-20 bg-inherit text-12-regular tablet:text-14-regular placeholder-gray-40 outline-none",
-              )}
-            />
-          </div>
-
-          {/* UserHeader Component */}
-          <nav className={cn("h-30 tablet:h-40 ml-auto flex shrink-0 order-2 tablet:order-3")}>
-            {/* 사장-로그인 */}
-            <ul className={cn("flex items-center gap-16 desktop:gap-40")}>
-              <li>
-                <Link href="" className={cn("text-14-bold tablet:text-16-bold")}>
-                  내 가게
-                </Link>
-              </li>
-              <li>
-                <Link href="" className={cn("text-14-bold tablet:text-16-bold")}>
-                  로그아웃
-                </Link>
-              </li>
-              <li>
-                <button aria-label="알림 열기" className="flex">
-                  <IcNoti className={cn("w-20 tablet:w-24 text-primary")} />
-                </button>
-              </li>
-            </ul>
-          </nav>
+          <SearchInput value={inputValue} onChange={setInputValue} />
+          <UserHeader />
         </div>
       </div>
     </header>
