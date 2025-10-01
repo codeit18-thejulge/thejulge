@@ -1,4 +1,4 @@
-import { SeoulAddress } from "./user";
+import { Link, SeoulAddress, User } from "./user";
 
 export interface Shop {
   id: string;
@@ -9,4 +9,13 @@ export interface Shop {
   description: string;
   imageUrl: string;
   originalHourlyPay: number;
+}
+
+export type ShopRequest = Omit<Shop, "id">;
+
+export interface ShopResponse extends Shop {
+  user: {
+    item: Omit<User, "shop">;
+  };
+  links: Link[];
 }
