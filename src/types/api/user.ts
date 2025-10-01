@@ -1,3 +1,5 @@
+import { Shop } from "./shop";
+
 export interface Link {
   rel: string;
   description: string;
@@ -18,17 +20,6 @@ export interface User {
   shop?: {
     item: Shop;
   } | null;
-}
-
-export interface Shop {
-  id: string;
-  name: string;
-  category: string;
-  address1: string;
-  address2: string;
-  description: string;
-  imageUrl: string;
-  originalHourlyPay: number;
 }
 
 export interface SignupRequest extends Pick<User, "email" | "type"> {
