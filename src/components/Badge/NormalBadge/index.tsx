@@ -8,7 +8,7 @@ const STATUS = {
 };
 
 interface StatusProps {
-  status: keyof typeof STATUS; // status는 STATUS의 키값 중 하나
+  status: keyof typeof STATUS; // status는 STATUS의 키값 중 하나임
 }
 
 // normal 배지
