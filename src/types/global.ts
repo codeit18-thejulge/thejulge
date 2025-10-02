@@ -1,5 +1,3 @@
-import { Shop } from "./shop";
-
 export interface Link {
   rel: string;
   description: string;
@@ -9,50 +7,9 @@ export interface Link {
   query?: { [key: string]: unknown };
 }
 
-export interface User {
-  id: string;
-  email: string;
-  type: "employee" | "employer";
-  name?: string;
-  phone?: string;
-  address?: string;
-  bio?: string;
-  shop?: {
-    item: Shop;
-  } | null;
-}
+export type ShopCategory = "한식 " | "중식 " | "일식 " | "양식 " | "분식 " | "카페 " | "편의점 " | "기타";
 
-export interface SignupRequest extends Pick<User, "email" | "type"> {
-  password: string;
-}
-
-export interface SignupResponse {
-  item: Pick<User, "id" | "email" | "type">;
-  links: Link[];
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  item: {
-    token: string;
-    user: {
-      item: User;
-      href: string;
-    };
-  };
-  links: Link[];
-}
-
-export interface PutMyInfoRequest {
-  name: string;
-  phone: string;
-  address: SeoulAddress;
-  bio: string;
-}
+export type UserType = "employee" | "employer";
 
 export type SeoulAddress =
   | "서울시 종로구"
