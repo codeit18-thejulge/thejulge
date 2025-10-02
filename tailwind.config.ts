@@ -29,8 +29,9 @@ const config: Config = {
       },
       colors: {
         white: "var(--white)",
-        //black: "var(--black)",
+        black: "var(--black)",
         primary: "var(--primary)",
+        'black-overlay': 'rgba(0, 0, 0, 0.7)',
         gray: {
           5: "var(--gray-5)",
           10: "var(--gray-10)",
