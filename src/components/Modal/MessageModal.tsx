@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from ".";
+import ModalBasic from ".";
 import { cn } from "@/utils";
 
 interface ButtonConfig {
@@ -8,7 +8,7 @@ interface ButtonConfig {
   variant?: "primary" | "secondary";
 }
 
-interface ActionModalProps {
+interface MessageModalProps {
   isOpen: boolean;
   icon?: React.ReactNode;
   message: string;
@@ -18,7 +18,7 @@ interface ActionModalProps {
   closeOnEsc?: boolean;
 }
 
-const ActionModal = ({
+const MessageModal = ({
   isOpen,
   icon,
   message,
@@ -26,9 +26,9 @@ const ActionModal = ({
   actions,
   closeOnOverlayClick = true,
   closeOnEsc = true,
-}: ActionModalProps) => {
+}: MessageModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={closeOnOverlayClick} closeOnEsc={closeOnEsc}>
+    <ModalBasic isOpen={isOpen} onClose={onClose} closeOnOverlayClick={closeOnOverlayClick} closeOnEsc={closeOnEsc}>
       <div className="flex flex-col items-center gap-16 tablet:gap-26 text-center">
         {icon && <div className="mt-4">{icon}</div>}
         <p className="text-black">{message}</p>
@@ -47,8 +47,8 @@ const ActionModal = ({
           ))}
         </div>
       </div>
-    </Modal>
+    </ModalBasic>
   );
 };
 
-export default ActionModal;
+export default MessageModal;

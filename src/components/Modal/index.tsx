@@ -9,7 +9,7 @@ interface ModalProps {
   closeOnEsc?: boolean;
 }
 
-const Modal = ({ isOpen, onClose, children, closeOnOverlayClick = true, closeOnEsc = true }: ModalProps) => {
+const ModalBasic = ({ isOpen, onClose, children, closeOnOverlayClick = true, closeOnEsc = true }: ModalProps) => {
   useEffect(() => {
     if (!isOpen || !closeOnEsc) {
       return;
@@ -47,4 +47,4 @@ const Modal = ({ isOpen, onClose, children, closeOnOverlayClick = true, closeOnE
   );
 };
 
-export default Modal;
+export default ModalBasic;
