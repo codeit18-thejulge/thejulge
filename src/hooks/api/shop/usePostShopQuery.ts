@@ -1,8 +1,12 @@
-import { ShopRequest, ShopResponse } from "@/types/api/shop";
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
+import { ShopRequest, ShopResponse } from "./shop";
 
-const postShop = async (data: ShopRequest): Promise<ShopResponse> => {
+export type PostShopRequest = ShopRequest;
+
+export type PostShopResponse = ShopResponse;
+
+const postShop = async (data: PostShopRequest): Promise<PostShopResponse> => {
   const response = await instance.post("/shops", data);
   return response.data;
 };
