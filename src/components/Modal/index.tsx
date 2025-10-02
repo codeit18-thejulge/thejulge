@@ -33,10 +33,13 @@ const Modal = ({ isOpen, onClose, children, closeOnOverlayClick = true, closeOnE
 
   return createPortal(
     <div
-      className="bg-black bg-opacity-70 z-50 inset-0 fixed flex justify-center items-center"
+      className="bg-black/70 z-50 inset-0 fixed flex justify-center items-center p-24"
       onClick={closeOnOverlayClick ? onClose : undefined}
     >
-      <div className="bg-white w-full max-w-[540px] rounded-lg p-24" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="bg-white w-full max-w-[540px] min-h-[220px] tablet:min-h-[250px] rounded-lg p-24"
+        onClick={(e) => e.stopPropagation()}
+      >
         {children}
       </div>
     </div>,

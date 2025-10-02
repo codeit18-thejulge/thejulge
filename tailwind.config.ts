@@ -29,7 +29,7 @@ const config: Config = {
       },
       colors: {
         white: "var(--white)",
-        black: "var(--black)",
+        //black: "var(--black)",
         primary: "var(--primary)",
         gray: {
           5: "var(--gray-5)",
