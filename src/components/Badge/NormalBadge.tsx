@@ -11,7 +11,7 @@ interface StatusProps {
 }
 
 // normal 배지
-const NormalBadge: React.FC<StatusProps> = ({ status }) => {
+const NormalBadge = ({ status }:StatusProps) => {
   const currentStatus = status ?? "pending";
 
   return (
