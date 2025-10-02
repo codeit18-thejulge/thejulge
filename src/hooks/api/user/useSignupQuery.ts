@@ -1,6 +1,21 @@
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
-import { SignupRequest, SignupResponse } from "@/types/user";
+import { Link, UserType } from "@/types/global";
+
+export interface SignupRequest {
+  email: string;
+  password: string;
+  type: UserType;
+}
+
+export interface SignupResponse {
+  item: {
+    id: string;
+    email: string;
+    type: UserType;
+  };
+  links: Link[];
+}
 
 const postSignup = async ({ email, password, type }: SignupRequest): Promise<SignupResponse> => {
   const response = await instance.post("/users", { email, password, type });
