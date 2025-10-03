@@ -31,9 +31,27 @@ export interface ShopItem {
   originalHourlyPay: number;
 }
 
-export interface NoticeItem {}
+export interface NoticeItem {
+  id: string;
+  hourlyPay: number;
+  startsAt: string;
+  workhour: number;
+  description: string;
+  closed: boolean;
+}
 
-export interface AlertItem {}
+export interface AlertItem {
+  id: string;
+  createdAt: string;
+  result: ResultStatus;
+  read: boolean;
+}
+
+export interface ApplicationItem {
+  id: string;
+  status: ApplicationStatus;
+  createdAt: string;
+}
 
 export type ShopCategory = "한식 " | "중식 " | "일식 " | "양식 " | "분식 " | "카페 " | "편의점 " | "기타";
 
@@ -65,3 +83,7 @@ export type SeoulAddress =
   | "서울시 강남구"
   | "서울시 송파구"
   | "서울시 강동구";
+
+export type ApplicationStatus = "pending" | "accepted" | "rejected" | "canceled";
+
+export type ResultStatus = "accepted" | "rejected";
