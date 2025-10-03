@@ -1,16 +1,19 @@
-import { SeoulAddress } from "@/types/global";
+import { UserInfoItem } from "@/types/global";
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
-import { GetMyInfoResponse } from "./useGetMyInfoQuery";
+import { UserItem, ShopItem, Link } from "@/types/global";
 
-export interface PutMyInfoRequest {
-  name: string;
-  phone: string;
-  address: SeoulAddress;
-  bio: string;
+export type PutMyInfoRequest = UserInfoItem;
+
+export interface PutMyInfoResponse {
+  item: UserItem &
+    Partial<UserInfoItem> & {
+      shop: {
+        item: ShopItem;
+      } | null;
+    };
+  links: Link[];
 }
-
-export type PutMyInfoResponse = GetMyInfoResponse;
 
 const putMyInfo = async ({ userId, data }: { userId: string; data: PutMyInfoRequest }): Promise<PutMyInfoResponse> => {
   const response = await instance.put(`/users/${userId}`, data);

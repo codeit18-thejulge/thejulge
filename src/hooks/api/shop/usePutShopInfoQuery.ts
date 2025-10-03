@@ -1,13 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import { instance } from "@/utils/instance";
-import { ShopRequest, ShopResponse } from "./shop";
+import { Link, ShopItem, UserInfoItem, UserItem } from "@/types/global";
 
 export interface PutShopInfoRequest {
   shopId: string;
-  data: ShopRequest;
+  data: ShopItem;
 }
 
-export type PutShopInfoResponse = ShopResponse;
+export type PutShopInfoResponse = {
+  item: ShopItem & {
+    user: {
+      item: UserItem & Partial<UserInfoItem>;
+      href: string;
+    };
+  };
+  links: Link[];
+};
 
 const putShopInfo = async ({ shopId, data }: PutShopInfoRequest): Promise<PutShopInfoResponse> => {
   const response = await instance.put(`/shops/${shopId}`, data);

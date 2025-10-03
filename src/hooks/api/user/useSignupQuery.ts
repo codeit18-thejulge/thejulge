@@ -1,6 +1,6 @@
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
-import { Link, UserType } from "@/types/global";
+import { Link, UserItem, UserType } from "@/types/global";
 
 export interface SignupRequest {
   email: string;
@@ -9,11 +9,7 @@ export interface SignupRequest {
 }
 
 export interface SignupResponse {
-  item: {
-    id: string;
-    email: string;
-    type: UserType;
-  };
+  item: UserItem;
   links: Link[];
 }
 

@@ -1,4 +1,4 @@
-import { UserType } from "@/types/global";
+import { UserInfoItem, UserItem, UserType } from "@/types/global";
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
 
@@ -11,15 +11,7 @@ export interface LoginResponse {
   item: {
     token: string;
     user: {
-      item: {
-        id: string;
-        email: string;
-        type: UserType;
-        name: string;
-        phone: string;
-        address: string;
-        bio: string;
-      };
+      item: UserItem & UserInfoItem;
       href: string;
     };
   };

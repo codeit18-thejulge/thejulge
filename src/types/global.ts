@@ -7,6 +7,34 @@ export interface Link {
   query?: { [key: string]: unknown };
 }
 
+export interface UserItem {
+  id: string;
+  email: string;
+  type: UserType;
+}
+
+export interface UserInfoItem {
+  name: string;
+  phone: string;
+  address: string;
+  bio: string;
+}
+
+export interface ShopItem {
+  id: string;
+  name: string;
+  category: string;
+  address1: string;
+  address2: string;
+  description: string;
+  imageUrl: string;
+  originalHourlyPay: number;
+}
+
+export interface NoticeItem {}
+
+export interface AlertItem {}
+
 export type ShopCategory = "한식 " | "중식 " | "일식 " | "양식 " | "분식 " | "카페 " | "편의점 " | "기타";
 
 export type UserType = "employee" | "employer";

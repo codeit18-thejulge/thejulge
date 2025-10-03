@@ -1,29 +1,15 @@
-import { Link, UserType } from "@/types/global";
+import { Link, ShopItem, UserInfoItem, UserItem, UserType } from "@/types/global";
 import { instance } from "@/utils/instance";
 import { useQuery } from "@tanstack/react-query";
+import { UserInfo } from "os";
 
 export interface GetMyInfoResponse {
-  item: {
-    id: string;
-    email: string;
-    type: UserType;
-    name: string;
-    phone: string;
-    address: string;
-    bio: string;
-    shop: {
-      item: {
-        id: string;
-        name: string;
-        category: string;
-        address1: string;
-        address2: string;
-        description: string;
-        imageUrl: string;
-        originalHourlyPay: number;
-      };
-    } | null;
-  };
+  item: UserItem &
+    Partial<UserInfoItem> & {
+      shop: {
+        item: ShopItem;
+      } | null;
+    };
   links: Link[];
 }
 
