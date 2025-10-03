@@ -38,6 +38,6 @@ export type SeoulAddress =
   | "서울시 송파구"
   | "서울시 강동구";
 
-export type ApplicationStatus = "pending" | "accepted" | "rejected";
+export type ApplicationStatus = "pending" | "accepted" | "rejected" | "canceled";
 
 export type ResultStatus = "accepted" | "rejected";
