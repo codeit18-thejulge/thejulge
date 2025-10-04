@@ -1,3 +1,4 @@
+import { cn } from "@/utils";
 import { ChangeEvent, forwardRef, TextareaHTMLAttributes } from "react";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -7,13 +8,18 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   placeholder?: string;
 }
 
+const textareaStyle = {
+  basic: "h-153 w-full resize-none rounded-md border border-gray-30 bg-white px-20 py-16 text-16 focus:outline-none",
+  error: "border-red-400",
+};
+
 const Textarea = forwardRef<HTMLTextAreaElement, Props>(
   ({ value, onChange, errorMsg, placeholder = "입력", ...rest }, ref) => {
     return (
       <>
         <textarea
           ref={ref}
-          className="h-153 w-full resize-none rounded-md border border-gray-30 bg-white px-20 py-16 text-16 focus:outline-none"
+          className={cn(textareaStyle.basic, errorMsg && textareaStyle.error)}
           onChange={onChange}
           value={value}
           placeholder={placeholder}
