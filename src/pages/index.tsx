@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <h1>3팀 파이팅!</h1>
-      <div className="flex gap-20">
+      <div className="gap-20">
         <Post
           name="진주회관"
           id="0d5dd6f0-5306-4060-8e92-11eff1e36bed"

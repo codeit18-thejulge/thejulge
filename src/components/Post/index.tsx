@@ -3,6 +3,7 @@ import Image from "next/image";
 import IcAddress from "@/assets/svgs/ic_address.svg";
 import IcClock from "@/assets/svgs/ic_clock.svg";
 import { SeoulAddress } from "@/types/api/user";
+import { getDateFromISOString } from "@/utils/getDateFromISOString";
 
 interface NoticeItem {
   id: string;
@@ -27,6 +28,7 @@ const postStyles = {
 };
 
 const Post = ({ name, id, hourlyPay, startsAt, workhour, description, closed, imageUrl, address }: Props) => {
+  const date = getDateFromISOString(startsAt);
   return (
     <section className={cn(postStyles.basic, closed && postStyles.closed)}>
       <div className="relative h-160">
@@ -38,7 +40,7 @@ const Post = ({ name, id, hourlyPay, startsAt, workhour, description, closed, im
         <div className="flex gap-8">
           <IcClock />
           <p>
-            {startsAt} ({workhour}시간)
+            {date} ({workhour}시간)
           </p>
         </div>
         <div className="flex gap-8">
