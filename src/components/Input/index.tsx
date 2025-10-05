@@ -21,6 +21,8 @@ const Input = ({ isPay, errorMsg, ...props }: InputType) => {
         <input
           name={props.name}
           type={props.type}
+          value={props.value}
+          placeholder="입력"
           className={cn("w-full px-20 py-16 focus:outline-none", isPay && "w-[90%]", props.className)}
           {...props}
         />
