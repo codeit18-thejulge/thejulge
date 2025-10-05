@@ -34,4 +34,6 @@ const Input = forwardRef<HTMLInputElement, InputType>(({ isPay, errorMsg, ...pro
   );
 });
 
+Input.displayName = "Input";
+
 export default Input;
