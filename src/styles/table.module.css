@@ -1,0 +1,151 @@
+.outBox {
+  overflow: hidden;
+  max-width: 60.25rem;
+  border: 1px solid #e5e4e7;
+  border-radius: 0.75rem;
+  -webkit-border-radius: 0.75rem;
+  -moz-border-radius: 0.75rem;
+  -ms-border-radius: 0.75rem;
+  -o-border-radius: 0.75rem;
+}
+
+.tableWrap {
+  position: relative;
+  overflow-x: auto;
+}
+
+/* .tableWrap::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+} */
+
+.table {
+  width: 100%;
+  text-align: left;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.theadColor {
+  background-color: #fef7f6;
+}
+
+.table th:last-child,
+.table td:last-child {
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.table th:last-child {
+  background-color: #fef7f6;
+}
+
+.table td:last-child {
+  white-space: nowrap;
+  background-color: var(--white);
+}
+
+.table th,
+.table td {
+  padding: 0.75rem 0.5rem;
+}
+
+.table th {
+  height: 2.5rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.table td {
+  height: 2.875rem;
+  vertical-align: middle;
+  font-size: 0.875rem;
+  background-color: var(--white);
+  transition: background-color 0.5s;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+}
+
+.table tbody tr:hover td {
+  background-color: var(--gray-10);
+  transition: background-color 0.5s;
+  cursor: pointer;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+}
+
+.overText {
+  display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.table td:last-child {
+  border-left: 1px solid #e5e4e7;
+}
+
+.table .btnGroup {
+  display: flex;
+  gap: 0 0.5rem;
+}
+
+.table tbody td {
+  border-bottom: 1px solid #e5e4e7;
+}
+
+.tableBottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem;
+}
+
+@media all and (min-width: 744px) {
+  .table th {
+    height: 3.125rem;
+    font-size: 0.875rem;
+  }
+  .table td {
+    height: auto;
+    min-height: 4.375rem;
+    max-height: 5.6875rem;
+    font-size: 1rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .overText {
+    -webkit-line-clamp: 2;
+  }
+
+  .table .btnGroup {
+    gap: 0 0.75rem;
+  }
+}
+
+@media all and (min-width: 1440px) {
+  .fourCol {
+    width: 14.75rem;
+  }
+  .table td:last-child {
+    border-left: unset;
+    background-color: unset;
+  }
+
+  .table td:last-child > * {
+    margin-right: 0.75rem;
+  }
+}
