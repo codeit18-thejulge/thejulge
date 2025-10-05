@@ -3,6 +3,7 @@ import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
 import { useEffect, useState } from "react";
 import ClosedBadge from "../Badge/ClosedBadge";
 import { cn } from "@/utils";
+import { useEscClose } from "@/hooks/useEscClose";
 
 interface FilterProps {
   onClose: () => void;
@@ -37,19 +38,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
     );
   };
 
-  useEffect(() => {
-    if (!isOpen || !closeOnEsc) {
-      return;
-    }
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, closeOnEsc, onClose]);
+  useEscClose({ isOpen, closeOnEsc, onClose });
 
   if (!isOpen) {
     return null;
