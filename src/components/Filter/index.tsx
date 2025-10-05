@@ -6,11 +6,12 @@ import { cn } from "@/utils";
 
 interface FilterProps {
   onClose: () => void;
+  isOpen: boolean;
 }
 
 const MAX_SELECTION = 4;
 
-const Filter = ({ onClose }: FilterProps) => {
+const Filter = ({ onClose, isOpen }: FilterProps) => {
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
 
   const handleAddressClick = (address: string) => {
@@ -34,6 +35,10 @@ const Filter = ({ onClose }: FilterProps) => {
       selectedAddresses.filter((selectedAddress) => selectedAddress !== address),
     );
   };
+
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="flex h-845 w-375 flex-col gap-24 rounded-10 border border-gray-20 px-12 py-24 shadow-md tablet:w-390 tablet:px-20">
