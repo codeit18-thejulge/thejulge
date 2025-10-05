@@ -1,1 +1,1 @@
-declare module 'tailwindcss-preset-px-to-rem';
+declare module "tailwindcss-preset-px-to-rem";
