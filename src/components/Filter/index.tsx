@@ -1,6 +1,6 @@
 import Ic_X from "@/assets/svgs/ic_X.svg";
 import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ClosedBadge from "../Badge/ClosedBadge";
 import { cn } from "@/utils";
 import { useEscClose } from "@/hooks/useEscClose";
@@ -15,6 +15,9 @@ const MAX_SELECTION = 4;
 
 const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
+
+  const containerStyle =
+    "flex h-845 w-375 flex-col gap-24 rounded-10 border border-gray-20 px-12 py-24 shadow-md tablet:w-390 tablet:px-20";
 
   const handleAddressClick = (address: string) => {
     const isSelected = selectedAddresses.includes(address);
@@ -45,7 +48,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
   }
 
   return (
-    <div className="flex h-845 w-375 flex-col gap-24 rounded-10 border border-gray-20 px-12 py-24 shadow-md tablet:w-390 tablet:px-20">
+    <div className={containerStyle}>
       <div className="flex justify-between">
         <p className="font-sans text-xl font-bold text-black">상세 필터</p>
         <Ic_X onClick={onClose} className="cursor-pointer" />
