@@ -3,13 +3,13 @@ import { GetUserAlertsResponse } from "./userAlerts";
 export const USER_ALERTS: GetUserAlertsResponse = {
   offset: 0,
   limit: 6,
-  count: 15,
+  count: 3,
   hasNext: true,
   items: [
     {
       item: {
         id: "alert-01",
-        createdAt: "2025-10-04T06:33:00Z",
+        createdAt: "2025-10-05T14:53:00Z",
         result: "accepted",
         read: false,
         application: {
@@ -43,7 +43,20 @@ export const USER_ALERTS: GetUserAlertsResponse = {
           },
           href: "https://api.example.com/notices/notice-01",
         },
-        links: [],
+        links: [
+          {
+            rel: "self",
+            description: "공고 정보",
+            method: "GET",
+            href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47/notices/99996477-82db-4bda-aae1-4044f11d9a8b",
+          },
+          {
+            rel: "shop",
+            description: "가게 정보",
+            method: "GET",
+            href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47",
+          },
+        ],
       },
     },
     {
@@ -83,7 +96,20 @@ export const USER_ALERTS: GetUserAlertsResponse = {
           },
           href: "https://api.example.com/notices/notice-02",
         },
-        links: [],
+        links: [
+          {
+            rel: "self",
+            description: "공고 정보",
+            method: "GET",
+            href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47/notices/99996477-82db-4bda-aae1-4044f11d9a8b",
+          },
+          {
+            rel: "shop",
+            description: "가게 정보",
+            method: "GET",
+            href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47",
+          },
+        ],
       },
     },
     {
@@ -123,9 +149,35 @@ export const USER_ALERTS: GetUserAlertsResponse = {
           },
           href: "https://api.example.com/notices/notice-03",
         },
-        links: [],
+        links: [
+          {
+            rel: "self",
+            description: "공고 정보",
+            method: "GET",
+            href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47/notices/99996477-82db-4bda-aae1-4044f11d9a8b",
+          },
+          {
+            rel: "shop",
+            description: "가게 정보",
+            method: "GET",
+            href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47",
+          },
+        ],
       },
     },
   ],
-  links: [],
+  links: [
+    {
+      rel: "self",
+      description: "공고 정보",
+      method: "GET",
+      href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47/notices/99996477-82db-4bda-aae1-4044f11d9a8b",
+    },
+    {
+      rel: "shop",
+      description: "가게 정보",
+      method: "GET",
+      href: "/api/0-1/the-julge/shops/4490151c-5217-4157-b072-9c37b05bed47",
+    },
+  ],
 };
