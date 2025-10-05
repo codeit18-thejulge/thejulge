@@ -7,20 +7,20 @@ export interface Link {
   query?: { [key: string]: unknown };
 }
 
-export interface User {
+export interface UserItem {
   id: string;
   email: string;
-  type: "employee" | "employer";
-  name?: string;
-  phone?: string;
-  address?: string;
-  bio?: string;
-  shop?: {
-    item: Shop;
-  } | null;
+  type: UserType;
 }
 
-export interface Shop {
+export interface UserInfoItem {
+  name: string;
+  phone: string;
+  address: string;
+  bio: string;
+}
+
+export interface ShopItem {
   id: string;
   name: string;
   category: string;
@@ -31,37 +31,31 @@ export interface Shop {
   originalHourlyPay: number;
 }
 
-export interface SignupRequest extends Pick<User, "email" | "type"> {
-  password: string;
+export interface NoticeItem {
+  id: string;
+  hourlyPay: number;
+  startsAt: string;
+  workhour: number;
+  description: string;
+  closed: boolean;
 }
 
-export interface SignupResponse {
-  item: Pick<User, "id" | "email" | "type">;
-  links: Link[];
+export interface AlertItem {
+  id: string;
+  createdAt: string;
+  result: ResultStatus;
+  read: boolean;
 }
 
-export interface LoginRequest {
-  email: string;
-  password: string;
+export interface ApplicationItem {
+  id: string;
+  status: ApplicationStatus;
+  createdAt: string;
 }
 
-export interface LoginResponse {
-  item: {
-    token: string;
-    user: {
-      item: User;
-      href: string;
-    };
-  };
-  links: Link[];
-}
+export type ShopCategory = "한식 " | "중식 " | "일식 " | "양식 " | "분식 " | "카페 " | "편의점 " | "기타";
 
-export interface PutMyInfoRequest {
-  name: string;
-  phone: string;
-  address: SeoulAddress;
-  bio: string;
-}
+export type UserType = "employee" | "employer";
 
 export type SeoulAddress =
   | "서울시 종로구"
@@ -89,3 +83,7 @@ export type SeoulAddress =
   | "서울시 강남구"
   | "서울시 송파구"
   | "서울시 강동구";
+
+export type ApplicationStatus = "pending" | "accepted" | "rejected" | "canceled";
+
+export type ResultStatus = "accepted" | "rejected";
