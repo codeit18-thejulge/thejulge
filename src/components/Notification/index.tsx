@@ -1,9 +1,10 @@
 import IcClose from "@/assets/svgs/ic_close.svg";
 import { cn } from "@/utils";
 import NotificationItem from "./NotificationItem";
+import LoadingSpinner from "../LoadingSpinner";
 
-import { GetUserAlertsRequest, GetUserAlertsResponse, UserAlertItem } from "@/types/api/userAlerts";
-import { USER_ALERTS } from "@/utils/mockData";
+import { GetUserAlertsRequest, GetUserAlertsResponse, UserAlertItem } from "./userAlerts";
+import { USER_ALERTS } from "./mockData";
 import { useEffect, useState } from "react";
 
 interface NotificationProps {
@@ -22,7 +23,7 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
 
       const data = USER_ALERTS; // 임시 mockData 사용
       const unreadAlerts = data.items.map((i) => i.item).filter((alert) => !alert.read); // 읽지 않은 알림만 필터링
-      setAlerts(unreadAlerts); // MockData에 Link가 없어서 오류남
+      setAlerts(unreadAlerts);
     } catch (err) {
       console.error(err);
     } finally {
@@ -45,7 +46,7 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
   }, [userId, refreshFlag]);
 
   if (loading) {
-    return <div>{"loading..."}</div>;
+    return <LoadingSpinner />;
   }
 
   return (
