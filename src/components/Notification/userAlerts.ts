@@ -29,8 +29,8 @@ export interface GetUserAlertsResponse {
       };
       links: Link[];
     };
-    links: Link[];
   }>;
+  links: Link[];
 }
 
 export type UserAlertItem = GetUserAlertsResponse["items"][number]["item"];

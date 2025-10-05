@@ -1,5 +1,3 @@
-// 유저 알림 데이터 예시입니다. 본인꺼 필요하시면 추가해서 사용해주세요.
-
 import { GetUserAlertsResponse } from "./userAlerts";
 
 export const USER_ALERTS: GetUserAlertsResponse = {
