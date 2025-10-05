@@ -25,7 +25,7 @@ const ToastContainer = ({ label, error, closedTime = 3000, errorMessage = "다�
     }, closedTime + 1000); // 애니메이션 종료 후 제거
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [closedTime]);
 
   //마운트가 풀리면 DOM에서 없어짐
   if (!mounted) {
@@ -45,7 +45,7 @@ const Toast = ({ label, error, errorMessage, closedTime = 3000 }: LabelProps) =>
     }, closedTime);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [closedTime]);
 
   return (
     <>
