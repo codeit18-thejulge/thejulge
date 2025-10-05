@@ -1,17 +1,18 @@
 import Ic_X from "@/assets/svgs/ic_X.svg";
 import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClosedBadge from "../Badge/ClosedBadge";
 import { cn } from "@/utils";
 
 interface FilterProps {
   onClose: () => void;
   isOpen: boolean;
+  closeOnEsc: boolean;
 }
 
 const MAX_SELECTION = 4;
 
-const Filter = ({ onClose, isOpen }: FilterProps) => {
+const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
 
   const handleAddressClick = (address: string) => {
@@ -35,6 +36,20 @@ const Filter = ({ onClose, isOpen }: FilterProps) => {
       selectedAddresses.filter((selectedAddress) => selectedAddress !== address),
     );
   };
+
+  useEffect(() => {
+    if (!isOpen || !closeOnEsc) {
+      return;
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, closeOnEsc, onClose]);
 
   if (!isOpen) {
     return null;
