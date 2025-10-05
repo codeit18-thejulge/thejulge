@@ -14,7 +14,7 @@ interface BtnStatus extends ButtonProps {
   children: React.ReactNode;
 }
 
-const Button = ({ status, children, disabled, ...props }: BtnStatus) => {
+const Button = ({ status, children, disabled, className, ...props }: BtnStatus) => {
   const isDisabled = disabled || status === "disabled";
 
   return (
@@ -22,7 +22,7 @@ const Button = ({ status, children, disabled, ...props }: BtnStatus) => {
       type="button"
       onClick={props.onClick}
       disabled={isDisabled}
-      className={cn("inline-block w-full max-w-350 rounded-md text-14-bold", BtnStyle[status], props.className)}
+      className={cn(BtnStyle[status], "inline-block w-full max-w-350 rounded-md text-14-bold", className)}
       {...props}
     >
       {children}
