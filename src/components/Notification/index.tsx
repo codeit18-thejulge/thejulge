@@ -1,5 +1,4 @@
 import IcClose from "@/assets/svgs/ic_close.svg";
-import { cn } from "@/utils";
 import NotificationItem from "./NotificationItem";
 import LoadingSpinner from "../LoadingSpinner";
 
@@ -14,8 +13,10 @@ interface NotificationProps {
 
 const Notification = ({ userId, onClose }: NotificationProps) => {
   const [alerts, setAlerts] = useState<UserAlertItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshFlag, setRefreshFlag] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
+
+  const isAllRead = !isLoading && alerts.length === 0;
+  const isUnread = !isLoading && alerts.length > 0;
 
   const getAlerts = async () => {
     try {
@@ -27,7 +28,7 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -35,7 +36,7 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
     try {
       // PUT /users/{user_id}/alerts/{alert_id}
 
-      setRefreshFlag((prev) => !prev);
+      await getAlerts();
     } catch (err) {
       console.error(err);
     }
@@ -43,33 +44,39 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
 
   useEffect(() => {
     getAlerts();
-  }, [userId, refreshFlag]);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+  }, []);
 
   return (
-    <div className="relative flex h-dvh w-full flex-col gap-16 px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]">
-      <button aria-label="알림창 닫기" className={cn("absolute right-20 top-44 tablet:hidden")} onClick={onClose}>
-        <IcClose className="w-24 text-black"></IcClose>
-      </button>
-      <h1 className="text-20-bold">알림</h1>
+    <section
+      aria-label="알림"
+      className="relative flex h-dvh w-full flex-col gap-16 px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]"
+    >
+      <header>
+        <h1 className="text-20-bold">알림</h1>
+        <button aria-label="알림창 닫기" className={"absolute right-20 top-44 tablet:hidden"} onClick={onClose}>
+          <IcClose className="w-24 text-black"></IcClose>
+        </button>
+      </header>
 
-      {alerts.length ? (
-        <h2 className="text-16-regualr text-gray-50">
-          <span className="text-16-bold text-black">{alerts.length}</span>개의 읽지 않은 알림이 있어요.
-        </h2>
-      ) : (
-        <h2>모든 알림을 확인했습니다</h2>
-      )}
+      <h2 className="text-16-regular text-gray-50">
+        {isLoading && <>Loading...</>}
+        {isAllRead && <>모든 알림을 확인했어요</>}
+        {isUnread && (
+          <>
+            <span className="text-16-bold text-black">{alerts.length}</span>개의 읽지 않은 알림이 있어요
+          </>
+        )}
+      </h2>
 
-      <div className="w-full overflow-y-auto">
+      <ul className="h-full overflow-y-auto">
+        {isLoading && <LoadingSpinner />}
         {alerts.map((alert) => (
-          <NotificationItem key={alert.id} alert={alert} onAlertRead={handleAlertRead} />
+          <li key={alert.id}>
+            <NotificationItem alert={alert} onAlertRead={handleAlertRead} />
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 
