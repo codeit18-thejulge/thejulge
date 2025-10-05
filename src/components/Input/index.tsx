@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes, ChangeEvent } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import { cn } from "@/utils";
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
