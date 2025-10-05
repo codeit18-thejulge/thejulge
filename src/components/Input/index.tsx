@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/utils";
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
@@ -14,7 +14,7 @@ const inputStyle = {
   pay: "flex justify-between",
 };
 
-const Input = ({ isPay, errorMsg, ...props }: InputType) => {
+const Input = forwardRef<HTMLInputElement, InputType>(({ isPay, errorMsg, ...props }, ref) => {
   return (
     <>
       <div className={cn(inputStyle.basic, errorMsg && inputStyle.error, isPay && inputStyle.pay)}>
@@ -24,6 +24,7 @@ const Input = ({ isPay, errorMsg, ...props }: InputType) => {
           value={props.value}
           placeholder="입력"
           className={cn("w-full px-20 py-16 focus:outline-none", isPay && "w-[90%]", props.className)}
+          ref={ref}
           {...props}
         />
         {isPay && <span className="py-16 pr-20 text-16">원</span>}
@@ -31,6 +32,6 @@ const Input = ({ isPay, errorMsg, ...props }: InputType) => {
       {errorMsg && <p className="mt-8 text-12 text-red-40">{errorMsg}</p>}
     </>
   );
-};
+});
 
 export default Input;
