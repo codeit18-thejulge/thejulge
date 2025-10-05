@@ -1,12 +1,10 @@
+import { DetailedHTMLProps, InputHTMLAttributes, ChangeEvent } from "react";
 import { cn } from "@/utils";
 
-interface InputType {
-  id: string;
-  type: string;
-  className?: string;
-  value?: string;
+type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+
+interface InputType extends InputProps {
   isPay?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errorMsg?: string;
 }
 
@@ -16,13 +14,13 @@ const inputStyle = {
   pay: "flex justify-between",
 };
 
-const Input = ({ id, type, value, isPay, errorMsg, ...props }: InputType) => {
+const Input = ({ isPay, errorMsg, ...props }: InputType) => {
   return (
     <>
       <div className={cn(inputStyle.basic, errorMsg && inputStyle.error, isPay && inputStyle.pay)}>
         <input
-          id={id}
-          type={type}
+          name={props.name}
+          type={props.type}
           className={cn("w-full px-20 py-16 focus:outline-none", isPay && "w-[90%]", props.className)}
           {...props}
         />
