@@ -10,8 +10,7 @@ interface LabelProps {
 }
 
 const styleClass =
-  "absolute z-50 transition-all inset-x-1/2 inset-y-2/4 -translate-y-2/4 -translate-x-2/4 min-h-fit min-w-fit whitespace-nowrap rounded-5 bg-red-30 px-17 py-11 text-16-regular text-white";
-const hidden = "opacity-0 -translate-y-1/4";
+  "absolute z-50 transition-all inset-x-1/2 inset-y-2/4 -translate-y-2/4 -translate-x-2/4 min-h-fit min-w-fit whitespace-nowrap rounded-5 bg-red-30 px-17 py-11 text-16-regular text-white opacity-0 -translate-y-1/4";
 const show = "opacity-1 -translate-y-2/4";
 
 // 컨테이너 렌더링
@@ -27,30 +26,30 @@ const ToastContainer = ({ label, error, closedTime = 3000, errorMessage = "다�
     return () => clearTimeout(timer);
   }, [closedTime]);
 
-  //마운트가 풀리면 DOM에서 없어짐
-  if (!mounted) {
-    return null;
-  }
-
-  return <>{mounted && <Toast label={label} error={error} errorMessage={errorMessage} closedTime={closedTime} />};</>;
+  return <>{mounted && <Toast label={label} error={error} errorMessage={errorMessage} closedTime={closedTime} />}</>;
 };
 
 const Toast = ({ label, error, errorMessage, closedTime = 3000 }: LabelProps) => {
-  const [isVisible, setIsVisible] = useState(hidden);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(show);
+    const startTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
     const timer = setTimeout(() => {
-      setIsVisible(hidden);
+      setIsVisible(false);
     }, closedTime);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(startTimer);
+      clearTimeout(timer);
+    };
   }, [closedTime]);
 
   return (
     <>
       {createPortal(
-        <div className={cn(`duration-${closedTime / 10}`, styleClass, isVisible, error && `bg-red-40`)}>
+        <div className={cn(`duration-${closedTime / 10}`, styleClass, isVisible && show, error && `bg-red-40`)}>
           {error ? errorMessage : label}
         </div>,
         document.body,
