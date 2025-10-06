@@ -8,7 +8,7 @@ interface Props {
 
 const PostImage = ({ imageUrl, closed }: Props) => {
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full flex-[2]">
       <Image src={imageUrl} alt="가게 이미지" fill className="h-full w-full rounded-xl object-cover" />
 
       {closed && (

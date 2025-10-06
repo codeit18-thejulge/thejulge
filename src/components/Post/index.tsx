@@ -15,7 +15,7 @@ interface Props extends Omit<NoticeItem, "description"> {
 }
 
 const postStyles = {
-  basic: "bg-white border-gray-20 border w-312 h-349 p-16 rounded-xl",
+  basic: "bg-white border-gray-20 border w-171 h-260 p-12 tablet:w-312 tablet:h-349 tablet:p-16 rounded-xl",
   closed: "text-gray-30",
 };
 
@@ -30,7 +30,7 @@ const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, addre
     <section className={cn(postStyles.basic, closed && postStyles.closed)}>
       <button
         onClick={handlePostClick}
-        className="flex h-full w-full flex-col justify-between gap-20"
+        className="flex h-full w-full flex-col justify-between gap-12 tablet:gap-20"
         aria-label="Notice Detail"
       >
         <PostImage imageUrl={imageUrl} closed={closed} />
