@@ -1,9 +1,7 @@
 import { DetailedHTMLProps, InputHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/utils";
 
-type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-
-interface InputType extends InputProps {
+interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   isPay?: boolean;
   errorMsg?: string;
 }
@@ -14,7 +12,7 @@ const inputStyle = {
   pay: "flex justify-between",
 };
 
-const Input = forwardRef<HTMLInputElement, InputType>(({ isPay, errorMsg, ...props }, ref) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(({ isPay, errorMsg, ...props }, ref) => {
   return (
     <>
       <div className={cn(inputStyle.basic, errorMsg && inputStyle.error, isPay && inputStyle.pay)}>
