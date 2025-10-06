@@ -1,5 +1,5 @@
 import NormalBadge from "../Badge/NormalBadge";
-import Pagination from "../Pagination";
+import ListPagination from "../ListPagination";
 import { useState, useEffect } from "react";
 import { Notice } from "@/types/api/notice";
 import tableStyle from "@/styles/table.module.css";
@@ -41,7 +41,7 @@ const Table = ({ userType, res }: TableProps) => {
         </table>
       </div>
       <div className={tableStyle.tableBottom}>
-        <Pagination />
+        <ListPagination />
       </div>
     </div>
   );
@@ -76,7 +76,7 @@ const TableRow = ({ item, userType }: TableRowProps) => {
 
   useEffect(() => {
     setIsState(item.status);
-  }, [item.status]); // 의존성 수정
+  }, [item.status]); 
 
   if (userType === "employer") {
     // 신청자 목록 - 사장
@@ -105,7 +105,7 @@ const TableRow = ({ item, userType }: TableRowProps) => {
       <tr>
         <td>{shop.item.name}</td>
         <td>{notice ? new Date(notice.item.startsAt).toLocaleDateString() : "-"}</td>
-        <td>{notice ? Number(notice.item.hourlyPay).toLocaleString() : "-"}</td>
+        <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
           <NormalBadge status={isState} />
         </td>

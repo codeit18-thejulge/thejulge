@@ -164,17 +164,17 @@ export const USER_APPLICATIONS = {
 		        "address2": "어디",
 		        "description": "여기",
 		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": "10000"
+		        "originalHourlyPay": 10000
 					},
 					"href": "뭐뭐"
 				},
 				"notice": {
 					"item": {
 						"id": "notice-01",
-						"hourlyPay": "15000",
+						"hourlyPay": 15000,
             "description": "설명을 해봐",
             "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": "6",
+            "workhour": 6,
             "closed": false,
 					},
 					"href": "string"
@@ -208,17 +208,17 @@ export const USER_APPLICATIONS = {
 		        "address2": "어디",
 		        "description": "여기",
 		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": "10000"
+		        "originalHourlyPay": 10000
 					},
 					"href": "뭐뭐"
 				},
 				"notice": {
 					"item": {
 						"id": "notice-02",
-						"hourlyPay": "10000",
+						"hourlyPay": 10000,
             "description": "설명을 해봐",
             "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": "6",
+            "workhour": 6,
             "closed": false,
 					},
 					"href": "string"
@@ -252,17 +252,17 @@ export const USER_APPLICATIONS = {
 		        "address2": "어디",
 		        "description": "여기",
 		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": "10000"
+		        "originalHourlyPay": 10000
 					},
 					"href": "뭐뭐"
 				},
 				"notice": {
 					"item": {
 						"id": "notice-03",
-						"hourlyPay": "150000",
+						"hourlyPay": 150000,
             "description": "설명을 해봐",
             "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": "6",
+            "workhour": 6,
             "closed": false,
 					},
 					"href": "string"
@@ -296,17 +296,17 @@ export const USER_APPLICATIONS = {
 		        "address2": "어디",
 		        "description": "여기",
 		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": "10000"
+		        "originalHourlyPay": 10000
 					},
 					"href": "뭐뭐"
 				},
 				"notice": {
 					"item": {
 						"id": "notice-04",
-						"hourlyPay": "19000",
+						"hourlyPay": 19000,
             "description": "설명을 해봐",
             "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": "6",
+            "workhour": 6,
             "closed": false,
 					},
 					"href": "string"
