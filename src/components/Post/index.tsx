@@ -1,18 +1,10 @@
 import { cn } from "@/utils";
-import { SeoulAddress } from "@/types/api/user";
+import { SeoulAddress } from "@/types/global";
 import { useRouter } from "next/router";
 import PostImage from "./components/PostImage";
 import PostFooter from "./components/PostFooter";
 import PostInfo from "./components/PostInfo";
-
-export interface NoticeItem {
-  id: string;
-  hourlyPay: number;
-  startsAt: string;
-  workhour: number;
-  description: string;
-  closed: boolean;
-}
+import { NoticeItem } from "@/types/global";
 
 // name imageUrl, address, original hourlyPay 가게정보에서 받아옵니다.
 interface Props extends NoticeItem {
