@@ -15,7 +15,7 @@ interface Props extends NoticeItem {
 }
 
 const postStyles = {
-  basic: "bg-white border-gray-20 border w-312 h-349 p-16 rounded-md",
+  basic: "bg-white border-gray-20 border w-312 h-349 p-16 rounded-xl",
   closed: "text-gray-30",
 };
 

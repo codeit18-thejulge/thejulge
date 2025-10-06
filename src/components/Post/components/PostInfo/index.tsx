@@ -20,13 +20,13 @@ const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
   const date = getDateFromISOString(startsAt);
 
   return (
-    <div className="flex flex-col items-start gap-12">
-      <h3 className="text-18-bold">{name}</h3>
+    <div className="flex flex-col items-start gap-12 text-gray-50">
+      <h3 className="text-16-bold text-black tablet:text-20-bold">{name}</h3>
       <div className="flex gap-8">
         <IcClcok className={cn(icStyles.basic, closed && icStyles.closed)} />
         <div className="flex flex-col items-start tablet:flex-row tablet:gap-8">
           <span>{date}</span>
-          <span> ({workhour}시간)</span>
+          <p> ({workhour}시간)</p>
         </div>
       </div>
       <div className="flex gap-8">
