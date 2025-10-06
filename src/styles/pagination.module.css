@@ -1,0 +1,44 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.pageItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 2px;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 0.3125rem;
+  -webkit-border-radius: 0.3125rem;
+  -moz-border-radius: 0.3125rem;
+  -ms-border-radius: 0.3125rem;
+  -o-border-radius: 0.3125rem;
+}
+
+.pageItem:hover {
+  background-color: #f0f0f0;
+}
+
+.activePage {
+  background-color: var(--red-30);
+  color: white;
+  border-color: #007bff;
+}
+
+.customBtn {
+  height: 2.25rem;
+  font-size: 2rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.disabled {
+  color: var(--gray-30);
+}
