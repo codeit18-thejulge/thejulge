@@ -28,7 +28,11 @@ const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, addre
 
   return (
     <section className={cn(postStyles.basic, closed && postStyles.closed)}>
-      <button onClick={handlePostClick} className="flex h-full w-full flex-col justify-between gap-20">
+      <button
+        onClick={handlePostClick}
+        className="flex h-full w-full flex-col justify-between gap-20"
+        aria-label="Notice Detail"
+      >
         <PostImage imageUrl={imageUrl} closed={closed} />
         <PostInfo name={name} address={address} startsAt={startsAt} workhour={workhour} closed={closed} />
         <PostFooter hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} />
