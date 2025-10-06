@@ -1,5 +1,5 @@
 import NormalBadge from "../Badge/NormalBadge";
-import ListPagination from "../ListPagination";
+import ListPagination from "@/components/ListPagination";
 import { useState, useEffect } from "react";
 import { Notice } from "@/types/api/notice";
 import tableStyle from "@/styles/table.module.css";
@@ -11,10 +11,13 @@ const TABLE_HEADER = {
 
 interface TableProps {
   userType: keyof typeof TABLE_HEADER;
+  limit:number,
+  count:number,
+  hasNext:boolean,  
   res: Notice[];
 }
 
-const Table = ({ userType, res }: TableProps) => {
+const Table = ({ userType, res, limit, count, hasNext }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<Notice[]>([]);
   useEffect(() => {
@@ -41,7 +44,12 @@ const Table = ({ userType, res }: TableProps) => {
         </table>
       </div>
       <div className={tableStyle.tableBottom}>
-        <ListPagination />
+        {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.*/}        
+        <ListPagination
+         limit={limit} 
+         count={count}
+         hasNext={hasNext}         
+         /> 
       </div>
     </div>
   );
@@ -76,7 +84,7 @@ const TableRow = ({ item, userType }: TableRowProps) => {
 
   useEffect(() => {
     setIsState(item.status);
-  }, [item.status]); 
+  }, [item.status]); // 의존성 수정
 
   if (userType === "employer") {
     // 신청자 목록 - 사장

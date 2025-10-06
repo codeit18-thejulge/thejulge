@@ -2,7 +2,7 @@
 
 export const USER_ALERTS = {
   offset: 0,
-  limit: 6,
+  limit:6,
   count: 15,
   hasNext: true,
   items: [
@@ -133,9 +133,9 @@ export const USER_ALERTS = {
 
 
 export const USER_APPLICATIONS = {
-	"offset": "0",
-	"limit": "6",
-	"count": "15", // 전체 개수
+	"offset": 0,
+	"limit": 35,
+	"count": 100, // 전체 개수
 	"hasNext": true, // 다음 내용 존재 여부
 	"items": [
 		{
@@ -252,14 +252,14 @@ export const USER_APPLICATIONS = {
 		        "address2": "어디",
 		        "description": "여기",
 		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": 10000
+		        "originalHourlyPay":10000
 					},
 					"href": "뭐뭐"
 				},
 				"notice": {
 					"item": {
 						"id": "notice-03",
-						"hourlyPay": 150000,
+						"hourlyPay":150000,
             "description": "설명을 해봐",
             "startsAt": "2025-09-28T15:00:00Z",
             "workhour": 6,
