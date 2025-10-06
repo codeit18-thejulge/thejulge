@@ -7,7 +7,6 @@ export default function Home() {
       <Post
         id="4490151c-5217-4157-b072-9c37b05bed47"
         name="진주회관"
-        description=""
         hourlyPay={15000}
         address="서울시 중구"
         originalHourlyPay={10000}

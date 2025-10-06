@@ -7,7 +7,7 @@ import PostInfo from "./components/PostInfo";
 import { NoticeItem } from "@/types/global";
 
 // name imageUrl, address, original hourlyPay 가게정보에서 받아옵니다.
-interface Props extends NoticeItem {
+interface Props extends Omit<NoticeItem, "description"> {
   name: string;
   imageUrl: string;
   address: SeoulAddress;
