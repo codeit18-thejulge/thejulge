@@ -14,7 +14,6 @@ const ModalBasic = ({ isOpen, onClose, children, closeOnOverlayClick = true, clo
     if (!isOpen || !closeOnEsc) {
       return;
     }
-
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -26,6 +25,16 @@ const ModalBasic = ({ isOpen, onClose, children, closeOnOverlayClick = true, clo
       window.removeEventListener("keydown", handleKeydown);
     };
   }, [isOpen, closeOnEsc, onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const originalStyle = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [isOpen]);
 
   if (!isOpen) {
     return null;
