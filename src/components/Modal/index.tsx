@@ -33,11 +33,11 @@ const ModalBasic = ({ isOpen, onClose, children, closeOnOverlayClick = true, clo
 
   return createPortal(
     <div
-      className="bg-black/70 z-50 inset-0 fixed flex justify-center items-center p-24"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black-overlay p-24"
       onClick={closeOnOverlayClick ? onClose : undefined}
     >
       <div
-        className="bg-white w-full max-w-[540px] min-h-[220px] tablet:min-h-[250px] rounded-lg p-24"
+        className="flex min-h-[220px] w-full max-w-[540px] items-center justify-center rounded-lg border bg-white p-24 tablet:min-h-[250px]"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
