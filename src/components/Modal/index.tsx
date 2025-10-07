@@ -37,7 +37,7 @@ const ModalBasic = ({ isOpen, onClose, children, closeOnOverlayClick = true, clo
       onClick={closeOnOverlayClick ? onClose : undefined}
     >
       <div
-        className="flex min-h-[220px] w-full max-w-[540px] items-center justify-center rounded-lg border bg-white p-24 tablet:min-h-[250px]"
+        className="tablet:min-h-250px flex min-h-220 w-full max-w-540 items-center justify-center rounded-lg border bg-white p-24"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
