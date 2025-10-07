@@ -13,6 +13,7 @@ import {
   CardTextBox,
   CardButtonBox,
 } from "../components/CardBody";
+
 //페이지에서 사용시 예시 입니다.
 interface CARD_PROPS {
   userType?: UserType;
@@ -39,18 +40,21 @@ const ShopNoticeCard = ({
   bgColor,
   time,
   workHour,
+  hourlyPay,
+  originalHourlyPay,
   closed = false,
+  ...props
 }: CARD_PROPS) => {
   return (
-    <CardWrap bgColor={bgColor || ""}>
-      <CardImageBox imageUrl={imageUrl} name={name} closed={closed} />
+    <CardWrap bgColor={bgColor || ""} {...props}>
+      <CardImageBox imageUrl={imageUrl} name={name} closed={closed} {...props} />
       <CardBody>
-        <CardCategory category={category} />
+        <CardCategory category={category} {...props} />
         <CardTextBox>
-          <CardPay hourlyPay={15000} originalHourlyPay={10000} closed={closed} />
-          <CardTime time={time} workHour={workHour} />
-          <CardAddress address={address} />
-          <CardDescription description={description} />
+          <CardPay hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed}{...props} />
+          <CardTime time={time} workHour={workHour} {...props} />
+          <CardAddress address={address} {...props} />
+          <CardDescription description={description} {...props} />
         </CardTextBox>
         <CardButtonBox>
           <Button status={"lined"} className={cn("h-38 text-14-regular tablet:h-48 tablet:text-16-bold")}>

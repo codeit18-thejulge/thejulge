@@ -30,16 +30,25 @@ interface CARD_PROPS {
   workHour?: number;
 }
 
-const ShopInfoCard = ({ category, name, description, imageUrl, address, bgColor, closed = false }: CARD_PROPS) => {
+const ShopInfoCard = ({
+  category,
+  name,
+  description,
+  imageUrl,
+  address,
+  bgColor,
+  closed = false,
+  ...props
+}: CARD_PROPS) => {
   return (
-    <CardWrap bgColor={bgColor || ""}>
-      <CardImageBox imageUrl={imageUrl} name={name} closed={closed} />
+    <CardWrap bgColor={bgColor || ""} {...props}>
+      <CardImageBox imageUrl={imageUrl} name={name} closed={closed} {...props} />
       <CardBody>
-        <CardCategory category={category} />
+        <CardCategory category={category} {...props} />
         <CardTextBox>
-          <CardTitle name={name} />
-          <CardAddress address={address} />
-          <CardDescription description={description} />
+          <CardTitle name={name} {...props} />
+          <CardAddress address={address} {...props} />
+          <CardDescription description={description} {...props} />
         </CardTextBox>
         <CardButtonBox>
           <Button status={"lined"} className={cn("h-38 text-14-regular tablet:h-48 tablet:text-16-bold")}>

@@ -37,7 +37,7 @@ const CardBody = ({ children, ...props }: CARD_PROPS) => {
 const CardImageBox = ({ imageUrl = "", name = "", closed }: CARD_PROPS) => {
   return (
     <div className="relative h-177 w-full overflow-hidden rounded-12 tablet:h-360 desktop:h-full desktop:max-w-539">
-      <Image layout="fill" objectFit="cover" src={imageUrl} alt={name} />
+      <Image layout="fill" objectFit="cover" src={imageUrl} alt={name}/>
       {closed && (
         <div className="absolute flex h-full w-full items-center justify-center bg-[rgba(0,0,0,0.7)] text-28-bold text-gray-30">
           마감완료
