@@ -1,11 +1,12 @@
 import React from "react";
 import ModalBasic from ".";
-import { cn } from "@/utils";
+import Button from "../Button";
 
-interface ButtonConfig {
-  label: string;
+interface ButtonSetting {
+  buttonText: string;
   onClick: () => void;
-  variant?: "primary" | "secondary";
+  style: "filled" | "lined";
+  className: string;
 }
 
 interface MessageModalProps {
@@ -13,7 +14,7 @@ interface MessageModalProps {
   icon?: React.ReactNode;
   message: string;
   onClose: () => void;
-  actions: ButtonConfig[];
+  footers: ButtonSetting[];
   closeOnOverlayClick?: boolean;
   closeOnEsc?: boolean;
 }
@@ -23,27 +24,20 @@ const MessageModal = ({
   icon,
   message,
   onClose,
-  actions,
+  footers,
   closeOnOverlayClick = true,
   closeOnEsc = true,
 }: MessageModalProps) => {
   return (
     <ModalBasic isOpen={isOpen} onClose={onClose} closeOnOverlayClick={closeOnOverlayClick} closeOnEsc={closeOnEsc}>
-      <div className="flex flex-col items-center gap-16 tablet:gap-26 text-center">
+      <div className="flex flex-col items-center gap-16 text-center tablet:gap-26">
         {icon && <div className="mt-4">{icon}</div>}
         <p className="text-black">{message}</p>
         <div className="flex gap-8">
-          {actions.map((action, index) => (
-            <button
-              key={index}
-              onClick={action.onClick}
-              className={cn("rounded-6 px-20 py-10 min-w-[80px] mt-16", {
-                "bg-primary text-white font-bold hover:bg-red-40": action.variant === "primary",
-                "border border-primary text-primary hover:bg-red-10": action.variant === "secondary",
-              })}
-            >
-              {action.label}
-            </button>
+          {footers.map((footer) => (
+            <Button key={footer.buttonText} status={footer.style} onClick={footer.onClick} className={footer.className}>
+              {footer.buttonText}
+            </Button>
           ))}
         </div>
       </div>
