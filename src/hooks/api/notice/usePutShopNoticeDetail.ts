@@ -2,17 +2,18 @@ import { useMutation } from "@tanstack/react-query";
 import { instance } from "@/utils/instance";
 import { Link, NoticeItem, ShopItem } from "@/types/global";
 
-export interface PostShopNoticesRequest {
+export interface PutShopNoticeDetailRequest {
   shopId: string;
+  noticeId: string;
   data: {
     hourlyPay: number;
-    startsAt: string; //양식: 2023-12-23T00:00:00Z
+    startsAt: string;
     workhour: number;
     description: string;
   };
 }
 
-export interface PostShopNoticesResponse {
+export interface PutShopNoticeDetailResponse {
   item: NoticeItem & {
     shop: {
       item: ShopItem;
@@ -22,14 +23,18 @@ export interface PostShopNoticesResponse {
   links: Link[];
 }
 
-const postShopNotices = async ({ shopId, data }: PostShopNoticesRequest): Promise<PostShopNoticesResponse> => {
-  const response = await instance.post(`/shops/${shopId}/notices`, data);
+const putShopNoticeDetail = async ({
+  shopId,
+  noticeId,
+  data,
+}: PutShopNoticeDetailRequest): Promise<PutShopNoticeDetailResponse> => {
+  const response = await instance.put(`/shops/${shopId}/notices/${noticeId}`, data);
   return response.data;
 };
 
-export const usePostShopNoticesQuery = () => {
+export const usePutShopNoticeDetailQuery = () => {
   return useMutation({
-    mutationFn: postShopNotices,
+    mutationFn: putShopNoticeDetail,
     onSuccess: (res) => {
       console.log(res);
     },
