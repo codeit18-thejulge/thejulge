@@ -44,15 +44,16 @@ const ListPagination = ({
   };
 
   const disabled = () => {
-    if (isPrevBtn) {
-      if (page === 1) {
-        return `${styles.customBtn} ${styles.disabled}`;
-      }
-      return styles.customBtn;
-    } else {
-      return styles.hidden;
-    }
-  };
+  if (!isPrevBtn) {
+    return styles.hidden;
+  }
+
+  if (page === 1) {
+    return `${styles.customBtn} ${styles.disabled}`;
+  }
+
+  return styles.customBtn;
+};
 
   const totalRecords = count; // 전체 레코드(항목) 수
 
