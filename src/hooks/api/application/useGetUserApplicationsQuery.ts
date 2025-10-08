@@ -23,6 +23,7 @@ export interface GetUserApplicationsResponse {
       };
       notice: {
         item: NoticeItem;
+        href: string;
       };
     };
     links: Link[];
