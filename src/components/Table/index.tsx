@@ -1,7 +1,9 @@
 import NormalBadge from "../Badge/NormalBadge";
 import ListPagination from "@/components/ListPagination";
+import TableHeader from "./components/TableHeader";
+import Button from "../Button";
 import { useState, useEffect } from "react";
-import { Notice } from "@/types/api/notice";
+import { Notice } from "@/types/notice";
 import tableStyle from "@/styles/table.module.css";
 
 const TABLE_HEADER = {
@@ -11,13 +13,15 @@ const TABLE_HEADER = {
 
 interface TableProps {
   userType: keyof typeof TABLE_HEADER;
-  limit:number,
-  count:number,
-  hasNext:boolean,  
+  limit: number;
+  count: number;
+  hasNext: boolean;
   res: Notice[];
+  onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
+  onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
 }
 
-const Table = ({ userType, res, limit, count, hasNext }: TableProps) => {
+const Table = ({ userType, res, limit, count, hasNext, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<Notice[]>([]);
   useEffect(() => {
@@ -31,44 +35,29 @@ const Table = ({ userType, res, limit, count, hasNext }: TableProps) => {
             <col className="w-228" />
             <col className="w-300" />
             <col className="w-200" />
-            <col className="w-236" />
+            <col className="w-162 tablet:w-220 desktop:w-236" />
           </colgroup>
           <thead className={tableStyle.theadColor}>
             <TableHeader colTitle={headerTitles} />
           </thead>
           <tbody>
             {tableData.map((item) => (
-              <TableRow key={item.id} item={item} userType={userType} />
+              <TableRow
+                key={item.id}
+                item={item}
+                userType={userType}
+                onHandleRejectClick={onHandleRejectClick}
+                onHandleAcceptClick={onHandleAcceptClick}
+              />
             ))}
           </tbody>
         </table>
       </div>
       <div className={tableStyle.tableBottom}>
-        {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.*/}        
-        <ListPagination
-         limit={limit} 
-         count={count}
-         hasNext={hasNext}         
-         /> 
+        {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.*/}
+        <ListPagination limit={limit} count={count} hasNext={hasNext} />
       </div>
     </div>
-  );
-};
-
-interface TableHeaderProps {
-  colTitle: string[];
-}
-
-// 열 제목
-const TableHeader = ({ colTitle }: TableHeaderProps) => {
-  return (
-    <tr>
-      {colTitle.map((item, index) => (
-        <th key={index} scope="col">
-          {item}
-        </th>
-      ))}
-    </tr>
   );
 };
 
@@ -76,15 +65,17 @@ const TableHeader = ({ colTitle }: TableHeaderProps) => {
 interface TableRowProps {
   item: Notice;
   userType: keyof typeof TABLE_HEADER;
+  onHandleRejectClick?: () => void;
+  onHandleAcceptClick?: () => void;
 }
 
-const TableRow = ({ item, userType }: TableRowProps) => {
+const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick }: TableRowProps) => {
   const { user, shop, notice } = item;
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
 
   useEffect(() => {
     setIsState(item.status);
-  }, [item.status]); // 의존성 수정
+  }, [item.status]);
 
   if (userType === "employer") {
     // 신청자 목록 - 사장
@@ -98,8 +89,24 @@ const TableRow = ({ item, userType }: TableRowProps) => {
         <td>
           {isState === "pending" ? (
             <div className={tableStyle.btnGroup}>
-              <button className="rounded-5 border border-primary px-10 py-5 text-primary">거절하기</button>
-              <button className="rounded-5 border border-blue-20 px-10 py-5">승인하기</button>
+              <Button
+                className={
+                  "rounded-5 border border-primary px-10 py-2 text-12-regular text-primary tablet:py-5 tablet:text-14-regular"
+                }
+                status={"lined"}
+                onClick={onHandleRejectClick}
+              >
+                거절하기
+              </Button>
+              <Button
+                className={
+                  "rounded-5 border border-blue-20 px-10 py-2 text-12-regular text-blue-20 tablet:py-5 tablet:text-14-regular"
+                }
+                status={"lined"}
+                onClick={onHandleAcceptClick}
+              >
+                승인하기
+              </Button>
             </div>
           ) : (
             <NormalBadge status={isState} />
