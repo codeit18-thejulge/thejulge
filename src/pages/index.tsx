@@ -1,4 +1,5 @@
 import { useGetNoticesQuery } from "@/hooks/api/notice/useGetNoticesQuery";
+import { useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
 import { useGetShopNoticesQuery } from "@/hooks/api/notice/useGetShopNoticesQuery";
 import { usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
 import { useLoginQuery } from "@/hooks/api/user/useLoginQuery";
@@ -7,9 +8,14 @@ export default function Home() {
   const { mutate: postLogin } = useLoginQuery();
   const { data: notices } = useGetNoticesQuery({});
   const { data: shopNotices } = useGetShopNoticesQuery({ shopId: "9e39dfd0-c684-443b-8727-c1d1a47344bd" });
+  const { data: shopNoticeDetail } = useGetShopNoticeDetailQuery({
+    shopId: "9e39dfd0-c684-443b-8727-c1d1a47344bd",
+    noticeId: "fc0aad52-832b-4388-8a8e-129d5160a6b3",
+  });
   const { mutate: postShopNotices } = usePostShopNoticesQuery();
   // console.log(notices);
-  // console.log(shopNotices);
+
+  console.log(shopNoticeDetail);
 
   const tt = () => {
     postShopNotices({
