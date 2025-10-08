@@ -4,6 +4,8 @@ import { useState } from "react";
 import ClosedBadge from "../Badge/ClosedBadge";
 import { cn } from "@/utils";
 import { useEscClose } from "@/hooks/useEscClose";
+import Input from "../Input";
+import Button from "../Button";
 
 interface FilterProps {
   onClose: () => void;
@@ -11,28 +13,26 @@ interface FilterProps {
   closeOnEsc: boolean;
 }
 
-const MAX_SELECTION = 4;
+const MAX_SELECTION = 3;
+const containerStyle =
+  "flex w-375 flex-col gap-24 rounded-10 border border-gray-20 px-12 py-24 shadow-md tablet:w-390 tablet:px-20";
 
 const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
-
-  const containerStyle =
-    "flex h-845 w-375 flex-col gap-24 rounded-10 border border-gray-20 px-12 py-24 shadow-md tablet:w-390 tablet:px-20";
 
   const handleAddressClick = (address: string) => {
     const isSelected = selectedAddresses.includes(address);
 
     if (isSelected) {
-      setSelectedAddresses((selectedAddresses) =>
+      return setSelectedAddresses((selectedAddresses) =>
         selectedAddresses.filter((selectedAddress) => selectedAddress !== address),
       );
-    } else {
-      if (selectedAddresses.length >= MAX_SELECTION) {
-        window.alert("최대 4개까지만 선택 가능합니다.");
-        return;
-      }
-      setSelectedAddresses((selectedAddresses) => [...selectedAddresses, address]);
     }
+
+    if (selectedAddresses.length >= MAX_SELECTION) {
+      return window.alert(`최대 ${MAX_SELECTION}개까지만 선택 가능합니다.`);
+    }
+    setSelectedAddresses((selectedAddresses) => [...selectedAddresses, address]);
   };
 
   const handleDelete = (address: string) => {
@@ -71,22 +71,40 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
             })}
           </div>
         </div>
-        <div className="grid h-82 grid-cols-2 gap-8">
-          {selectedAddresses.map((address) => (
-            <ClosedBadge key={address} propText={address} onDelete={() => handleDelete(address)} />
-          ))}
+        {selectedAddresses.length !== 0 ? (
+          <div className="grid h-50 grid-cols-2 gap-8">
+            {selectedAddresses.map((address) => (
+              <ClosedBadge key={address} propText={address} onDelete={() => handleDelete(address)} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex h-50 items-center pl-10 pt-10 text-gray-30">
+            <p>최대 {MAX_SELECTION}개까지 선택 가능합니다.</p>
+          </div>
+        )}
+      </div>
+      <hr />
+      <div className="flex flex-col gap-8">
+        <label htmlFor="hi">시작일</label>
+        <Input id="hi" className="bg-transparent" />
+      </div>
+      <hr />
+      <div className="flex flex-col gap-8">
+        <label htmlFor="hi2">금액</label>
+        <div className="flex items-center gap-12">
+          <div className="w-full max-w-170">
+            <Input id="hi2" isPay className="w-full flex-grow bg-transparent px-20 py-16 focus:outline-none" />{" "}
+          </div>
+          <span>이상부터</span>
         </div>
       </div>
-      <hr />
-      <div className="h-92 border">
-        <p>인풋 자리1</p>
-      </div>
-      <hr />
-      <div className="h-92 border">
-        <p>인풋 자리2</p>
-      </div>
-      <div className="h-48 border">
-        <p>버튼 자리</p>
+      <div className="flex h-48 gap-8">
+        <Button status="lined" className="flex-[1]">
+          초기화
+        </Button>
+        <Button status="filled" className="flex-[2]">
+          적용하기
+        </Button>
       </div>
     </div>
   );
