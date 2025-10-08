@@ -1,55 +1,7 @@
-import { useGetNoticesQuery } from "@/hooks/api/notice/useGetNoticesQuery";
-import { useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
-import { useGetShopNoticesQuery } from "@/hooks/api/notice/useGetShopNoticesQuery";
-import { usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
-import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
-import { useLoginQuery } from "@/hooks/api/user/useLoginQuery";
-
 export default function Home() {
-  const { mutate: postLogin } = useLoginQuery();
-  const { data: notices } = useGetNoticesQuery({});
-  const { data: shopNotices } = useGetShopNoticesQuery({ shopId: "9e39dfd0-c684-443b-8727-c1d1a47344bd" });
-  const { data: shopNoticeDetail } = useGetShopNoticeDetailQuery({
-    shopId: "9e39dfd0-c684-443b-8727-c1d1a47344bd",
-    noticeId: "fc0aad52-832b-4388-8a8e-129d5160a6b3",
-  });
-  const { mutate: postShopNotices } = usePostShopNoticesQuery();
-  // console.log(notices);
-  const { mutate: putShopNoticeDetail } = usePutShopNoticeDetailQuery();
-  console.log(shopNoticeDetail);
-
-  const tt = () => {
-    postShopNotices({
-      shopId: "9e39dfd0-c684-443b-8727-c1d1a47344bd",
-      hourlyPay: 12000,
-      startsAt: "2025-12-23T00:00:00Z",
-      workhour: 3,
-      description: "정상인",
-    });
-  };
-
-  const login = () => {
-    postLogin({ email: "test@a.com", password: "1" });
-  };
-
-  const ee = () => {
-    putShopNoticeDetail({
-      shopId: "9e39dfd0-c684-443b-8727-c1d1a47344bd",
-      noticeId: "fc0aad52-832b-4388-8a8e-129d5160a6b3",
-      data: {
-        hourlyPay: 13000,
-        startsAt: "2025-12-23T00:00:00Z",
-        workhour: 4,
-        description: "정상인1",
-      },
-    });
-  };
   return (
     <>
       <h1>3팀 파이팅!</h1>
-      <button onClick={login}>로그인</button>
-      <button onClick={tt}>클릭</button>
-      <button onClick={ee}>수정</button>
     </>
   );
 }
