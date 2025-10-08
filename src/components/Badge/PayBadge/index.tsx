@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import UpArrow from "@/assets/svgs/uparrow.svg";
+import IcUpArrow from "@/assets/svgs/ic_uparrow.svg";
 
 interface PAY_PROPS {
   hourlyPay: number;
@@ -7,6 +7,7 @@ interface PAY_PROPS {
   closed: boolean;
   label?: string;
   icon?: React.ReactNode;
+  post?: boolean;
 }
 
 const getHourlyPay = (hourlyPay: number, originalHourlyPay: number) => {
@@ -21,24 +22,33 @@ const PayBadge = ({
   originalHourlyPay,
   closed,
   label = "기존 시급보다",
-  icon = <UpArrow className="w-full" />,
+  icon = <IcUpArrow className="w-full" />,
+  post,
+  ...props
 }: PAY_PROPS) => {
   //시급 차이 계산
   const payDifference = getHourlyPay(hourlyPay, originalHourlyPay);
-
-  //공모 마감 상태에 따른 변화
-  const closedStatusClass = closed ? `text-gray-20 tablet:bg-gray-20` : `text-red-40 tablet:bg-red-40`;
+  //시급 차이에 따른 opacity
+  const opacityLevel = String((payDifference / 100).toFixed(2));
 
   return (
     <div
       className={cn(
-        "flex max-w-fit items-center gap-x-4 rounded-20 bg-white text-12-regular leading-none tablet:px-12 tablet:py-10 tablet:text-14-bold tablet:text-white",
-        closedStatusClass,
+        `relative flex max-w-fit items-center text-12-regular leading-none tablet:text-14-bold ${post && closed ? "text-gray-10" : "text-red-40 tablet:text-white"} ${!post && !closed && "text-white tablet:text-white"} ${!post && closed && "hidden"}}`,
       )}
+      {...props}
     >
-      <span className="tablet:inline-block">{label}</span>
-      <span className="text-12-regular after:content-['%'] tablet:text-14-bold">{payDifference.toFixed(0)}</span>
-      <div className="w-12 tablet:w-14">{icon}</div>
+      <div
+        className={cn(
+          `absolute h-full w-full rounded-20 ${post && !closed && "bg-white tablet:bg-red-40"} ${post && closed && "bg-gray-20"} ${!post && !closed && "bg-red-40"} `,
+        )}
+        style={{ opacity: `${opacityLevel}` }}
+      ></div>
+      <div className={`relative z-10 flex max-w-fit gap-x-4 px-12 py-10 ${!post && closed && "hidden"}`}>
+        <span className={`${post ? "hidden tablet:inline-block" : "inline-block"}`}>{label}</span>
+        <span className="text-12-regular after:content-['%'] tablet:text-14-bold">{payDifference.toFixed(0)}</span>
+        <div className="w-12 tablet:w-14">{icon}</div>
+      </div>
     </div>
   );
 };
