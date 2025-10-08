@@ -1,4 +1,4 @@
-import { SeoulAddress } from "@/types/api/user";
+import { SeoulAddress } from "@/types/global";
 
 export const SEOUL_ADDRESS: SeoulAddress[] = [
   "서울시 종로구",
