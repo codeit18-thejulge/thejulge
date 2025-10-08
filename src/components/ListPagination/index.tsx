@@ -11,14 +11,7 @@ interface PageProps {
   onPageChange?: (pageNumber: number) => void; // 부모에게 전달하는 콜백
 }
 
-const ListPagination = ({
-  limit,
-  count,
-  hasNext,
-  viewMax = 5,
-  pagingMax = 7,
-  onPageChange,
-}: PageProps) => {
+const ListPagination = ({ limit, count, hasNext, viewMax = 5, pagingMax = 7, onPageChange }: PageProps) => {
   const [page, setPage] = useState(1); // 현재 페이지 상태
   const [isViewItem, setIsViewItem] = useState(1);
   const [isPrevBtn, isSetPrevBtn] = useState(false);
@@ -36,7 +29,7 @@ const ListPagination = ({
       isSetPrevBtn(true);
       isSetNextBtn(true);
     }
-  }, [limit,viewMax,pagingMax, isPrevBtn, isNextBtn]);
+  }, [limit, viewMax, pagingMax, isPrevBtn, isNextBtn]);
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber); // 페이지 전환 시 현재 페이지 업데이트
@@ -44,16 +37,16 @@ const ListPagination = ({
   };
 
   const disabled = () => {
-  if (!isPrevBtn) {
-    return styles.hidden;
-  }
+    if (!isPrevBtn) {
+      return styles.hidden;
+    }
 
-  if (page === 1) {
-    return `${styles.customBtn} ${styles.disabled}`;
-  }
+    if (page === 1) {
+      return `${styles.customBtn} ${styles.disabled}`;
+    }
 
-  return styles.customBtn;
-};
+    return styles.customBtn;
+  };
 
   const totalRecords = count; // 전체 레코드(항목) 수
 
