@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { instance } from "@/utils/instance";
 import { ApplicationItem, Link, NoticeItem, ShopItem, UserInfoItem, UserItem } from "@/types/global";
 
-export interface GetShopNoticeApplicationsRequest {
+export interface GetShopApplicationsRequest {
   shopId: string;
   noticeId: string;
   params?: {
@@ -11,7 +11,7 @@ export interface GetShopNoticeApplicationsRequest {
   };
 }
 
-export interface GetShopNoticeApplicationsResponse {
+export interface GetShopApplicationsResponse {
   offset: number;
   limit: number;
   count: number;
@@ -36,18 +36,18 @@ export interface GetShopNoticeApplicationsResponse {
   links: Link[];
 }
 
-const getShopNoticeApplications = async ({
+const getShopApplications = async ({
   shopId,
   noticeId,
   params,
-}: GetShopNoticeApplicationsRequest): Promise<GetShopNoticeApplicationsResponse> => {
+}: GetShopApplicationsRequest): Promise<GetShopApplicationsResponse> => {
   const response = await instance.get(`/shops/${shopId}/notices/${noticeId}/applications`, { params });
   return response.data;
 };
 
-export const useGetShopNoticeApplicationsQuery = ({ shopId, noticeId, params }: GetShopNoticeApplicationsRequest) => {
+export const useGetShopApplicationsQuery = ({ shopId, noticeId, params }: GetShopApplicationsRequest) => {
   return useQuery({
-    queryKey: ["getShopNoticeApplications", shopId, noticeId, params],
-    queryFn: () => getShopNoticeApplications({ shopId, noticeId, params }),
+    queryKey: ["getShopApplications", shopId, noticeId, params],
+    queryFn: () => getShopApplications({ shopId, noticeId, params }),
   });
 };
