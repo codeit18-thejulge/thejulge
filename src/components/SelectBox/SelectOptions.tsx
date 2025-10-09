@@ -12,7 +12,9 @@ interface OptionProps {
 }
 
 const SelectOptions = ({ isOpen, options, onSelect, style, className }: OptionProps) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className={cn("custom-scroll absolute left-0 right-0 z-40 my-8 overflow-y-auto", style.boxSelect, className)}>
