@@ -1,12 +1,17 @@
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const EmptyProfile = () => {
   const router = useRouter();
 
   const handleRegisterClick = () => {
-    router.push("profile/register");
+    router.push("/profile/register");
   };
+
+  useEffect(() => {
+    router.prefetch("/profile/register");
+  }, []);
 
   return (
     <div className="container mx-auto flex flex-col gap-12">
