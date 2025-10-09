@@ -28,12 +28,7 @@ const Profile = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     return <p>{error.message}</p>;
   }
 
-  const isProfileRegistered = !!(
-    userInfo?.item.name &&
-    userInfo.item.phone &&
-    userInfo.item.address &&
-    userInfo.item.bio
-  );
+  const isProfileRegistered = !!(userInfo?.item.name && userInfo.item.phone && userInfo.item.address);
 
   return (
     <>
