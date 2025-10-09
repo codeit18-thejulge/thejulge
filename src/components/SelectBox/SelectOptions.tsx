@@ -1,12 +1,12 @@
 import { cn } from "@/utils";
-import { Options } from "@/types/global";
+import { Option } from "@/types/global";
 
 type STYLES = { boxSelect: string; fontSelect: string };
 
 interface OptionProps {
   isOpen: boolean;
-  options: Options[];
-  onSelect: (option: Options) => void;
+  options: Option[];
+  onSelect: (option: Option) => void;
   style: STYLES;
   className?: string;
 }

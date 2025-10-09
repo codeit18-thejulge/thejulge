@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import IcDropdown from "@/assets/svgs/ic_dropdown.svg";
-import { Options } from "@/types/global";
+import { Option } from "@/types/global";
 import { cn } from "@/utils";
 import SelectOptions from "./SelectOptions";
 
@@ -12,7 +12,7 @@ const style: STYLES = {
 };
 
 interface SelectProps {
-  options: Options[];
+  options: Option[];
   placeholder?: string;
   className?: string;
 }
@@ -29,12 +29,12 @@ const SelectBox = ({ options, placeholder, className }: SelectProps) => {
   type UseSelectHandlerProps = {
     setSelectedValue: React.Dispatch<React.SetStateAction<string>>;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    onChange?: (option: Options) => void;
+    onChange?: (option: Option) => void;
   };
 
   const useSelectHandler = ({ setSelectedValue, setIsOpen, onChange }: UseSelectHandlerProps) => {
     const handleSelect = useCallback(
-      (option: Options) => {
+      (option: Option) => {
         setSelectedValue(option.label);
         setIsOpen(false);
         if (onChange) {
