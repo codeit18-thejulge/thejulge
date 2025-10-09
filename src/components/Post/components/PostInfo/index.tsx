@@ -1,7 +1,7 @@
-import { getDateFromISOString } from "@/utils/getDateFromISOString";
 import IcClock from "@/assets/svgs/ic_clock.svg";
 import IcAddress from "@/assets/svgs/ic_address.svg";
 import { cn } from "@/utils";
+import { getNoticeTime } from "@/utils/formatTime";
 
 interface Props {
   name: string;
@@ -17,7 +17,8 @@ const icStyles = {
 };
 
 const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
-  const date = getDateFromISOString(startsAt);
+  const { date, sTime, eTime } = getNoticeTime(startsAt, workhour);
+  const period = `${sTime} ~ ${eTime}`;
 
   return (
     <div className={cn("flex flex-col items-start gap-8 text-gray-50 tablet:gap-12", closed && "text-gray-30")}>
@@ -26,7 +27,10 @@ const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
         <IcClock className={icStyles.basic} />
         <div className="flex flex-col items-start tablet:flex-row tablet:gap-8">
           <span>{date}</span>
-          <p>({workhour}시간)</p>
+          <div className="flex gap-4 tablet:flex tablet:gap-8">
+            <span>{period}</span>
+            <span>({workhour}시간)</span>
+          </div>
         </div>
       </div>
       <div className="flex gap-8 text-12 tablet:text-14">

@@ -29,3 +29,11 @@ export const isStartTimePassed = (startsAt: string): boolean => {
 
   return now.isAfter(startTime);
 };
+
+// 날짜, 시작시간, 종료시간 각자 반환하는 함수
+export const getNoticeTime = (startsAt: string, workhour: number) => {
+  const date = dayjs(startsAt).format("YYYY-MM-DD");
+  const sTime = dayjs(startsAt).format("HH:mm");
+  const eTime = dayjs(startsAt).add(workhour, "hour").format("HH:mm");
+  return { date, sTime, eTime };
+};
