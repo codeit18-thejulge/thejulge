@@ -24,7 +24,7 @@ const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
     <div className={cn("flex flex-col items-start gap-8 text-gray-50 tablet:gap-12", closed && "text-gray-30")}>
       <h3 className={cn("text-16-bold tablet:text-20-bold", closed ? "text-gray-30" : "text-black")}>{name}</h3>
       <div className="flex gap-8 text-12 tablet:text-14">
-        <IcClock className={icStyles.basic} />
+        <IcClock className={cn(icStyles.basic, closed && icStyles.closed)} />
         <div className="flex flex-col items-start tablet:flex-row tablet:gap-8">
           <span>{date}</span>
           <div className="flex gap-4 tablet:flex tablet:gap-8">
@@ -34,7 +34,7 @@ const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
         </div>
       </div>
       <div className="flex gap-8 text-12 tablet:text-14">
-        <IcAddress className={icStyles.basic} />
+        <IcAddress className={cn(icStyles.basic, closed && icStyles.closed)} />
         <p>{address}</p>
       </div>
     </div>
