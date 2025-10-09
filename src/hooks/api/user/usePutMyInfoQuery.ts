@@ -23,7 +23,11 @@ const putMyInfo = async ({ userId, data }: { userId: string; data: PutMyInfoRequ
 export const usePutMyInfoQuery = () => {
   return useMutation({
     mutationFn: putMyInfo,
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: (res) => {
+      console.log(res); // 추후 모달띄우기
+    },
+    onError: (err) => {
+      console.log(err); // 추후 에러메시지 띄우기
+    },
   });
 };
