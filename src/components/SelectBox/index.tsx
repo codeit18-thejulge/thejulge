@@ -17,12 +17,7 @@ interface SelectProps {
   className?: string;
 }
 
-const SELECT_PLACEHOLDER = "선택";
-
-const SelectBox = ({ options, placeholder, className }: SelectProps) => {
-  if (!placeholder) {
-    placeholder = SELECT_PLACEHOLDER;
-  }
+const SelectBox = ({ options, placeholder="선택", className }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(placeholder);
 
