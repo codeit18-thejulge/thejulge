@@ -16,7 +16,6 @@ interface CARD_PROPS extends NoticeItem {
 }
 
 const ShopNoticeCard = ({
-  category,
   name,
   description,
   imageUrl,
@@ -41,7 +40,7 @@ const ShopNoticeCard = ({
       <h3 className="hidden">근무조건</h3>
       <CardImageBox imageUrl={imageUrl} name={name} closed={closed} {...props} />
       <div className="flex flex-1 flex-col">
-        <CardCategory category={category} {...props} />
+        <div className="pb-4 pt-16 text-14-bold text-red-40 tablet:text-16-bold">시급</div>
         <div className={"flex flex-col gap-y-8 tablet:gap-y-12"}>
           <CardPay hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} {...props} />
           <CardTime startsAt={startsAt} workhour={workhour} {...props} />

@@ -1,23 +1,17 @@
-import { UserType, ShopCategory } from "@/types/global";
+import { ShopCategory } from "@/types/global";
 import Button from "@/components/Button";
 import { cn } from "@/utils";
 import { CardImageBox, CardCategory, CardTitle, CardAddress, CardDescription } from "..";//필요한 것만 사용
 
 //페이지에서 사용시 예시 입니다.
 interface CARD_PROPS {
-  userType: UserType;
   category: ShopCategory;
   name: string;
-  time: string;
   description: string;
   address: string;
   imageUrl: string;
-  hourlyPay: number;
-  originalHourlyPay?: number;
-  children: React.ReactNode;
   closed: boolean;
   bgColor: string;
-  workHour: number;
   onHandleEditClick: () => void;
   onHandleRegistrationClick: () => void;
 }
