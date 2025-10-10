@@ -2,13 +2,15 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
 import { usePutMyInfoQuery } from "@/hooks/api/user/usePutMyInfoQuery";
-import { UserInfoItem } from "@/types/global";
+import { Option, SeoulAddress, UserInfoItem } from "@/types/global";
 import { ChangeEvent, useEffect, useState } from "react";
 import IcXButton from "@/assets/svgs/x.svg";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { InferGetServerSidePropsType } from "next";
+import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
+import SelectBox from "@/components/SelectBox";
 
 const getServerSideProps = async () => {
   const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b"; // 추후 변경
@@ -36,6 +38,11 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddressChange = (option: Option) => {
+    const { value } = option;
+    setProfileData((prev) => ({ ...prev, address: value as SeoulAddress }));
   };
 
   const handleRegisterClick = () => {
@@ -91,8 +98,11 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
               <span>선호지역</span>
               <span className="text-red-30">*</span>
             </label>
-            {/* 추후 변경 */}
-            <Input value={profileData?.address} />
+            <SelectBox
+              onChange={handleAddressChange}
+              options={SEOUL_ADDRESS_OPTIONS}
+              placeholder={profileData?.address}
+            />
           </div>
         </div>
 
