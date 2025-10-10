@@ -15,7 +15,7 @@ const SelectOptions = ({ isOpen, options, onSelect, style, className }: OptionPr
   if (!isOpen) {
     return null;
   }
-  console.log(options);
+
   return (
     <div className={cn("custom-scroll absolute left-0 right-0 z-40 my-8 overflow-y-auto", style.boxSelect, className)}>
       {options.map((option, index) => (
