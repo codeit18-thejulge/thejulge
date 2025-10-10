@@ -7,8 +7,18 @@ import { Notice } from "@/types/notice";
 import tableStyle from "@/styles/table.module.css";
 
 const TABLE_HEADER = {
-  employer: ["신청자", "소개", "전화번호", "상태"],
-  employee: ["가게", "일자", "시급", "상태"],
+  employer: [
+    { id: "one", title: "신청자" },
+    { id: "two", title: "소개" },
+    { id: "three", title: "전화번호" },
+    { id: "four", title: "상태" },
+  ],
+  employee: [
+    { id: "one", title: "가게" },
+    { id: "two", title: "일자" },
+    { id: "three", title: "시급" },
+    { id: "four", title: "상태" },
+  ],
 };
 
 interface TableProps {
@@ -22,10 +32,13 @@ interface TableProps {
   onPageChange: () => void;
 }
 
-const Table = ({ 
-  userType, res,
-  // limit=0, count=0, hasNext, onPageChange, 
-  onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({
+  userType,
+  res,
+  // limit=0, count=0, hasNext, onPageChange,
+  onHandleRejectClick,
+  onHandleAcceptClick,
+}: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<Notice[]>([]);
   useEffect(() => {
@@ -59,7 +72,7 @@ const Table = ({
       </div>
       <div className={tableStyle.tableBottom}>
         {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.*/}
-        <ListPagination 
+        <ListPagination
         // limit={limit} count={count} hasNext={hasNext} onPageChange={onPageChange}
         />
       </div>

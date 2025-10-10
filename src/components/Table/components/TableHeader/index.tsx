@@ -1,14 +1,13 @@
 interface TableHeaderProps {
-  colTitle: string[];
+  colTitle: { id: string; title: string }[];
 }
-
 // 열 제목
 const TableHeader = ({ colTitle }: TableHeaderProps) => {
   return (
     <tr>
-      {colTitle.map((item, index) => (
-        <th key={index} scope="col">
-          {item}
+      {colTitle.map((item) => (
+        <th key={item.id} scope="col">
+          {item.title}
         </th>
       ))}
     </tr>

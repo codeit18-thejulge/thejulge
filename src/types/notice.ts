@@ -1,9 +1,9 @@
-import { Shop } from "./shop";
+import { ShopItem,NoticeItem,ApplicationStatus } from "./global";
 
 // 사장&알바 상세 공고 조회
 export interface Notice {
   id: string;
-  status: "pending" | "accepted" | "rejected" | "canceled";
+  status: ApplicationStatus;
   createdAt: string;
   user: {
     item: {
@@ -18,18 +18,11 @@ export interface Notice {
     };
   };
   shop: {
-    item: Shop;
+    item: ShopItem;
     href: string;
   };
   notice?: {
-    item: {
-      id: string;
-      hourlyPay: number;
-      description: string;
-      startsAt: string;
-      workhour: number;
-      closed: boolean;
-    };
+    item: NoticeItem;
     href: string;
   };
 }
