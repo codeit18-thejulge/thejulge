@@ -1,5 +1,5 @@
 import NormalBadge from "../Badge/NormalBadge";
-import ListPagination from "@/components/ListPagination";
+// import ListPagination from "@/components/ListPagination";
 import TableHeader from "./components/TableHeader";
 import Button from "../Button";
 import { useState, useEffect } from "react";
@@ -71,10 +71,10 @@ const Table = ({
         </table>
       </div>
       <div className={tableStyle.tableBottom}>
-        {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.*/}
+        {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.
         <ListPagination
         // limit={limit} count={count} hasNext={hasNext} onPageChange={onPageChange}
-        />
+        />*/}
       </div>
     </div>
   );
