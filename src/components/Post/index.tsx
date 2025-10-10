@@ -33,7 +33,7 @@ const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, addre
         className="flex h-full w-full flex-col justify-between gap-12 tablet:gap-20"
         aria-label="Notice Detail"
       >
-        <PostImage imageUrl={imageUrl} closed={closed} />
+        <PostImage startsAt={startsAt} imageUrl={imageUrl} closed={closed} />
         <PostInfo name={name} address={address} startsAt={startsAt} workhour={workhour} closed={closed} />
         <PostFooter hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} />
       </button>
