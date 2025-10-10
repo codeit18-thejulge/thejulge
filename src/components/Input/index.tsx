@@ -21,9 +21,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ isPay, errorMsg, class
           type={props.type}
           value={props.value}
           placeholder="입력"
-          className={cn("w-full px-20 py-16 focus:outline-none", isPay && "w-[90%]", className)}
+          className={cn("w-full bg-transparent px-20 py-16 focus:outline-none", isPay && "w-[90%]", className)}
           ref={ref}
           {...props}
+          autoComplete="off"
         />
         {isPay && <span className="py-16 pr-20 text-16">원</span>}
       </div>
