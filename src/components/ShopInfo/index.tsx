@@ -1,25 +1,34 @@
+import { isStartTimePassed } from "@/utils/formatTime";
 import PayBadge from "@/components/Badge/PayBadge";
 import { formatNoticeTime } from "@/utils/formatTime";
 import { cn } from "@/utils";
-import IcTime from "@/assets/svgs/ic_time.svg";
-import IcArea from "@/assets/svgs/ic_area.svg";
+import IcClock from "@/assets/svgs/ic_clock.svg";
+import IcAddress from "@/assets/svgs/ic_address.svg";
 import Image from "next/image";
 
-const responseText = "text-14-regular tablet:text-16-regular";
+const RESPONSE_TEXT = "text-14-regular tablet:text-16-regular";
 
 //가게 이미지
 interface CARD_IMAGE {
+  startsAt: string;
   imageUrl: string;
   name: string;
   closed: boolean;
 }
-const CardImageBox = ({ imageUrl = "", name = "", closed }: CARD_IMAGE) => {
+const CardImageBox = ({ imageUrl = "", startsAt, name = "", closed }: CARD_IMAGE) => {
+  const isPassed = isStartTimePassed(startsAt);
   return (
     <div className="relative h-177 w-full overflow-hidden rounded-12 tablet:h-360 desktop:h-full desktop:max-w-539">
       <Image layout="fill" objectFit="cover" src={imageUrl} alt={name} />
-      {closed && (
-        <div className="absolute flex h-full w-full items-center justify-center bg-[rgba(0,0,0,0.7)] text-28-bold text-gray-30">
-          마감완료
+      {isPassed && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black opacity-70">
+          <span className="px-4 py-2 text-28-bold text-gray-30">지난 공고</span>
+        </div>
+      )}
+
+      {!isPassed && closed && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black opacity-70">
+          <span className="px-4 py-2 text-28-bold text-gray-30">마감 완료</span>
         </div>
       )}
     </div>
@@ -54,8 +63,8 @@ interface CARD_ADDRESS {
 }
 const CardAddress = ({ address = "" }: CARD_ADDRESS) => {
   return (
-    <p className={cn("flex items-center gap-6 text-gray-50", responseText)}>
-      <IcArea className={"h-16 w-13 tablet:h-20 tablet:w-16"} />
+    <p className={cn("flex items-center gap-6 text-gray-50", RESPONSE_TEXT)}>
+      <IcAddress className={"h-16 w-13 text-red-30 tablet:h-20 tablet:w-16"} />
       <span className={"mt-2"}>{address}</span>
     </p>
   );
@@ -72,7 +81,7 @@ const CardTime = ({ startsAt = "2025-10-11T21:00:00Z", workhour: workHour = 3 }:
 
   return (
     <p className="leading-0 flex items-center gap-8 text-gray-50">
-      <IcTime className={"h-16 w-16 tablet:h-20 tablet:w-20"} />
+      <IcClock className={"h-16 w-16 text-red-30 tablet:h-20 tablet:w-20"} />
       <span>
         {formatNoticeTime(startsAt, workHour)} ({workHour}시간)
       </span>
@@ -106,7 +115,7 @@ const CardDescription = ({ description = "", ...props }: CARD_DESCRIPTION) => {
     <p
       className={cn(
         "leading-22 tablet:leading-26 overflow-auto whitespace-pre-wrap desktop:max-h-74",
-        responseText,
+        RESPONSE_TEXT,
         "textOverScroll",
       )}
       {...props}
