@@ -1,7 +1,7 @@
 import { UserType, ShopCategory } from "@/types/global";
 import Button from "@/components/Button";
 import { cn } from "@/utils";
-import { CardImageBox, CardCategory, CardTitle, CardAddress, CardDescription } from "../components/CardBody";
+import { CardImageBox, CardCategory, CardTitle, CardAddress, CardDescription } from "..";//필요한 것만 사용
 
 //페이지에서 사용시 예시 입니다.
 interface CARD_PROPS {

@@ -1,7 +1,7 @@
 import { UserType, NoticeSort, NoticeItem } from "@/types/global";
 import Button from "@/components/Button";
 import { cn } from "@/utils";
-import { CardImageBox, CardCategory, CardTime, CardAddress, CardPay, CardDescription } from "../components/CardBody";
+import { CardImageBox, CardCategory, CardTime, CardAddress, CardPay, CardDescription } from "..";
 
 //페이지에서 사용시 예시 입니다.
 interface CARD_PROPS extends NoticeItem {
@@ -12,7 +12,7 @@ interface CARD_PROPS extends NoticeItem {
   imageUrl: string;
   originalHourlyPay: number;
   bgColor: string;
-  onHandleClick:()=>void;
+  onHandleClick: () => void;
 }
 
 const ShopNoticeCard = ({
