@@ -28,9 +28,10 @@ const getServerSideProps = async () => {
 const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
-
   const { mutate: putMyInfo } = usePutMyInfoQuery();
+
+  const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -53,12 +54,20 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
     }
   }, [userInfo]);
 
+  useEffect(() => {
+    if (profileData?.name && profileData?.phone && profileData?.address) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [profileData]);
+
   return (
     <div className="container mx-auto flex flex-col gap-32">
       <h2 className="flex items-center justify-between">
         <span className="text-20-bold tablet:text-28-bold">내 프로필</span>
         <button onClick={handleCancelClick}>
-          <IcXButton className="h-32 w-32" />
+          <IcXButton className="h-24 w-24 tablet:h-32 tablet:w-32" />
         </button>
       </h2>
       <section className="flex flex-col gap-20">
@@ -83,7 +92,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
               <span className="text-red-30">*</span>
             </label>
             {/* 추후 변경 */}
-            <Input />
+            <Input value={profileData?.address} />
           </div>
         </div>
 
@@ -92,7 +101,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
           <Textarea name="bio" value={profileData?.bio} onChange={handleProfileChange} />
         </div>
       </section>
-      <Button status="filled" className="self-center px-136 py-14" onClick={handleRegisterClick}>
+      <Button status="filled" className="self-center px-136 py-14" onClick={handleRegisterClick} disabled={isDisabled}>
         등록하기
       </Button>
     </div>
