@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useEscClose } from "@/hooks/useEscClose";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,21 +11,7 @@ interface ModalProps {
 }
 
 const ModalBasic = ({ isOpen, onClose, children, closeOnOverlayClick = true, closeOnEsc = true }: ModalProps) => {
-  useEffect(() => {
-    if (!isOpen || !closeOnEsc) {
-      return;
-    }
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, [isOpen, closeOnEsc, onClose]);
+  useEscClose({ isOpen, closeOnEsc, onClose });
 
   useEffect(() => {
     if (isOpen) {
