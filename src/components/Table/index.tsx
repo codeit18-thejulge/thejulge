@@ -23,9 +23,9 @@ const TABLE_HEADER = {
 
 interface TableProps {
   userType: keyof typeof TABLE_HEADER;
-  limit: number;
-  count: number;
-  hasNext: boolean;
+  // limit: number;
+  // count: number;
+  // hasNext: boolean;
   res: Notice[];
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
