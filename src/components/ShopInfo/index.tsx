@@ -1,7 +1,6 @@
 import PayBadge from "@/components/Badge/PayBadge";
 import { formatNoticeTime } from "@/utils/formatTime";
 import { cn } from "@/utils";
-import styles from "@/styles/scrollNone.module.css";
 import IcTime from "@/assets/svgs/ic_time.svg";
 import IcArea from "@/assets/svgs/ic_area.svg";
 import Image from "next/image";
@@ -108,7 +107,7 @@ const CardDescription = ({ description = "", ...props }: CARD_DESCRIPTION) => {
       className={cn(
         "leading-22 tablet:leading-26 overflow-auto whitespace-pre-wrap desktop:max-h-74",
         responseText,
-        styles.scrollbar,
+        "textOverScroll",
       )}
       {...props}
     >

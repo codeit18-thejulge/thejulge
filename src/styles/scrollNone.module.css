@@ -1,6 +1,0 @@
-.scrollbar::-webkit-scrollbar {
-  width: 2px;
-}
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--red-20);
-}

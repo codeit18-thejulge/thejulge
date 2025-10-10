@@ -29,3 +29,11 @@
   --green-10: #d4f7d4;
   --green-20: #20a81e;
 }
+
+
+.textOverScroll::-webkit-scrollbar {
+  width: 2px;
+}
+.textOverScroll::-webkit-scrollbar-thumb {
+  background-color: var(--red-20);
+}
