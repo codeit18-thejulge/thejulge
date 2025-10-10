@@ -30,10 +30,11 @@
   --green-20: #20a81e;
 }
 
-
-.textOverScroll::-webkit-scrollbar {
-  width: 2px;
-}
-.textOverScroll::-webkit-scrollbar-thumb {
-  background-color: var(--red-20);
+@layer utilities {
+  .textOverScroll::-webkit-scrollbar {
+    width: 2px;
+  }
+  .textOverScroll::-webkit-scrollbar-thumb {
+    background-color: var(--red-20);
+  }
 }
