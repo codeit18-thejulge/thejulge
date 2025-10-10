@@ -1,10 +1,10 @@
-import NormalBadge from "../Badge/NormalBadge";
-// import ListPagination from "@/components/ListPagination";
 import TableHeader from "./components/TableHeader";
-import Button from "../Button";
+import TableRow from "./components/TableRow";
+// import ListPagination from "@/components/ListPagination";
 import { useState, useEffect } from "react";
 import { Notice } from "@/types/notice";
 import tableStyle from "@/styles/table.module.css";
+
 
 const TABLE_HEADER = {
   employer: [
@@ -79,73 +79,4 @@ const Table = ({
     </div>
   );
 };
-
-// 테이블 값
-interface TableRowProps {
-  item: Notice;
-  userType: keyof typeof TABLE_HEADER;
-  onHandleRejectClick?: () => void;
-  onHandleAcceptClick?: () => void;
-}
-
-const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick }: TableRowProps) => {
-  const { user, shop, notice } = item;
-  const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
-
-  useEffect(() => {
-    setIsState(item.status);
-  }, [item.status]);
-
-  if (userType === "employer") {
-    // 신청자 목록 - 사장
-    return (
-      <tr>
-        <td>{user.item.name}</td>
-        <td>
-          <div className={tableStyle.overText}>{user.item.bio || user.item.description || "-"}</div>
-        </td>
-        <td>{user.item.phone || "-"}</td>
-        <td>
-          {isState === "pending" ? (
-            <div className={tableStyle.btnGroup}>
-              <Button
-                className={
-                  "rounded-5 border border-primary px-10 py-2 text-12-regular text-primary tablet:py-5 tablet:text-14-regular"
-                }
-                status={"lined"}
-                onClick={onHandleRejectClick}
-              >
-                거절하기
-              </Button>
-              <Button
-                className={
-                  "rounded-5 border border-blue-20 px-10 py-2 text-12-regular text-blue-20 tablet:py-5 tablet:text-14-regular"
-                }
-                status={"lined"}
-                onClick={onHandleAcceptClick}
-              >
-                승인하기
-              </Button>
-            </div>
-          ) : (
-            <NormalBadge status={isState} />
-          )}
-        </td>
-      </tr>
-    );
-  } else {
-    // 가게 목록 -알바
-    return (
-      <tr>
-        <td>{shop.item.name}</td>
-        <td>{notice ? new Date(notice.item.startsAt).toLocaleDateString() : "-"}</td>
-        <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
-        <td>
-          <NormalBadge status={isState} />
-        </td>
-      </tr>
-    );
-  }
-};
-
 export default Table;
