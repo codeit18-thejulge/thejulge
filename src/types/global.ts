@@ -87,3 +87,7 @@ export type SeoulAddress =
 export type ApplicationStatus = "pending" | "accepted" | "rejected" | "canceled";
 
 export type ResultStatus = "accepted" | "rejected";
+
+export type NoticeSort = "time" | "pay" | "hour" | "shop";
+
+export type Option = { value: string; label: string };

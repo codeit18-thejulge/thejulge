@@ -12,7 +12,7 @@ const inputStyle = {
   pay: "flex justify-between",
 };
 
-const Input = forwardRef<HTMLInputElement, InputProps>(({ isPay, errorMsg, ...props }, ref) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(({ isPay, errorMsg, className, ...props }, ref) => {
   return (
     <>
       <div className={cn(inputStyle.basic, errorMsg && inputStyle.error, isPay && inputStyle.pay)}>
@@ -21,7 +21,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ isPay, errorMsg, ...pr
           type={props.type}
           value={props.value}
           placeholder="입력"
-          className={cn("w-full px-20 py-16 focus:outline-none", isPay && "w-[90%]", props.className)}
+          className={cn("w-full px-20 py-16 focus:outline-none", isPay && "w-[90%]", className)}
           ref={ref}
           {...props}
         />
