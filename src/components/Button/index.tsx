@@ -1,9 +1,10 @@
 import { DetailedHTMLProps, ButtonHTMLAttributes } from "react";
 import { cn } from "@/utils";
 
+const disabledStyle = " disabled:bg-gray-40 disabled:text-white";
 const BtnStyle = {
-  filled: "bg-primary text-white",
-  lined: "bg-white border-primary border-solid text-primary border",
+  filled: "bg-primary text-white" + disabledStyle,
+  lined: "bg-white border-primary border-solid text-primary border" + disabledStyle,
 };
 
 type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
@@ -17,11 +18,7 @@ const Button = ({ status, children, className, ...props }: BtnStatus) => {
   return (
     <button
       type="button"
-      className={cn(
-        "inline-block w-full max-w-350 rounded-md bg-gray-40 text-14-bold text-white",
-        status && BtnStyle[status],
-        className,
-      )}
+      className={cn("inline-block w-full max-w-350 rounded-md text-14-bold", status && BtnStyle[status], className)}
       {...props}
     >
       {children}
