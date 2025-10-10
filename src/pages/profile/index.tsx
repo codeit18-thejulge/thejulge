@@ -1,12 +1,12 @@
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import EmptyProfile from "@/components/Profile/EmptyProfile";
 import ProfileDetail from "@/components/Profile/ProfileDetail";
 import ApplicationLog from "@/components/Profile/ApplicationLog";
 
-const getServerSideProps: GetServerSideProps = async () => {
-  const userId = "906ccb00-4e5c-4340-a737-38741bde10a4";
+const getServerSideProps = async () => {
+  const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b";
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

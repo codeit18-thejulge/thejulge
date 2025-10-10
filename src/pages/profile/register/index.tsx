@@ -3,36 +3,56 @@ import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
 import { usePutMyInfoQuery } from "@/hooks/api/user/usePutMyInfoQuery";
 import { UserInfoItem } from "@/types/global";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import IcXButton from "@/assets/svgs/x.svg";
 import { useRouter } from "next/router";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
+import { InferGetServerSidePropsType } from "next";
 
-const userId = "906ccb00-4e5c-4340-a737-38741bde10a4"; // 추후 변경
+const getServerSideProps = async () => {
+  const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b"; // 추후 변경
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["getMyInfo", userId],
+    queryFn: () => getMyInfo(userId),
+  });
+  return {
+    props: {
+      userId,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
 
-const ProfileRegister = () => {
+const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+  const { data: userInfo } = useGetMyInfoQuery(userId);
+  const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
 
   const { mutate: putMyInfo } = usePutMyInfoQuery();
 
-  const [formData, setFormData] = useState<UserInfoItem>({
-    name: "",
-    phone: "",
-    address: "서울시 강남구", // 추후변경
-    bio: "",
-  });
-
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleRegisterClick = () => {
-    putMyInfo({ userId, data: formData });
+    if (profileData) {
+      putMyInfo({ userId, data: profileData });
+    }
   };
 
   const handleCancelClick = () => {
     router.back();
   };
+
+  useEffect(() => {
+    if (userInfo?.item) {
+      setProfileData(userInfo.item);
+    }
+  }, [userInfo]);
+
   return (
     <div className="container mx-auto flex flex-col gap-32">
       <h2 className="flex items-center justify-between">
@@ -48,14 +68,14 @@ const ProfileRegister = () => {
               <span>이름</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="name" value={formData.name} onChange={handleProfileChange} />
+            <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
           </div>
           <div>
             <label className="text-16-regular">
               <span>연락처</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="phone" value={formData.phone} onChange={handleProfileChange} />
+            <Input name="phone" value={profileData?.phone} onChange={handleProfileChange} />
           </div>
           <div>
             <label className="text-16-regular">
@@ -69,7 +89,7 @@ const ProfileRegister = () => {
 
         <div>
           <label className="text-16-regular">소개</label>
-          <Textarea name="bio" value={formData.bio} onChange={handleProfileChange} />
+          <Textarea name="bio" value={profileData?.bio} onChange={handleProfileChange} />
         </div>
       </section>
       <Button status="filled" className="self-center px-136 py-14" onClick={handleRegisterClick}>
@@ -79,4 +99,5 @@ const ProfileRegister = () => {
   );
 };
 
+export { getServerSideProps };
 export default ProfileRegister;

@@ -3,7 +3,7 @@ import { useLoginQuery } from "@/hooks/api/user/useLoginQuery";
 export default function Home() {
   const { mutate: postLogin } = useLoginQuery();
   const ll = () => {
-    postLogin({ email: "a@a.com", password: "1" });
+    postLogin({ email: "b@b.com", password: "1" });
   };
   return (
     <>

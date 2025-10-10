@@ -3,7 +3,7 @@ import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
 import { UserItem, ShopItem, Link } from "@/types/global";
 
-export type PutMyInfoRequest = UserInfoItem;
+export type PutMyInfoRequest = Partial<UserInfoItem>;
 
 export interface PutMyInfoResponse {
   item: UserItem &
