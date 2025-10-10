@@ -21,9 +21,10 @@ interface SelectProps {
 
 const SelectBox = ({ options, placeholder = "선택", className, onChange }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(placeholder);
+  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState(placeholder);
 
-  const handleSelect = useSelectHandler({ setSelectedValue, setIsOpen, onChange });
+  const handleSelect = useSelectHandler({ setSelectedValue, setSelectedLabel, setIsOpen, onChange });
 
   return (
     <div className={cn("relative w-full", className)}>
@@ -32,7 +33,7 @@ const SelectBox = ({ options, placeholder = "선택", className, onChange }: Sel
         onClick={() => setIsOpen(!isOpen)}
         aria-label="셀렉트 박스"
       >
-        <span className={cn(selectedValue === placeholder ? "text-gray-40" : "text-black")}>{selectedValue}</span>
+        <span className={cn(selectedLabel === placeholder ? "text-gray-40" : "text-black")}>{selectedLabel}</span>
         <div
           className={cn("flex items-center justify-center transition-transform duration-200", isOpen && "rotate-180")}
         >
