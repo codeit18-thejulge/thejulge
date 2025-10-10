@@ -27,7 +27,7 @@ const SelectOptions = ({ isOpen, options, onSelect, style, className }: OptionPr
           onClick={() => onSelect(option)}
           aria-label="셀렉트박스 옵션"
         >
-          {option.label}
+          {option.value}
         </option>
       ))}
     </div>

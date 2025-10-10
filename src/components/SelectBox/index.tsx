@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import IcDropdown from "@/assets/svgs/ic_dropdown.svg";
 import { Option } from "@/types/global";
 import { cn } from "@/utils";
+import { useSelectHandler } from "@/hooks/useSelectHandler";
 import SelectOptions from "./SelectOptions";
 
 type STYLES = { boxSelect: string; fontSelect: string };
@@ -15,34 +16,14 @@ interface SelectProps {
   options: Option[];
   placeholder?: string;
   className?: string;
+  onChange?: (option: Option) => void;
 }
 
-const SelectBox = ({ options, placeholder="선택", className }: SelectProps) => {
+const SelectBox = ({ options, placeholder = "선택", className, onChange }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(placeholder);
 
-  type UseSelectHandlerProps = {
-    setSelectedValue: React.Dispatch<React.SetStateAction<string>>;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    onChange?: (option: Option) => void;
-  };
-
-  const useSelectHandler = ({ setSelectedValue, setIsOpen, onChange }: UseSelectHandlerProps) => {
-    const handleSelect = useCallback(
-      (option: Option) => {
-        setSelectedValue(option.label);
-        setIsOpen(false);
-        if (onChange) {
-          onChange(option);
-        }
-      },
-      [setSelectedValue, setIsOpen, onChange],
-    );
-
-    return handleSelect;
-  };
-
-  const handleSelect = useSelectHandler({ setSelectedValue, setIsOpen });
+  const handleSelect = useSelectHandler({ setSelectedValue, setIsOpen, onChange });
 
   return (
     <div className={cn("relative w-full", className)}>
