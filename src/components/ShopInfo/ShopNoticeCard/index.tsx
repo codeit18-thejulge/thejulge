@@ -1,34 +1,18 @@
-import { UserType } from "@/types/global";
+import { UserType, NoticeSort, NoticeItem } from "@/types/global";
 import Button from "@/components/Button";
 import { cn } from "@/utils";
-import CardWrap from "../components/CardWrap";
-import {
-  CardBody,
-  CardImageBox,
-  CardCategory,
-  CardTime,
-  CardAddress,
-  CardPay,
-  CardDescription,
-  CardTextBox,
-  CardButtonBox,
-} from "../components/CardBody";
+import { CardImageBox, CardCategory, CardTime, CardAddress, CardPay, CardDescription } from "../components/CardBody";
 
 //페이지에서 사용시 예시 입니다.
-interface CARD_PROPS {
-  userType?: UserType;
-  category?: string;
-  name?: string;
-  time?: string;
-  description?: string;
-  address?: string;
-  imageUrl?: string;
-  hourlyPay?: number;
-  originalHourlyPay?: number;
-  children?: React.ReactNode;
-  closed?: boolean;
-  bgColor?: string;
-  workHour?: number;
+interface CARD_PROPS extends NoticeItem {
+  userType: UserType;
+  category: NoticeSort;
+  name: string;
+  address: string;
+  imageUrl: string;
+  originalHourlyPay: number;
+  bgColor: string;
+  onHandleClick:()=>void;
 }
 
 const ShopNoticeCard = ({
@@ -38,31 +22,43 @@ const ShopNoticeCard = ({
   imageUrl,
   address,
   bgColor,
-  time,
-  workHour,
+  startsAt,
+  workhour,
   hourlyPay,
   originalHourlyPay,
   closed = false,
+  onHandleClick,
   ...props
 }: CARD_PROPS) => {
   return (
-    <CardWrap bgColor={bgColor || ""} {...props}>
+    <article
+      className={cn(
+        "flex flex-col gap-x-31 overflow-hidden rounded-12 bg-white p-24 desktop:h-356 desktop:flex-row",
+        bgColor,
+      )}
+      {...props}
+    >
+      <h3 className="hidden">근무조건</h3>
       <CardImageBox imageUrl={imageUrl} name={name} closed={closed} {...props} />
-      <CardBody>
+      <div className="flex flex-1 flex-col">
         <CardCategory category={category} {...props} />
-        <CardTextBox>
-          <CardPay hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed}{...props} />
-          <CardTime time={time} workHour={workHour} {...props} />
+        <div className={"flex flex-col gap-y-8 tablet:gap-y-12"}>
+          <CardPay hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} {...props} />
+          <CardTime startsAt={startsAt} workhour={workhour} {...props} />
           <CardAddress address={address} {...props} />
           <CardDescription description={description} {...props} />
-        </CardTextBox>
-        <CardButtonBox>
-          <Button status={"lined"} className={cn("h-38 text-14-regular tablet:h-48 tablet:text-16-bold")}>
+        </div>
+        <div className="mt-24 flex w-full gap-x-8 whitespace-nowrap tablet:mt-40 desktop:mt-auto">
+          <Button
+            status={"lined"}
+            className={cn("h-38 text-14-regular tablet:h-48 tablet:text-16-bold")}
+            onClick={onHandleClick}
+          >
             공고 편집하기
           </Button>
-        </CardButtonBox>
-      </CardBody>
-    </CardWrap>
+        </div>
+      </div>
+    </article>
   );
 };
 
