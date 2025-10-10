@@ -29,3 +29,9 @@
   --green-10: #d4f7d4;
   --green-20: #20a81e;
 }
+
+/* select box scroll custom */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
