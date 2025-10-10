@@ -19,9 +19,13 @@ interface TableProps {
   res: Notice[];
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
+  onPageChange: () => void;
 }
 
-const Table = ({ userType, res, limit, count, hasNext, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({ 
+  userType, res,
+  // limit=0, count=0, hasNext, onPageChange, 
+  onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<Notice[]>([]);
   useEffect(() => {
@@ -55,7 +59,9 @@ const Table = ({ userType, res, limit, count, hasNext, onHandleRejectClick, onHa
       </div>
       <div className={tableStyle.tableBottom}>
         {/* 페이지 네이션 컴포넌트 만들어지면 오류 없습니다.*/}
-        <ListPagination limit={limit} count={count} hasNext={hasNext} />
+        <ListPagination 
+        // limit={limit} count={count} hasNext={hasNext} onPageChange={onPageChange}
+        />
       </div>
     </div>
   );
