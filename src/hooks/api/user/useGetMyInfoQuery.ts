@@ -1,7 +1,6 @@
-import { Link, ShopItem, UserInfoItem, UserItem, UserType } from "@/types/global";
+import { Link, ShopItem, UserInfoItem, UserItem } from "@/types/global";
 import { instance } from "@/utils/instance";
 import { useQuery } from "@tanstack/react-query";
-import { UserInfo } from "os";
 
 export interface GetMyInfoResponse {
   item: UserItem &
