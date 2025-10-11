@@ -12,7 +12,7 @@ const EmployeeSection = () => {
     router.push("/joblist");
   };
   return (
-    <section className="mx-auto flex max-w-6xl justify-between px-16 py-80">
+    <section className="mx-auto flex max-w-6xl items-center justify-between gap-24 px-16 py-80">
       <div className="flex flex-col justify-center gap-12">
         <h2 className="text-32 font-bold">이런 알바는 어때요?</h2>
         <p className="text-24">
@@ -27,7 +27,7 @@ const EmployeeSection = () => {
           공고 보러가기
         </Button>
       </div>
-      <div className="flex gap-12">
+      <div className="flex">
         <motion.div
           initial={{ opacity: 0, x: -100, rotate: -15 }}
           whileInView={{ opacity: 1, x: 0, rotate: -8 }}
