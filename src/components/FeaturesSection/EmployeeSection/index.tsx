@@ -2,8 +2,8 @@ import Button from "@/components/Button";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import imgPost1 from "@/assets/svgs/imgPost1.png";
-import imgPost2 from "@/assets/svgs/imgPost2.png";
+import imgPost1 from "@/assets/svgs/img_post1.png";
+import imgPost2 from "@/assets/svgs/img_post2.png";
 
 const EmployeeSection = () => {
   const router = useRouter();

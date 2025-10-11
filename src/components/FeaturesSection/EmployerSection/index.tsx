@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import imgShop from "@/assets/svgs/imgShop.png";
+import imgShop from "@/assets/svgs/img_shop.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
