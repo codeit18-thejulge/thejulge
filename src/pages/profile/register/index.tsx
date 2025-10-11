@@ -11,6 +11,7 @@ import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery
 import { InferGetServerSidePropsType } from "next";
 import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import SelectBox from "@/components/SelectBox";
+import MessageModal from "@/components/Modal/MessageModal";
 
 const getServerSideProps = async () => {
   const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b"; // 추후 변경
@@ -30,10 +31,12 @@ const getServerSideProps = async () => {
 const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
 
   const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -54,6 +57,22 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const handleCancelClick = () => {
     router.back();
   };
+
+  const handleConfirmClick = () => {
+    setIsOpenModal(false);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setModalMessage("프로필 등록이 완료되었습니다");
+      setIsOpenModal(true);
+    }
+
+    if (isError) {
+      setModalMessage("프로필 등록을 실패했습니다");
+      setIsOpenModal(true);
+    }
+  }, [isSuccess, isError]);
 
   useEffect(() => {
     if (userInfo?.item) {
@@ -114,6 +133,13 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
       <Button status="filled" className="self-center px-136 py-14" onClick={handleRegisterClick} disabled={isDisabled}>
         등록하기
       </Button>
+
+      <MessageModal
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        message={modalMessage}
+        footers={[{ buttonText: "확인", style: "filled", onClick: handleConfirmClick, className: "py-8 px-32" }]}
+      />
     </div>
   );
 };

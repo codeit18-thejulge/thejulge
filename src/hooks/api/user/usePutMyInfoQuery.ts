@@ -1,6 +1,6 @@
 import { UserInfoItem } from "@/types/global";
 import { instance } from "@/utils/instance";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserItem, ShopItem, Link } from "@/types/global";
 
 export type PutMyInfoRequest = Partial<UserInfoItem>;
@@ -21,13 +21,12 @@ const putMyInfo = async ({ userId, data }: { userId: string; data: PutMyInfoRequ
 };
 
 export const usePutMyInfoQuery = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: putMyInfo,
-    onSuccess: (res) => {
-      console.log(res); // 추후 모달띄우기
-    },
-    onError: (err) => {
-      console.log(err); // 추후 에러메시지 띄우기
+    onSuccess: (data, variables) => {
+      const { userId } = variables;
+      queryClient.invalidateQueries({ queryKey: ["getMyInfo", userId] });
     },
   });
 };
