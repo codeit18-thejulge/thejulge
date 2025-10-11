@@ -1,5 +1,4 @@
 import Button from "../Button";
-import SearchInput from "../Header/SearchInput";
 import IcSearch from "@/assets/svgs/ic_search.svg";
 
 const HeroSection = () => {
