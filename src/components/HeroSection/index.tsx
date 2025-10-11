@@ -28,7 +28,7 @@ const HeroSection = () => {
                 placeholder="공고명, 업체명으로 검색"
               />
             </div>
-            <Button status="filled" className="w-100 py-20">
+            <Button status="filled" className="w-100 py-20 transition hover:bg-red-40">
               검색
             </Button>
           </div>
