@@ -12,5 +12,3 @@ export default function Home() {
     </>
   );
 }
-
-//#6b4eff
