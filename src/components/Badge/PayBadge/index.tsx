@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import UpArrow from "@/assets/svgs/uparrow.svg";
+import IcUpArrow from "@/assets/svgs/ic_uparrow.svg";
 
 interface PAY_PROPS {
   hourlyPay: number;
@@ -21,7 +21,7 @@ const PayBadge = ({
   originalHourlyPay,
   closed,
   label = "기존 시급보다",
-  icon = <UpArrow className="w-full" />,
+  icon = <IcUpArrow className="w-full" />,
 }: PAY_PROPS) => {
   //시급 차이 계산
   const payDifference = getHourlyPay(hourlyPay, originalHourlyPay);
