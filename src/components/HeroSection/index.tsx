@@ -1,7 +1,12 @@
+import { useRouter } from "next/router";
 import Button from "../Button";
-import IcSearch from "@/assets/svgs/ic_search.svg";
 
 const HeroSection = () => {
+  const router = useRouter();
+
+  const handleJobClick = () => {
+    router.push("/joblist");
+  };
   return (
     <section className="bg-red-10 px-16 py-64">
       <div className="mx-auto max-w-3xl">
@@ -19,31 +24,23 @@ const HeroSection = () => {
           </p>
 
           <div className="flex justify-center gap-12">
-            <div className="relative">
-              <IcSearch className="absolute left-15 top-20 w-20 text-black" />
-              <input
-                type="text"
-                className="h-full rounded-xl pl-50 placeholder:text-black focus:outline-gray-50 tablet:w-600"
-                placeholder="공고명, 업체명으로 검색"
-              />
-            </div>
-            <Button status="filled" className="w-100 py-20 transition hover:bg-red-40">
-              검색
+            <Button status="filled" className="py-16 text-24-bold transition hover:bg-red-40" onClick={handleJobClick}>
+              공고 보러가기
             </Button>
           </div>
         </div>
 
-        <div className="mt-24 flex items-center justify-center gap-24 border-t-2 pt-24">
+        <div className="mt-24 flex items-center justify-center gap-24 border-t border-gray-30 pt-24">
           <div className="text-center">
             <div className="text-28-bold text-primary">1,234</div>
             <div className="text-14-bold">활성 공고</div>
           </div>
-          <div className="h-45 w-1 bg-gray-50"></div>
+          <div className="h-45 w-1 bg-gray-30"></div>
           <div className="text-center">
             <div className="text-28-bold text-primary">5,678</div>
             <div className="text-14-bold">등록 업체</div>
           </div>
-          <div className="h-45 w-1 bg-gray-50"></div>
+          <div className="2 h-45 w-1 bg-gray-30"></div>
           <div className="text-center">
             <div className="text-28-bold text-primary">12,345</div>
             <div className="text-14-bold">지원자</div>
