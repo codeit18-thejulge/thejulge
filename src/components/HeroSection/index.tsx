@@ -3,7 +3,7 @@ import IcSearch from "@/assets/svgs/ic_search.svg";
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-b from-[#F3F2FF] to-[#FAFAFC] px-16 py-64">
+    <section className="bg-red-10 px-16 py-64">
       <div className="mx-auto max-w-3xl">
         <div className="flex flex-col gap-16">
           <h1 className="text-center text-48 font-bold">
