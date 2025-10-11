@@ -1,23 +1,8 @@
-.outBox {
-  overflow: hidden;
-  max-width: 60.25rem;
-  border: 1px solid #e5e4e7;
-  border-radius: 0.75rem;
-  -webkit-border-radius: 0.75rem;
-  -moz-border-radius: 0.75rem;
-  -ms-border-radius: 0.75rem;
-  -o-border-radius: 0.75rem;
-}
 
 .tableWrap {
   position: relative;
   overflow-x: auto;
 }
-
-/* .tableWrap::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-} */
 
 .table {
   width: 100%;
