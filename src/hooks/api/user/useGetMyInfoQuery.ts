@@ -1,8 +1,18 @@
-import { User } from "@/types/api/user";
+import { Link, ShopItem, UserInfoItem, UserItem } from "@/types/global";
 import { instance } from "@/utils/instance";
 import { useQuery } from "@tanstack/react-query";
 
-const getMyInfo = async (userId: string): Promise<User> => {
+export interface GetMyInfoResponse {
+  item: UserItem &
+    Partial<UserInfoItem> & {
+      shop: {
+        item: ShopItem;
+      } | null;
+    };
+  links: Link[];
+}
+
+const getMyInfo = async (userId: string): Promise<GetMyInfoResponse> => {
   const response = await instance.get(`/users/${userId}`);
   return response.data;
 };
