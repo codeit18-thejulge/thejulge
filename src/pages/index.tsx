@@ -1,7 +1,15 @@
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+
 export default function Home() {
   return (
     <>
-      <h1>3팀 파이팅!</h1>    
+      <Header />
+      <HeroSection />
+      <Footer />
     </>
   );
 }
+
+//#6b4eff
