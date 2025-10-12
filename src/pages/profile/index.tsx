@@ -1,9 +1,9 @@
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import type { InferGetServerSidePropsType } from "next";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import EmptyProfile from "@/components/Profile/EmptyProfile";
-import ProfileDetail from "@/components/Profile/ProfileDetail";
-import ApplicationLog from "@/components/Profile/ApplicationLog";
+import EmptyProfile from "@/pages/profile/(components)/Profile/EmptyProfile";
+import ProfileDetail from "@/pages/profile/(components)/Profile/ProfileDetail";
+import ApplicationLog from "@/pages/profile/(components)/Profile/ApplicationLog";
 
 const getServerSideProps = async () => {
   const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b";
