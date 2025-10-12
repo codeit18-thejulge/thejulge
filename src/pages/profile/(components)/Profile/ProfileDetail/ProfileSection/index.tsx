@@ -2,14 +2,26 @@ import { useRouter } from "next/router";
 import IcPhone from "@/assets/svgs/ic_phone.svg";
 import IcAddress from "@/assets/svgs/ic_address.svg";
 import Button from "@/components/Button";
-import { GetMyInfoResponse } from "@/hooks/api/user/useGetMyInfoQuery";
+import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface Props {
-  item: GetMyInfoResponse["item"];
+  userId: string;
 }
 
-const ProfileSection = ({ item }: Props) => {
+const ProfileSection = ({ userId }: Props) => {
   const router = useRouter();
+  const { data, isLoading, isError, error } = useGetMyInfoQuery(userId);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError || !data) {
+    return isError ? <p>{error.message}</p> : <p>데이터를 불러오지 못했습니다</p>;
+  }
+
+  const { item } = data;
 
   const handleEditClick = () => {
     router.push("/profile/register");

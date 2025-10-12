@@ -29,7 +29,7 @@ const Profile = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
 
   const isProfileRegistered = !!(userInfo?.item.name && userInfo.item.phone && userInfo.item.address);
 
-  return <>{isProfileRegistered ? <ProfileDetail userInfo={userInfo} /> : <EmptyProfile />}</>;
+  return <>{isProfileRegistered ? <ProfileDetail userId={userId} /> : <EmptyProfile />}</>;
 };
 
 export { getServerSideProps };
