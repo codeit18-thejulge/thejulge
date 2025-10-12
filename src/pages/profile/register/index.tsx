@@ -14,7 +14,7 @@ import SelectBox from "@/components/SelectBox";
 import MessageModal from "@/components/Modal/MessageModal";
 
 const getServerSideProps = async () => {
-  const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b"; // 추후 변경
+  const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484"; // 추후 변경
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["getMyInfo", userId],
@@ -89,7 +89,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   }, [profileData]);
 
   return (
-    <div className="container mx-auto flex flex-col gap-32">
+    <div className="mx-auto flex max-w-6xl flex-col gap-32 py-60">
       <h2 className="flex items-center justify-between">
         <span className="text-20-bold tablet:text-28-bold">내 프로필</span>
         <button onClick={handleCancelClick}>

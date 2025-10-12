@@ -1,12 +1,11 @@
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import type { InferGetServerSidePropsType } from "next";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import EmptyProfile from "@/components/Profile/EmptyProfile";
-import ProfileDetail from "@/components/Profile/ProfileDetail";
-import ApplicationLog from "@/components/Profile/ApplicationLog";
+import EmptyProfile from "@/pages/profile/(components)/Profile/EmptyProfile";
+import ProfileDetail from "@/pages/profile/(components)/Profile/ProfileDetail";
 
 const getServerSideProps = async () => {
-  const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b";
+  const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484";
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -30,18 +29,7 @@ const Profile = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
 
   const isProfileRegistered = !!(userInfo?.item.name && userInfo.item.phone && userInfo.item.address);
 
-  return (
-    <>
-      {isProfileRegistered ? (
-        <div>
-          <ProfileDetail />
-          <ApplicationLog />
-        </div>
-      ) : (
-        <EmptyProfile />
-      )}
-    </>
-  );
+  return <>{isProfileRegistered ? <ProfileDetail userId={userId} /> : <EmptyProfile />}</>;
 };
 
 export { getServerSideProps };
