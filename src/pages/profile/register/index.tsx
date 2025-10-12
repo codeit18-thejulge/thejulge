@@ -12,6 +12,7 @@ import { InferGetServerSidePropsType } from "next";
 import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import SelectBox from "@/components/SelectBox";
 import MessageModal from "@/components/Modal/MessageModal";
+import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 
 const getServerSideProps = async () => {
   const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484"; // 추후 변경
@@ -31,7 +32,7 @@ const getServerSideProps = async () => {
 const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isError, isSuccess, error } = usePutMyInfoQuery();
 
   const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
   const [isDisabled, setIsDisabled] = useState(false);
@@ -40,6 +41,10 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    if (name === "phone") {
+      const formatted = formatPhoneNumber(value);
+      return setProfileData((prev) => ({ ...prev, [name]: formatted }));
+    }
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
