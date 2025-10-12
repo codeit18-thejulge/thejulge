@@ -32,7 +32,7 @@ const getServerSideProps = async () => {
 const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo, isError, isSuccess, error } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
 
   const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
   const [isDisabled, setIsDisabled] = useState(false);
