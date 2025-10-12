@@ -33,7 +33,7 @@ const EmployeeSection = () => {
           whileInView={{ opacity: 1, x: 0, rotate: -8 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           viewport={{ once: true, amount: 0.5 }}
-          className="max:w-[300px] z-10 rounded-xl shadow-2xl"
+          className="rounded-xl shadow-2xl"
         >
           <Image src={imgPost1} alt="첫 번째 공고 카드" />
         </motion.div>
@@ -43,7 +43,7 @@ const EmployeeSection = () => {
           whileInView={{ opacity: 1, x: 0, rotate: 6 }}
           transition={{ duration: 0.7, delay: 0.4 }}
           viewport={{ once: true, amount: 0.5 }}
-          className="max:w-[300px] rounded-xl shadow-2xl"
+          className="rounded-xl shadow-2xl"
         >
           <Image src={imgPost2} alt="두 번째 공고 카드" />
         </motion.div>
