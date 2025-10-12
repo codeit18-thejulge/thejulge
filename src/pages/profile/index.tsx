@@ -34,7 +34,7 @@ const Profile = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     <>
       {isProfileRegistered ? (
         <div>
-          <ProfileDetail />
+          <ProfileDetail userInfo={userInfo} />
           <ApplicationLog />
         </div>
       ) : (
