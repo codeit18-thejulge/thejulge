@@ -3,7 +3,6 @@ import type { InferGetServerSidePropsType } from "next";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import EmptyProfile from "@/pages/profile/(components)/Profile/EmptyProfile";
 import ProfileDetail from "@/pages/profile/(components)/Profile/ProfileDetail";
-import ApplicationLog from "@/pages/profile/(components)/Profile/ApplicationLog";
 
 const getServerSideProps = async () => {
   const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b";
@@ -30,18 +29,7 @@ const Profile = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
 
   const isProfileRegistered = !!(userInfo?.item.name && userInfo.item.phone && userInfo.item.address);
 
-  return (
-    <>
-      {isProfileRegistered ? (
-        <div>
-          <ProfileDetail userInfo={userInfo} />
-          <ApplicationLog />
-        </div>
-      ) : (
-        <EmptyProfile />
-      )}
-    </>
-  );
+  return <>{isProfileRegistered ? <ProfileDetail userInfo={userInfo} /> : <EmptyProfile />}</>;
 };
 
 export { getServerSideProps };
