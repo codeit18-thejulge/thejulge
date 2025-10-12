@@ -3,6 +3,7 @@ import LandingHeader from "@/components/Landing/LandingHeader";
 import HeroSection from "@/components/Landing/HeroSection";
 import FeaturesSection from "@/components/Landing/FeaturesSection";
 import HowWorks from "@/components/Landing/HowWorks";
+import ReasonToUse from "@/components/Landing/ReasonToUse";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <LandingHeader />
       <HeroSection />
       <HowWorks />
+      <ReasonToUse />
       <FeaturesSection />
       <Footer />
     </>
