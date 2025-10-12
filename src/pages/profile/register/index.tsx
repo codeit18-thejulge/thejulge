@@ -14,7 +14,7 @@ import SelectBox from "@/components/SelectBox";
 import MessageModal from "@/components/Modal/MessageModal";
 
 const getServerSideProps = async () => {
-  const userId = "2c2bc013-9f37-4777-9817-4b92ebaf7c0b"; // 추후 변경
+  const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484"; // 추후 변경
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["getMyInfo", userId],
