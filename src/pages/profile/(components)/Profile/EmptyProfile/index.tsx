@@ -11,7 +11,7 @@ const EmptyProfile = () => {
 
   useEffect(() => {
     router.prefetch("/profile/register");
-  }, []);
+  }, [router]);
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-12 py-60">
