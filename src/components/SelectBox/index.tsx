@@ -17,9 +17,10 @@ interface SelectProps {
   placeholder?: string;
   className?: string;
   onChange?: (option: Option) => void;
+  dropdownClassname?: string;
 }
 
-const SelectBox = ({ options, placeholder = "선택", className, onChange }: SelectProps) => {
+const SelectBox = ({ options, placeholder = "선택", className, onChange, dropdownClassname }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
 
@@ -32,9 +33,14 @@ const SelectBox = ({ options, placeholder = "선택", className, onChange }: Sel
   const handleSelect = useSelectHandler({ setSelectedLabel, setIsOpen, onChange });
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn("relative w-full")}>
       <div
-        className={cn("flex items-center justify-between px-20 py-16 text-gray-40", style.boxSelect, style.fontSelect)}
+        className={cn(
+          "flex items-center justify-between px-20 py-16 text-gray-40",
+          style.boxSelect,
+          style.fontSelect,
+          className,
+        )}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="셀렉트 박스"
       >
@@ -46,7 +52,13 @@ const SelectBox = ({ options, placeholder = "선택", className, onChange }: Sel
         </div>
       </div>
 
-      <SelectOptions isOpen={isOpen} options={options} style={style} onSelect={handleSelect} />
+      <SelectOptions
+        isOpen={isOpen}
+        options={options}
+        style={style}
+        onSelect={handleSelect}
+        className={dropdownClassname}
+      />
     </div>
   );
 };
