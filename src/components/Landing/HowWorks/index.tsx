@@ -1,35 +1,4 @@
-import React from "react";
-import IcUserPlus from "@/assets/svgs/ic_userplus.svg";
-import IcSearch from "@/assets/svgs/ic_search.svg";
-import IcMessage from "@/assets/svgs/ic_message.svg";
-import IcCheckCircle from "@/assets/svgs/ic_check-circle.svg";
-
-const STEPS = [
-  {
-    id: 1,
-    icon: IcUserPlus,
-    title: "회원가입",
-    description: "간단한 정보만 입력하면 가입 완료! 이메일 또는 소셜 로그인으로 빠르게 시작하세요.",
-  },
-  {
-    id: 2,
-    icon: IcSearch,
-    title: "공고 검색",
-    description: "원하는 지역, 시급, 날짜를 선택해서 딱 맞는 알바를 찾아보세요.",
-  },
-  {
-    id: 3,
-    icon: IcMessage,
-    title: "지원하기",
-    description: "마음에 드는 공고에 클릭 한 번으로 간편하게 지원하세요.",
-  },
-  {
-    id: 4,
-    icon: IcCheckCircle,
-    title: "근무 시작",
-    description: "사장님의 승인을 받으면 바로 일할 수 있어요!",
-  },
-];
+import { STEPS } from "@/constants/LANDING_VARIABLES";
 
 const HowWorks = () => {
   return (
