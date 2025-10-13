@@ -16,7 +16,7 @@ export interface GetUserApplicationsResponse {
   count: number;
   hasNext: boolean;
   items: Array<{
-    items: ApplicationItem & {
+    item: ApplicationItem & {
       shop: {
         item: ShopItem;
         href: string;
