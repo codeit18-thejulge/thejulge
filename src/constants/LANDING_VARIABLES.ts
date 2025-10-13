@@ -6,7 +6,7 @@ import IcZap from "@/assets/svgs/ic_zap.svg";
 import IcBell from "@/assets/svgs/ic_bell.svg";
 import IcDollar from "@/assets/svgs/ic_dollar.svg";
 import IcAddress from "@/assets/svgs/ic_address.svg";
-import IcShield from "@/assets/svgs/ic_shield.svg";
+import IcCheck from "@/assets/svgs/ic_check-circle.svg";
 import IcDocument from "@/assets/svgs/ic_document.svg";
 
 export const STEPS = [
@@ -93,9 +93,9 @@ export const REASONS = [
   },
   {
     id: 4,
-    icon: IcShield,
-    title: "안전한 거래",
-    description: "검증된 업체만 등록 가능하며, 안전한 거래를 하세요.",
+    icon: IcCheck,
+    title: "빠른 확인",
+    description: "사장님도, 알바님도 지원 현황을 한눈에 볼 수 있어요.",
   },
   {
     id: 5,
