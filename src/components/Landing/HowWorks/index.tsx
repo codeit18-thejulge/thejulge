@@ -21,6 +21,7 @@ const HowWorks = () => {
                 <h3 className="text-18-bold">{step.title}</h3>
                 <p className="text-muted-foreground text-sm">{step.description}</p>
               </div>
+
               {i < STEPS.length - 1 && (
                 <div className="absolute left-[65%] top-32 hidden h-0.5 w-[80%] bg-gray-20 desktop:block"></div>
               )}
