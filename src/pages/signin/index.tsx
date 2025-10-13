@@ -13,7 +13,7 @@ const buttonClass = "h-48 w-full";
 const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 const pwdRegEx = /^[A-Za-z0-9]{8,20}$/;
 
-const signin = () => {
+const Signin = () => {
   const [loginInfo, setLoginInfo] = useState<LoginRequest>({ email: "", password: "" });
   const [errorEmailMsg, setErrorEmailMsg] = useState("");
   const [errorPwdMsg, setErrorPwdMsg] = useState("");
@@ -129,4 +129,4 @@ const signin = () => {
   );
 };
 
-export default signin;
+export default Signin;
