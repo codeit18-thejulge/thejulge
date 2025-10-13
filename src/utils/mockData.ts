@@ -2,7 +2,7 @@
 
 export const USER_ALERTS = {
   offset: 0,
-  limit:6,
+  limit: 6,
   count: 15,
   hasNext: true,
   items: [
@@ -130,190 +130,188 @@ export const USER_ALERTS = {
   links: [],
 };
 
-
-
 export const USER_APPLICATIONS = {
-	"offset": 0,
-	"limit": 35,
-	"count": 100, // 전체 개수
-	"hasNext": true, // 다음 내용 존재 여부
-	"items": [
-		{
-			"item": {
-				"id": "app-01",
-				"status": "pending",
-				"createdAt": "2025-09-28T15:00:00Z",
-				"user": {
-					"item": {
-				    "id": "user-01",
-				    "email": "aaa@email.com",
-				    "type": "employee",
-						"name": "무몀씨", // optional
-						"phone": "000-0000-0000", // optional
-						"address": "주소", // optional
-						"bio": "내 소개를", // optional
-					},
-					"href": "뭐뭐"
-				},
-				"shop": {
-					"item": {
-						"id": "shop-01",
-		        "name": "가게이름",
-		        "category": "한식",
-		        "address1": "서울시 중구",
-		        "address2": "어디",
-		        "description": "여기",
-		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": 10000
-					},
-					"href": "뭐뭐"
-				},
-				"notice": {
-					"item": {
-						"id": "notice-01",
-						"hourlyPay": 15000,
-            "description": "설명을 해봐",
-            "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": 6,
-            "closed": false,
-					},
-					"href": "string"
-				}
-			},
-			"links": []
-		},
-		{
-			"item": {
-				"id": "app-02",
-				"status": "accepted",
-				"createdAt": "2025-09-28T15:00:00Z",
-				"user": {
-					"item": {
-				    "id": "user-01",
-				    "email": "aaa@email.com",
-				    "type": "employee",
-						"name": "무몀씨2", // optional
-						"phone": "000-0000-0000", // optional
-						"address": "주소", // optional
-						"bio": "안녕하세요! 소개글이 두 줄 이상 길어지면 말줄임이 된다고 합니다. 그러니 되는지 확인을 해봅시다."
-					},
-					"href": "뭐뭐"
-				},
-				"shop": {
-					"item": {
-						"id": "shop-02",
-		        "name": "가게이름2",
-		        "category": "한식",
-		        "address1": "서울시 중구",
-		        "address2": "어디",
-		        "description": "여기",
-		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": 10000
-					},
-					"href": "뭐뭐"
-				},
-				"notice": {
-					"item": {
-						"id": "notice-02",
-						"hourlyPay": 10000,
-            "description": "설명을 해봐",
-            "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": 6,
-            "closed": false,
-					},
-					"href": "string"
-				}
-			},
-			"links": []
-		},
-		{
-			"item": {
-				"id": "app-03",
-				"status": "rejected",
-				"createdAt": "2025-09-28T15:00:00Z",
-				"user": {
-					"item": {
-				    "id": "user-013",
-				    "email": "aaa@email.com",
-				    "type": "employee",
-						"name": "무몀씨3", // optional
-						"phone": "000-0000-0000", // optional
-						"address": "주소", // optional
-						"bio": "내 소개를", // optional
-					},
-					"href": "뭐뭐"
-				},
-				"shop": {
-					"item": {
-						"id": "shop-03",
-		        "name": "가게이름3",
-		        "category": "한식",
-		        "address1": "서울시 중구",
-		        "address2": "어디",
-		        "description": "여기",
-		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay":10000
-					},
-					"href": "뭐뭐"
-				},
-				"notice": {
-					"item": {
-						"id": "notice-03",
-						"hourlyPay":150000,
-            "description": "설명을 해봐",
-            "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": 6,
-            "closed": false,
-					},
-					"href": "string"
-				}
-			},
-			"links": []
-		},
-		{
-			"item": {
-				"id": "app-04",
-				"status": "canceled",
-				"createdAt": "2025-09-28T15:00:00Z",
-				"user": {
-					"item": {
-				    "id": "user-04",
-				    "email": "aaa@email.com",
-				    "type": "employee",
-						"name": "무몀씨", // optional
-						"phone": "000-0000-0000", // optional
-						"address": "주소", // optional
-						"bio": "내 소개를", // optional
-					},
-					"href": "뭐뭐"
-				},
-				"shop": {
-					"item": {
-						"id": "shop-04",
-		        "name": "가게이름4",
-		        "category": "한식",
-		        "address1": "서울시 중구",
-		        "address2": "어디",
-		        "description": "여기",
-		        "imageUrl": "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
-		        "originalHourlyPay": 10000
-					},
-					"href": "뭐뭐"
-				},
-				"notice": {
-					"item": {
-						"id": "notice-04",
-						"hourlyPay": 19000,
-            "description": "설명을 해봐",
-            "startsAt": "2025-09-28T15:00:00Z",
-            "workhour": 6,
-            "closed": false,
-					},
-					"href": "string"
-				}
-			},
-			"links": []
-		}
-	],
-	"links": []
-}
+  offset: 0,
+  limit: 35,
+  count: 100, // 전체 개수
+  hasNext: true, // 다음 내용 존재 여부
+  items: [
+    {
+      item: {
+        id: "app-01",
+        status: "pending",
+        createdAt: "2025-09-28T15:00:00Z",
+        user: {
+          item: {
+            id: "user-01",
+            email: "aaa@email.com",
+            type: "employee",
+            name: "무몀씨", // optional
+            phone: "000-0000-0000", // optional
+            address: "주소", // optional
+            bio: "내 소개를", // optional
+          },
+          href: "뭐뭐",
+        },
+        shop: {
+          item: {
+            id: "shop-01",
+            name: "가게이름",
+            category: "한식",
+            address1: "서울시 중구",
+            address2: "어디",
+            description: "여기",
+            imageUrl: "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
+            originalHourlyPay: 10000,
+          },
+          href: "뭐뭐",
+        },
+        notice: {
+          item: {
+            id: "notice-01",
+            hourlyPay: 15000,
+            description: "설명을 해봐",
+            startsAt: "2025-09-28T15:00:00Z",
+            workhour: 6,
+            closed: false,
+          },
+          href: "string",
+        },
+      },
+      links: [],
+    },
+    {
+      item: {
+        id: "app-02",
+        status: "accepted",
+        createdAt: "2025-09-28T15:00:00Z",
+        user: {
+          item: {
+            id: "user-01",
+            email: "aaa@email.com",
+            type: "employee",
+            name: "무몀씨2", // optional
+            phone: "000-0000-0000", // optional
+            address: "주소", // optional
+            bio: "안녕하세요! 소개글이 두 줄 이상 길어지면 말줄임이 된다고 합니다. 그러니 되는지 확인을 해봅시다.",
+          },
+          href: "뭐뭐",
+        },
+        shop: {
+          item: {
+            id: "shop-02",
+            name: "가게이름2",
+            category: "한식",
+            address1: "서울시 중구",
+            address2: "어디",
+            description: "여기",
+            imageUrl: "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
+            originalHourlyPay: 10000,
+          },
+          href: "뭐뭐",
+        },
+        notice: {
+          item: {
+            id: "notice-02",
+            hourlyPay: 10000,
+            description: "설명을 해봐",
+            startsAt: "2025-09-28T15:00:00Z",
+            workhour: 6,
+            closed: false,
+          },
+          href: "string",
+        },
+      },
+      links: [],
+    },
+    {
+      item: {
+        id: "app-03",
+        status: "rejected",
+        createdAt: "2025-09-28T15:00:00Z",
+        user: {
+          item: {
+            id: "user-013",
+            email: "aaa@email.com",
+            type: "employee",
+            name: "무몀씨3", // optional
+            phone: "000-0000-0000", // optional
+            address: "주소", // optional
+            bio: "내 소개를", // optional
+          },
+          href: "뭐뭐",
+        },
+        shop: {
+          item: {
+            id: "shop-03",
+            name: "가게이름3",
+            category: "한식",
+            address1: "서울시 중구",
+            address2: "어디",
+            description: "여기",
+            imageUrl: "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
+            originalHourlyPay: 10000,
+          },
+          href: "뭐뭐",
+        },
+        notice: {
+          item: {
+            id: "notice-03",
+            hourlyPay: 150000,
+            description: "설명을 해봐",
+            startsAt: "2025-09-28T15:00:00Z",
+            workhour: 6,
+            closed: false,
+          },
+          href: "string",
+        },
+      },
+      links: [],
+    },
+    {
+      item: {
+        id: "app-04",
+        status: "canceled",
+        createdAt: "2025-09-28T15:00:00Z",
+        user: {
+          item: {
+            id: "user-04",
+            email: "aaa@email.com",
+            type: "employee",
+            name: "무몀씨", // optional
+            phone: "000-0000-0000", // optional
+            address: "주소", // optional
+            bio: "내 소개를", // optional
+          },
+          href: "뭐뭐",
+        },
+        shop: {
+          item: {
+            id: "shop-04",
+            name: "가게이름4",
+            category: "한식",
+            address1: "서울시 중구",
+            address2: "어디",
+            description: "여기",
+            imageUrl: "shttps://images.unsplash.com/photo-1598373182133-52452f7691ef",
+            originalHourlyPay: 10000,
+          },
+          href: "뭐뭐",
+        },
+        notice: {
+          item: {
+            id: "notice-04",
+            hourlyPay: 19000,
+            description: "설명을 해봐",
+            startsAt: "2025-09-28T15:00:00Z",
+            workhour: 6,
+            closed: false,
+          },
+          href: "string",
+        },
+      },
+      links: [],
+    },
+  ],
+  links: [],
+};

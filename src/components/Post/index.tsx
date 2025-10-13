@@ -15,7 +15,7 @@ interface Props extends Omit<NoticeItem, "description"> {
 }
 
 const postStyles = {
-  basic: "bg-white border-gray-20 border w-171 h-260 p-12 tablet:w-312 tablet:h-349 tablet:p-16 rounded-xl",
+  basic: "bg-white border-gray-20 border min-h-349 w-full h-full p-12 tablet:p-16 rounded-xl flex flex-col",
   closed: "text-gray-30",
 };
 
@@ -23,14 +23,14 @@ const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, addre
   const router = useRouter();
 
   const handlePostClick = () => {
-    router.push(`/notice/${id}`); // 페이지 url 에 따라 추후 변경 가능
+    router.push(`/jobinfo/${id}`);
   };
 
   return (
     <section className={cn(postStyles.basic, closed && postStyles.closed)}>
       <button
         onClick={handlePostClick}
-        className="flex h-full w-full flex-col justify-between gap-12 tablet:gap-20"
+        className="flex w-full flex-grow flex-col justify-between gap-12 tablet:gap-20"
         aria-label="Notice Detail"
       >
         <PostImage startsAt={startsAt} imageUrl={imageUrl} closed={closed} />
