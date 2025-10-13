@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import imgShop from "@/assets/svgs/img_shop.png";
+import ImgJob from "@/assets/svgs/img_job.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -19,7 +19,7 @@ const EmployerSection = () => {
         viewport={{ once: true, amount: 0.5 }}
         className="relative z-10 rounded-xl shadow-2xl"
       >
-        <Image src={imgShop} alt="공고 등록 카드" />
+        <Image src={ImgJob} alt="공고 등록 카드" />
       </motion.div>
       <div className="flex flex-col items-end justify-center gap-12">
         <h2 className="text-32 font-bold">직원이 필요하신가요?</h2>
