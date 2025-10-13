@@ -50,8 +50,8 @@ const PayBadge = ({
         )}
         style={{ opacity: `${opacityLevel}` }}
       ></div>
-      <div className={cn("relative z-10 flex max-w-fit gap-x-4 px-12 py-10", !post && closed && "hidden")}>
-        <span className={post ? "hidden tablet:inline-block" : "inline-block"}>{label}</span>
+      <div className={cn("relative z-10 flex max-w-fit gap-x-4", post ? "px-0 py-0 tablet:px-12 tablet:py-10" : "px-12 py-10",  !post && closed && "hidden", post && closed && "bg-white")}>
+        <span className={"inline-block"}>{label}</span>
         <span className="text-12-regular after:content-['%'] tablet:text-14-bold">{payDifference.toFixed(0)}</span>
         <div className="w-12 tablet:w-14">{icon}</div>
       </div>
