@@ -15,7 +15,7 @@ const FAQ = () => {
         <div className="mb-16 text-center">
           <h2 className="mb-12 text-32 font-bold">자주 묻는 질문</h2>
           <p className="text-20">
-            <span className="font-bold text-primary">The julge</span>의 궁금하신 점을 빠르게 확인해보세요
+            <span className="font-bold text-primary">The julge</span>의 궁금한 점을 빠르게 확인해보세요
           </p>
         </div>
         <div className="mt-30">
