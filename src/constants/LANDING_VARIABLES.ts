@@ -4,7 +4,7 @@ import IcMessage from "@/assets/svgs/ic_message.svg";
 import IcCheckCircle from "@/assets/svgs/ic_check-circle.svg";
 import IcZap from "@/assets/svgs/ic_zap.svg";
 import IcBell from "@/assets/svgs/ic_bell.svg";
-import IcDollar from "@/assets/svgs/ic_dollar.svg";
+import IcMoney from "@/assets/svgs/ic_money.svg";
 import IcAddress from "@/assets/svgs/ic_address.svg";
 import IcCheck from "@/assets/svgs/ic_check-circle.svg";
 import IcDocument from "@/assets/svgs/ic_document.svg";
@@ -81,7 +81,7 @@ export const REASONS = [
   },
   {
     id: 2,
-    icon: IcDollar,
+    icon: IcMoney,
     title: "높은 시급",
     description: "급하게 구인하는 공고는 기존보다 높은 시급을 제공해요.",
   },
