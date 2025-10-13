@@ -6,15 +6,15 @@ import { cn } from "@/utils";
 
 const Footer = () => {
   return (
-    <footer className={cn("w-full flex justify-center bg-gray-20")}>
+    <footer className={cn("flex w-full justify-center bg-gray-20")}>
       <div
         className={cn(
-          "w-full max-w-1028 px-20 pt-32 pb-16 tablet:p-32 grid grid-cols-2 tablet:grid-cols-3 gap-40 items-center",
+          "grid w-full max-w-1028 grid-cols-2 items-center gap-40 px-20 pb-16 pt-32 tablet:grid-cols-3 tablet:p-32",
         )}
       >
         <div
           className={cn(
-            "text-12-regular tablet:text-16-regular text-gray-50 col-span-2 tablet:col-span-1 order-last tablet:order-1",
+            "order-last col-span-2 text-12-regular text-gray-50 tablet:order-1 tablet:col-span-1 tablet:text-16-regular",
           )}
         >
           ©codeit - 2023
@@ -22,7 +22,7 @@ const Footer = () => {
         <nav aria-label="footer links" className={cn("col-span-1 tablet:order-2")}>
           <ul
             className={cn(
-              "text-gray-50 flex justify-start tablet:justify-center gap-30 text-14-regular tablet:text-16-regular",
+              "flex justify-start gap-30 text-14-regular text-gray-50 tablet:justify-center tablet:text-16-regular",
             )}
           >
             <li>
