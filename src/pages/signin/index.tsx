@@ -41,7 +41,7 @@ const Signin = () => {
 
   const handleEmailBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
     const inputEmail = event.target.value;
-    let result = emailRegEx.test(inputEmail);
+    const result = emailRegEx.test(inputEmail);
     if (!result) {
       setErrorEmailMsg("이메일 형식으로 작성해주세요.");
     } else {
@@ -51,7 +51,7 @@ const Signin = () => {
 
   const handlePwdBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
     const inputPwd = event.target.value;
-    let result = pwdRegEx.test(inputPwd);
+    const result = pwdRegEx.test(inputPwd);
     if (!result) {
       setErrorPwdMsg("8자 이상 작성해주세요.");
     } else {
