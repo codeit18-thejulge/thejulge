@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IcDropdown from "@/assets/svgs/ic_dropdown.svg";
 import { Option } from "@/types/global";
 import { cn } from "@/utils";
@@ -17,23 +17,34 @@ interface SelectProps {
   placeholder?: string;
   className?: string;
   onChange?: (option: Option) => void;
+  dropdownClassname?: string;
 }
 
-const SelectBox = ({ options, placeholder = "선택", className, onChange }: SelectProps) => {
+const SelectBox = ({ options, placeholder = "선택", className, onChange, dropdownClassname }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
 
-  const handleSelect = useSelectHandler({ setSelectedValue, setSelectedLabel, setIsOpen, onChange });
+  useEffect(() => {
+    if (placeholder) {
+      setSelectedLabel(placeholder);
+    }
+  }, [placeholder]);
+
+  const handleSelect = useSelectHandler({ setSelectedLabel, setIsOpen, onChange });
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn("relative w-full")}>
       <div
-        className={cn("flex items-center justify-between px-20 py-16 text-gray-40", style.boxSelect, style.fontSelect)}
+        className={cn(
+          "flex items-center justify-between px-20 py-16 text-gray-40",
+          style.boxSelect,
+          style.fontSelect,
+          className,
+        )}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="셀렉트 박스"
       >
-        <span className={cn(selectedLabel === placeholder ? "text-gray-40" : "text-black")}>{selectedLabel}</span>
+        <span className={cn(placeholder === "선택" ? "text-gray-40" : "text-black")}>{selectedLabel}</span>
         <div
           className={cn("flex items-center justify-center transition-transform duration-200", isOpen && "rotate-180")}
         >
@@ -41,7 +52,13 @@ const SelectBox = ({ options, placeholder = "선택", className, onChange }: Sel
         </div>
       </div>
 
-      <SelectOptions isOpen={isOpen} options={options} style={style} onSelect={handleSelect} className="h-300" />
+      <SelectOptions
+        isOpen={isOpen}
+        options={options}
+        style={style}
+        onSelect={handleSelect}
+        className={dropdownClassname}
+      />
     </div>
   );
 };
