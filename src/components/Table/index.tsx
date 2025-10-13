@@ -1,7 +1,8 @@
 import TableHeader from "./components/TableHeader";
 import TableRow from "./components/TableRow";
 import { useState, useEffect } from "react";
-import { Notice } from "@/types/notice";
+import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
+import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import tableStyle from "@/styles/table.module.css";
 
 const TABLE_HEADER = {
@@ -21,43 +22,46 @@ const TABLE_HEADER = {
 
 interface TableProps {
   userType: keyof typeof TABLE_HEADER;
-  res: Notice[];
+  res: GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"];
+  isLoading?: boolean;
+  error?: boolean;
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
   onPageChange: () => void;
 }
 
-const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({ userType, res, isLoading, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
-  const [tableData, setTableData] = useState<Notice[]>([]);
+  const [tableData, setTableData] = useState<
+    GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
+  >([]);
   useEffect(() => {
     setTableData(res);
   }, [res]);
   return (
-    <div className={tableStyle.tableWrap}>
-      <table className={tableStyle.table}>
-        <colgroup>
-          <col className="w-228" />
-          <col className="w-300" />
-          <col className="w-200" />
-          <col className="w-162 tablet:w-220 desktop:w-236" />
-        </colgroup>
-        <thead className={tableStyle.theadColor}>
-          <TableHeader colTitle={headerTitles} />
-        </thead>
-        <tbody>
-          {tableData.map((item) => (
-            <TableRow
-              key={item.id}
-              item={item}
-              userType={userType}
-              onHandleRejectClick={onHandleRejectClick}
-              onHandleAcceptClick={onHandleAcceptClick}
-            />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <table className={tableStyle.table}>
+      <colgroup>
+        <col className="w-228" />
+        <col className="w-300" />
+        <col className="w-200" />
+        <col className="w-162 tablet:w-220 desktop:w-236" />
+      </colgroup>
+      <thead className={tableStyle.theadColor}>
+        <TableHeader colTitle={headerTitles} />
+      </thead>
+      <tbody>
+        {tableData?.map((item) => (
+          <TableRow
+            key={item.item.id}
+            item={item.item}
+            userType={userType}
+            onHandleRejectClick={onHandleRejectClick}
+            onHandleAcceptClick={onHandleAcceptClick}
+            isLoading={isLoading}
+          />
+        ))}
+      </tbody>
+    </table>
   );
 };
 export default Table;

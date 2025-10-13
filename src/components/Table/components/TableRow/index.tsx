@@ -1,15 +1,27 @@
 import { UserType } from "@/types/global";
 import NormalBadge from "@/components/Badge/NormalBadge";
+import { UserItem, UserInfoItem } from "@/types/global";
+import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
+import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import Button from "@/components/Button";
 import { useState, useEffect } from "react";
-import { Notice } from "@/types/notice";
+
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
 
+interface user {
+  user: {
+    item: UserItem & Partial<UserInfoItem>;
+    href: string;
+  };
+}
+
 // 테이블 값
 interface TableRowProps {
-  item: Notice;
+  item: GetShopApplicationsResponse["items"][0]["item"] | GetUserApplicationsResponse["items"][0]["item"];
   userType: UserType;
+  isLoading?:boolean;
+  error?:boolean;
   onHandleOpenClick?: () => void;
   onHandleRejectClick?: () => void;
   onHandleAcceptClick?: () => void;
@@ -18,7 +30,8 @@ interface TableRowProps {
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
 
 const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, onHandleOpenClick }: TableRowProps) => {
-  const { user, shop, notice } = item;
+  const { shop, notice } = item;
+  const { user } = item as user;
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
 
   useEffect(() => {
