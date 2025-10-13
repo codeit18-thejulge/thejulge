@@ -2,6 +2,8 @@ import IcNoti from "@/assets/svgs/ic_notification.svg";
 import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
+import Notification from "@/components/Notification";
+import { useState } from "react";
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 
@@ -50,6 +52,15 @@ const GuestMenu = () => {
 };
 
 const UserMenu = ({ userType }: { userType: UserType }) => {
+  const [isNotiOpen, setIsNotiOpen] = useState(false);
+
+  const handleNotiToggle = () => {
+    setIsNotiOpen((prev) => !prev);
+  };
+  const handleNotiClose = () => {
+    setIsNotiOpen(false);
+  };
+
   return (
     <ul className="flex items-center gap-16 desktop:gap-40">
       <li>
@@ -62,11 +73,17 @@ const UserMenu = ({ userType }: { userType: UserType }) => {
           {userMenuItem.logout.title}
         </Link>
       </li>
-      <li>
-        <button aria-label="알림 열기" className="flex">
+      <li className="tablet:relative">
+        <button aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
           <IcNoti className="w-20 text-primary tablet:w-24" />
-          {/* Notification Modal */}
         </button>
+        {isNotiOpen && (
+          <Notification
+            userId="user-01"
+            onClose={handleNotiClose}
+            className="fixed right-0 top-0 tablet:absolute tablet:top-32"
+          />
+        )}
       </li>
     </ul>
   );

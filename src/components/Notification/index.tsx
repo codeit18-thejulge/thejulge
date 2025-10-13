@@ -5,13 +5,15 @@ import LoadingSpinner from "../LoadingSpinner";
 import { GetUserAlertsRequest, GetUserAlertsResponse, UserAlertItem } from "./userAlerts";
 import { USER_ALERTS } from "./mockData";
 import { useEffect, useState } from "react";
+import { cn } from "@/utils";
 
 interface NotificationProps {
   userId: string;
   onClose: () => void;
+  className?: string;
 }
 
-const Notification = ({ userId, onClose }: NotificationProps) => {
+const Notification = ({ userId, onClose, className }: NotificationProps) => {
   const [alerts, setAlerts] = useState<UserAlertItem[]>([]);
   const [isLoading, setisLoading] = useState(true);
 
@@ -49,7 +51,10 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
   return (
     <section
       aria-label="알림"
-      className="relative flex h-dvh w-full flex-col gap-16 px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]"
+      className={cn(
+        "flex h-dvh w-dvw flex-col gap-16 bg-white px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]",
+        className,
+      )}
     >
       <header>
         <h1 className="text-20-bold">알림</h1>
