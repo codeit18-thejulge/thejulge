@@ -36,7 +36,7 @@ const getNotices = async (params: getNoticesRequest): Promise<getNoticesResponse
   return response.data;
 };
 
-export const useGetNoticesQuery = (params: getNoticesRequest, options?: {enabled?: boolean}) => {
+export const useGetNoticesQuery = (params: getNoticesRequest = {}, options?: {enabled?: boolean}) => {
   return useQuery({
     queryKey: ["getNotices", params],
     queryFn: () => getNotices(params),
