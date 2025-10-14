@@ -4,7 +4,12 @@ import { cn } from "@/utils";
 import SearchInput from "./SearchInput";
 import UserHeader from "./UserHeader";
 
-const Header = () => {
+interface HeaderProps {
+  placeholder?: string;
+  onSearch: (search: string) => void;
+}
+
+const Header = ({placeholder, onSearch}: HeaderProps) => {
   return (
     <header role="banner" className={cn("sticky flex w-full justify-center")}>
       <div className="w-full max-w-1088">
@@ -12,7 +17,7 @@ const Header = () => {
           <Link href="/" aria-label="메인페이지로 이동" className="shrink-0">
             <Logo className="w-84 tablet:w-112" />
           </Link>
-          <SearchInput />
+          <SearchInput placeholder={placeholder} onSearch={onSearch} />
           <UserHeader />
         </div>
       </div>
