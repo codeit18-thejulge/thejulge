@@ -98,7 +98,7 @@ const JobList = () => {
             />
             <button className="bg-red-30 flex-shrink-0 px-12 py-6 rounded-5 text-16 text-white font-bold" onClick={handleFilterToggle}>상세 필터</button>
             {openFilter && 
-              <div className="absolute top-50 right-0 z-50">
+              <div className="absolute top-50 right-0 z-50 mobile:left-0">
                 <Filter 
                   isOpen={openFilter} 
                   onClose={() => setOpenFilter(false)} 
