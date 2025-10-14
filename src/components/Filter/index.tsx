@@ -1,6 +1,6 @@
 import Ic_X from "@/assets/svgs/ic_X.svg";
 import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ClosedBadge from "../Badge/ClosedBadge";
 import { cn } from "@/utils";
 import { useEscClose } from "@/hooks/useEscClose";
@@ -76,25 +76,8 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
     }
   }
 
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    if(filterRef.current && !filterRef.current.contains(e.target as Node)) {
-      onClose();
-    }
-  }, [onClose]); 
-
   useEscClose({ isOpen, closeOnEsc, onClose });
-  useEffect(() => {
-    if(!isOpen) {
-      return;
-    }
-    
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  },[isOpen, onClose, handleClickOutside]);
-  
-
+ 
   if (!isOpen) {
     return null;
   }
@@ -107,7 +90,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
       </div>
       <div className="flex flex-col gap-12">
         <p className="font-sans text-16 text-black">위치</p>
-        <div className="h-258 w-350 overflow-x-scroll rounded-6 border border-gray-20 bg-gray-10">
+        <div className="h-258 w-350 overflow-x-scroll rounded-6 border border-gray-20">
           <div className="grid grid-cols-2 gap-18 px-25 py-15">
             {SEOUL_ADDRESS.map((address) => {
               const chosen = selectedAddresses.includes(address);
@@ -146,11 +129,6 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
         <div className="flex items-center gap-12">
           <div className="w-full max-w-170">
             <Input value={pay} id="payId" isUnit="원" className="bg-transparent" onChange={(e) => setPay(e.target.value)}/>
-            {/* <Input
-              id="hi2"
-              isUnit="원"
-              className="w-full flex-grow bg-transparent px-20 py-16 focus:outline-none"
-            />{" "} */}
           </div>
           <span>이상부터</span>
         </div>
