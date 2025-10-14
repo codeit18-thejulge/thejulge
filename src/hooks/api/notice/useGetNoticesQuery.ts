@@ -5,7 +5,7 @@ import { Link, NoticeItem, NoticeSort, ShopItem } from "@/types/global";
 export interface getNoticesRequest {
   offset?: number;
   limit?: number;
-  address?: string;
+  address?: string | string[];  
   keyword?: string;
   startsAtGte?: string;
   hourlyPayGte?: number;
