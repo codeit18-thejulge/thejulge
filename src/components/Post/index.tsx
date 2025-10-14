@@ -12,14 +12,27 @@ interface Props extends Omit<NoticeItem, "description"> {
   imageUrl: string;
   address: SeoulAddress;
   originalHourlyPay: number;
+  className?: string;
 }
 
 const postStyles = {
-  basic: "bg-white border-gray-20 border min-h-349 w-full h-full p-12 tablet:p-16 rounded-xl flex flex-col",
+  basic:
+    "bg-white border-gray-20 border p-12 desktop:w-312 desktop:h-348 tablet:w-332 tablet:h-361 w-171 h-261 tablet:p-16 rounded-xl flex flex-col",
   closed: "text-gray-30",
 };
 
-const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, address, originalHourlyPay }: Props) => {
+const Post = ({
+  name,
+  id,
+  hourlyPay,
+  startsAt,
+  workhour,
+  closed,
+  imageUrl,
+  address,
+  originalHourlyPay,
+  className,
+}: Props) => {
   const router = useRouter();
 
   const handlePostClick = () => {
@@ -27,7 +40,7 @@ const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, addre
   };
 
   return (
-    <section className={cn(postStyles.basic, closed && postStyles.closed)}>
+    <section className={cn(postStyles.basic, closed && postStyles.closed, className)}>
       <button
         onClick={handlePostClick}
         className="flex w-full flex-grow flex-col justify-between gap-12 tablet:gap-20"
