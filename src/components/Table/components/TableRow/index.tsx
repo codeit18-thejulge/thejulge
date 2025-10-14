@@ -21,14 +21,15 @@ interface user {
 interface TableRowProps {
   item: GetShopApplicationsResponse["items"][0]["item"] | GetUserApplicationsResponse["items"][0]["item"];
   userType: UserType;
-  onHandleOpenClick?: () => void;
+  isLoading?: boolean;
+  error?: boolean;
   onHandleRejectClick?: () => void;
   onHandleAcceptClick?: () => void;
 }
 
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
 
-const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, onHandleOpenClick }: TableRowProps) => {
+const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick }: TableRowProps) => {
   const { shop, notice } = item;
   const { user } = item as user;
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
@@ -44,9 +45,7 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, on
       <tr>
         <td>{user.item.name}</td>
         <td>
-          <p onClick={onHandleOpenClick} className={tableStyle.overText}>
-            {user.item.bio || "-"}
-          </p>
+          <p className={tableStyle.overText}>{user.item.bio || "-"}</p>
         </td>
         <td>{formatPhoneNumber(phoneNumber)}</td>
         <td>
