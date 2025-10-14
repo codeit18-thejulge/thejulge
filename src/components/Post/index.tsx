@@ -5,6 +5,7 @@ import PostImage from "./components/PostImage";
 import PostFooter from "./components/PostFooter";
 import PostInfo from "./components/PostInfo";
 import { NoticeItem } from "@/types/global";
+import { isStartTimePassed } from "@/utils/formatTime";
 
 // name imageUrl, address, original hourlyPay 가게정보에서 받아옵니다.
 interface Props extends Omit<NoticeItem, "description"> {
@@ -39,16 +40,24 @@ const Post = ({
     router.push(`/jobinfo/${id}`);
   };
 
+  const isPassed = isStartTimePassed(startsAt);
   return (
-    <section className={cn(postStyles.basic, closed && postStyles.closed, className)}>
+    <section className={cn(postStyles.basic, (closed || isPassed) && postStyles.closed, className)}>
       <button
         onClick={handlePostClick}
         className="flex w-full flex-grow flex-col justify-between gap-12 tablet:gap-20"
         aria-label="Notice Detail"
       >
         <PostImage startsAt={startsAt} imageUrl={imageUrl} closed={closed} />
-        <PostInfo name={name} address={address} startsAt={startsAt} workhour={workhour} closed={closed} />
-        <PostFooter hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} />
+        <PostInfo
+          name={name}
+          address={address}
+          startsAt={startsAt}
+          workhour={workhour}
+          isPassed={isPassed}
+          closed={closed}
+        />
+        <PostFooter hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} isPassed={isPassed} />
       </button>
     </section>
   );
