@@ -23,7 +23,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type={props.type}
             value={props.value}
             placeholder="입력"
-            className={cn("w-full bg-transparent px-20 py-16 focus:outline-none", isUnit && "w-[90%]", className)}
+            className={cn(
+              "w-full bg-transparent px-20 py-16 focus:outline-none",
+              className,
+              isUnit && "w-[80%] pl-20 pr-0",
+            )}
             ref={ref}
             autoComplete={autoComplete}
             {...props}
