@@ -1,4 +1,4 @@
-import { ShopItem,NoticeItem,ApplicationStatus } from "./global";
+import { ShopItem, NoticeItem, ApplicationStatus } from "./global";
 
 // 사장&알바 상세 공고 조회
 export interface Notice {
