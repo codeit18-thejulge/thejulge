@@ -28,6 +28,7 @@ export const useLoginQuery = () => {
     mutationFn: postLogin,
     onSuccess: (res) => {
       localStorage.setItem("accessToken", res.item.token);
+      localStorage.setItem("userId", res.item.user.item.id); 
     },
     onError: () => {},
   });

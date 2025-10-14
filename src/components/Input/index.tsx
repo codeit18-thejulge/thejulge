@@ -2,7 +2,7 @@ import { DetailedHTMLProps, InputHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/utils";
 
 interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-  isPay?: boolean;
+  isUnit?: string;
   errorMsg?: string;
   autoComplete?: string;
 }
@@ -14,21 +14,25 @@ const inputStyle = {
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ isPay, errorMsg, className, autoComplete = "off", ...props }, ref) => {
+  ({ isUnit, errorMsg, className, autoComplete = "off", ...props }, ref) => {
     return (
       <>
-        <div className={cn(inputStyle.basic, errorMsg && inputStyle.error, isPay && inputStyle.pay)}>
+        <div className={cn(inputStyle.basic, errorMsg && inputStyle.error, isUnit && inputStyle.pay)}>
           <input
             name={props.name}
             type={props.type}
             value={props.value}
             placeholder="입력"
-            className={cn("w-full bg-transparent px-20 py-16 focus:outline-none", isPay && "w-[90%]", className)}
+            className={cn(
+              "w-full bg-transparent px-20 py-16 focus:outline-none",
+              className,
+              isUnit && "w-[80%] pl-20 pr-0",
+            )}
             ref={ref}
             autoComplete={autoComplete}
             {...props}
           />
-          {isPay && <span className="py-16 pr-20 text-16">원</span>}
+          {isUnit && <span className="py-16 pr-20 text-16">{isUnit}</span>}
         </div>
         {errorMsg && <p className="mt-8 text-12 text-red-40">{errorMsg}</p>}
       </>

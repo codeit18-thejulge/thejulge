@@ -93,7 +93,11 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
         <label htmlFor="hi2">금액</label>
         <div className="flex items-center gap-12">
           <div className="w-full max-w-170">
-            <Input id="hi2" isPay className="w-full flex-grow bg-transparent px-20 py-16 focus:outline-none" />{" "}
+            <Input
+              id="hi2"
+              isUnit="원"
+              className="w-full flex-grow bg-transparent px-20 py-16 focus:outline-none"
+            />{" "}
           </div>
           <span>이상부터</span>
         </div>
