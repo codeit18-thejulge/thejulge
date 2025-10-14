@@ -5,6 +5,7 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import { cn } from "@/utils";
 import dayjs from "dayjs";
 import { ChangeEvent, useState } from "react";
+import Layout from "@/components/Layout";
 
 const MINIMUN_WAGE = 10030;
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
@@ -43,7 +44,7 @@ const RegisterJobinfo = () => {
         <IcClose className="absolute right-0 top-0 w-24 tablet:w-32" />
         <form className="flex flex-col gap-32">
           <h1 className="text-20-bold text-black tablet:text-28-bold">공고 등록</h1>
-          <div className="grid grid-cols-1 gap-20 tablet:grid-cols-2 desktop:grid-cols-3">
+          <div className="grid grid-cols-1 gap-20 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
             <label className={cn(labelStyle)}>
               <span className={cn(labelRequiredStyle)}>시급</span>
               <Input
@@ -95,3 +96,4 @@ const RegisterJobinfo = () => {
 };
 
 export default RegisterJobinfo;
+RegisterJobinfo.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
