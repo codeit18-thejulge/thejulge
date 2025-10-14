@@ -1,14 +1,21 @@
-import { useLoginQuery } from "@/hooks/api/user/useLoginQuery";
+import Footer from "@/components/Footer";
+import LandingHeader from "@/components/Landing/LandingHeader";
+import HeroSection from "@/components/Landing/HeroSection";
+import FeaturesSection from "@/components/Landing/FeaturesSection";
+import HowWorks from "@/components/Landing/HowWorks";
+import ReasonToUse from "@/components/Landing/ReasonToUse";
+import FAQ from "@/components/Landing/FAQ";
 
 export default function Home() {
-  const { mutate: postLogin } = useLoginQuery();
-  const ll = () => {
-    postLogin({ email: "b@b.com", password: "1" });
-  };
   return (
     <>
-      <h1>3팀 파이팅!</h1>
-      <button onClick={ll}>로그인</button>
+      <LandingHeader />
+      <HeroSection />
+      <HowWorks />
+      <ReasonToUse />
+      <FeaturesSection />
+      <FAQ />
+      <Footer />
     </>
   );
 }

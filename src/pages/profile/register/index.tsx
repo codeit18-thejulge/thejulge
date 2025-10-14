@@ -4,7 +4,7 @@ import Textarea from "@/components/Textarea";
 import { usePutMyInfoQuery } from "@/hooks/api/user/usePutMyInfoQuery";
 import { Option, SeoulAddress, UserInfoItem } from "@/types/global";
 import { ChangeEvent, useEffect, useState } from "react";
-import IcXButton from "@/assets/svgs/x.svg";
+import IcXButton from "@/assets/svgs/ic_x.svg";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
