@@ -27,3 +27,8 @@ export const SEOUL_ADDRESS: SeoulAddress[] = [
   "서울시 송파구",
   "서울시 강동구",
 ];
+
+export const SEOUL_ADDRESS_OPTIONS = SEOUL_ADDRESS.map((address) => ({
+  value: address,
+  label: address,
+}));

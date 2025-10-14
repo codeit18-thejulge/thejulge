@@ -103,7 +103,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
     <div ref={filterRef} className={cn(containerStyle, className)} onKeyDown={handleEnterKeyDown}>
       <div className="flex justify-between">
         <p className="font-sans text-xl font-bold text-black">상세 필터</p>
-        <Ic_X onClick={onClose} className="cursor-pointer" />
+        <Ic_X onClick={onClose} className="cursor-pointer w-16 h-16" />
       </div>
       <div className="flex flex-col gap-12">
         <p className="font-sans text-16 text-black">위치</p>
@@ -145,7 +145,12 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
         <label htmlFor="payId">금액</label>
         <div className="flex items-center gap-12">
           <div className="w-full max-w-170">
-            <Input value={pay} id="payId" isPay className="bg-transparent" onChange={(e) => setPay(e.target.value)}/>
+            <Input value={pay} id="payId" isUnit="원" className="bg-transparent" onChange={(e) => setPay(e.target.value)}/>
+            {/* <Input
+              id="hi2"
+              isUnit="원"
+              className="w-full flex-grow bg-transparent px-20 py-16 focus:outline-none"
+            />{" "} */}
           </div>
           <span>이상부터</span>
         </div>

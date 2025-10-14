@@ -9,6 +9,7 @@ interface Props {
   workhour: number;
   address: string;
   closed: boolean;
+  isPassed: boolean;
 }
 
 const icStyles = {
@@ -16,15 +17,18 @@ const icStyles = {
   closed: "text-gray-30",
 };
 
-const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
+const PostInfo = ({ name, startsAt, workhour, address, closed, isPassed }: Props) => {
   const { date, sTime, eTime } = getNoticeTime(startsAt, workhour);
   const period = `${sTime} ~ ${eTime}`;
 
+  const isGray = closed || isPassed;
+
   return (
-    <div className={cn("flex flex-col items-start gap-8 text-gray-50 tablet:gap-12", closed && "text-gray-30")}>
-      <h3 className={cn("text-16-bold tablet:text-20-bold", closed ? "text-gray-30" : "text-black")}>{name}</h3>
+    <div className={cn("flex flex-col items-start gap-8 tablet:gap-12", isGray && icStyles.closed)}>
+      <h3 className={cn("text-16-bold tablet:text-20-bold", isGray ? icStyles.closed : "text-black")}>{name}</h3>
+
       <div className="flex gap-8 text-12 tablet:text-14">
-        <IcClock className={cn(icStyles.basic, closed && icStyles.closed)} />
+        <IcClock className={cn(icStyles.basic, isGray && icStyles.closed)} />
         <div className="flex flex-col items-start tablet:flex-row tablet:gap-8">
           <span>{date}</span>
           <div className="flex gap-4 tablet:flex tablet:gap-8">
@@ -33,8 +37,9 @@ const PostInfo = ({ name, startsAt, workhour, address, closed }: Props) => {
           </div>
         </div>
       </div>
+
       <div className="flex gap-8 text-12 tablet:text-14">
-        <IcAddress className={cn(icStyles.basic, closed && icStyles.closed)} />
+        <IcAddress className={cn(icStyles.basic, isGray && icStyles.closed)} />
         <p>{address}</p>
       </div>
     </div>

@@ -45,13 +45,13 @@ const PayBadge = ({
         className={cn(
           "absolute h-full w-full rounded-20",
           post && !closed && "bg-white tablet:bg-red-40",
-          post && closed && "bg-gray-20",
+          post && closed && "bg-white tablet:bg-gray-20",
           !post && !closed && "bg-red-40",
         )}
         style={{ opacity: `${opacityLevel}` }}
       ></div>
-      <div className={cn("relative z-10 flex max-w-fit gap-x-4 px-12 py-10", !post && closed && "hidden")}>
-        <span className={post ? "hidden tablet:inline-block" : "inline-block"}>{label}</span>
+      <div className={cn("relative z-10 flex max-w-fit gap-x-4", post ? "px-0 py-0 tablet:px-12 tablet:py-10" : "px-12 py-10",  !post && closed && "hidden", post && closed && "tablet:text-white")}>
+        <span className={"inline-block"}>{label}</span>
         <span className="text-12-regular after:content-['%'] tablet:text-14-bold">{payDifference.toFixed(0)}</span>
         <div className="w-12 tablet:w-14">{icon}</div>
       </div>
