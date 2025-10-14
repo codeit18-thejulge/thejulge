@@ -13,6 +13,7 @@ import { cn } from "@/utils";
 
 const inputClass = "h-58 w-full";
 const buttonClass = "h-48 w-full";
+const labelClass = "mb-8 block";
 const typeClass = "flex w-167 gap-10 rounded-30 border border-solid px-41 py-13";
 const PART = "employee";
 const BOSS = "employer";
@@ -110,8 +111,11 @@ const Signup = () => {
       </Link>
       <form method="post" onSubmit={handleSignup}>
         <div className="mb-28">
-          <p className="mb-8">이메일</p>
+          <label className={labelClass} htmlFor="email">
+            이메일
+          </label>
           <Input
+            id="email"
             name="email"
             type="email"
             className={inputClass}
@@ -122,8 +126,11 @@ const Signup = () => {
           />
         </div>
         <div className="mb-28">
-          <p className="mb-8">비밀번호</p>
+          <label className={labelClass} htmlFor="password">
+            비밀번호
+          </label>
           <Input
+            id="password"
             name="password"
             type="password"
             className={inputClass}
@@ -134,8 +141,11 @@ const Signup = () => {
           />
         </div>
         <div className="mb-28">
-          <p className="mb-8">비밀번호 확인</p>
+          <label className={labelClass} htmlFor="pwdcheck">
+            비밀번호 확인
+          </label>
           <Input
+            id="pwdcheck"
             name="pwdcheck"
             type="password"
             className={inputClass}
