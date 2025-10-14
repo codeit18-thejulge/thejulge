@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { instance } from "@/utils/instance";
 import { Link, NoticeItem, NoticeSort, ShopItem } from "@/types/global";
+import qs from 'qs'
 
 export interface getNoticesRequest {
   offset?: number;
@@ -32,7 +33,9 @@ export interface getNoticesResponse {
 }
 
 const getNotices = async (params: getNoticesRequest): Promise<getNoticesResponse> => {
-  const response = await instance.get("/notices", { params });
+  const response = await instance.get("/notices", { params,
+    paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
+   });
   return response.data;
 };
 
