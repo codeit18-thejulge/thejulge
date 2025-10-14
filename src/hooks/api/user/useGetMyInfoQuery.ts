@@ -12,14 +12,14 @@ export interface GetMyInfoResponse {
   links: Link[];
 }
 
-const getMyInfo = async (userId: string): Promise<GetMyInfoResponse> => {
+export const getMyInfo = async (userId: string): Promise<GetMyInfoResponse> => {
   const response = await instance.get(`/users/${userId}`);
   return response.data;
 };
 
 export const useGetMyInfoQuery = (userId: string) => {
   return useQuery({
-    queryKey: ["getMyInfo"],
+    queryKey: ["getMyInfo", userId],
     queryFn: () => getMyInfo(userId),
   });
 };
