@@ -18,7 +18,7 @@ const Button = ({ status, children, className, ...props }: BtnStatus) => {
   return (
     <button
       type="button"
-      className={cn("inline-block w-full max-w-350 rounded-md text-14-bold", status && BtnStyle[status], className)}
+      className={cn("inline-block w-full rounded-md text-14-bold", status && BtnStyle[status], className)}
       {...props}
     >
       {children}

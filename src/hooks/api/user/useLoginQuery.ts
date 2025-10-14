@@ -30,6 +30,7 @@ export const useLoginQuery = () => {
     mutationFn: postLogin,
     onSuccess: (res) => {
       localStorage.setItem("accessToken", res.item.token);
+      localStorage.setItem("userId", res.item.user.item.id);
       router.replace("/"); //공고리스트 제작 후 수정 필요
     },
     onError: () => {},

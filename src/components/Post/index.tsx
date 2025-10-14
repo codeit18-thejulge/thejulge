@@ -5,6 +5,7 @@ import PostImage from "./components/PostImage";
 import PostFooter from "./components/PostFooter";
 import PostInfo from "./components/PostInfo";
 import { NoticeItem } from "@/types/global";
+import { isStartTimePassed } from "@/utils/formatTime";
 
 // name imageUrl, address, original hourlyPay 가게정보에서 받아옵니다.
 interface Props extends Omit<NoticeItem, "description"> {
@@ -12,30 +13,51 @@ interface Props extends Omit<NoticeItem, "description"> {
   imageUrl: string;
   address: SeoulAddress;
   originalHourlyPay: number;
+  className?: string;
 }
 
 const postStyles = {
-  basic: "bg-white border-gray-20 border w-171 h-260 p-12 tablet:w-312 tablet:h-349 tablet:p-16 rounded-xl",
+  basic:
+    "bg-white border-gray-20 border p-12 desktop:w-312 desktop:h-348 tablet:w-332 tablet:h-361 w-171 h-261 tablet:p-16 rounded-xl flex flex-col",
   closed: "text-gray-30",
 };
 
-const Post = ({ name, id, hourlyPay, startsAt, workhour, closed, imageUrl, address, originalHourlyPay }: Props) => {
+const Post = ({
+  name,
+  id,
+  hourlyPay,
+  startsAt,
+  workhour,
+  closed,
+  imageUrl,
+  address,
+  originalHourlyPay,
+  className,
+}: Props) => {
   const router = useRouter();
 
   const handlePostClick = () => {
-    router.push(`/notice/${id}`); // 페이지 url 에 따라 추후 변경 가능
+    router.push(`/jobinfo/${id}`);
   };
 
+  const isPassed = isStartTimePassed(startsAt);
   return (
-    <section className={cn(postStyles.basic, closed && postStyles.closed)}>
+    <section className={cn(postStyles.basic, (closed || isPassed) && postStyles.closed, className)}>
       <button
         onClick={handlePostClick}
-        className="flex h-full w-full flex-col justify-between gap-12 tablet:gap-20"
+        className="flex w-full flex-grow flex-col justify-between gap-12 tablet:gap-20"
         aria-label="Notice Detail"
       >
         <PostImage startsAt={startsAt} imageUrl={imageUrl} closed={closed} />
-        <PostInfo name={name} address={address} startsAt={startsAt} workhour={workhour} closed={closed} />
-        <PostFooter hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} />
+        <PostInfo
+          name={name}
+          address={address}
+          startsAt={startsAt}
+          workhour={workhour}
+          isPassed={isPassed}
+          closed={closed}
+        />
+        <PostFooter hourlyPay={hourlyPay} originalHourlyPay={originalHourlyPay} closed={closed} isPassed={isPassed} />
       </button>
     </section>
   );
