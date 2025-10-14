@@ -27,10 +27,9 @@ interface TableProps {
   error?: boolean;
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
-  onPageChange: () => void;
 }
 
-const Table = ({ userType, res, isLoading, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<
     GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
@@ -56,8 +55,7 @@ const Table = ({ userType, res, isLoading, onHandleRejectClick, onHandleAcceptCl
             item={item.item}
             userType={userType}
             onHandleRejectClick={onHandleRejectClick}
-            onHandleAcceptClick={onHandleAcceptClick}
-            isLoading={isLoading}
+            onHandleAcceptClick={onHandleAcceptClick}           
           />
         ))}
       </tbody>

@@ -5,7 +5,8 @@ import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserA
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import Button from "@/components/Button";
 import { useState, useEffect } from "react";
-
+import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
+import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
 
@@ -20,8 +21,6 @@ interface user {
 interface TableRowProps {
   item: GetShopApplicationsResponse["items"][0]["item"] | GetUserApplicationsResponse["items"][0]["item"];
   userType: UserType;
-  isLoading?:boolean;
-  error?:boolean;
   onHandleOpenClick?: () => void;
   onHandleRejectClick?: () => void;
   onHandleAcceptClick?: () => void;
@@ -40,6 +39,7 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, on
 
   if (userType === "employer") {
     // 신청자 목록 - 사장
+    const phoneNumber = user.item.phone || "-";
     return (
       <tr>
         <td>{user.item.name}</td>
@@ -48,7 +48,7 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, on
             {user.item.bio || "-"}
           </p>
         </td>
-        <td>{user.item.phone || "-"}</td>
+        <td>{formatPhoneNumber(phoneNumber)}</td>
         <td>
           {isState === "pending" ? (
             <div className={tableStyle.btnGroup}>
@@ -75,10 +75,13 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, on
     );
   } else {
     // 가게 목록 -알바
+    const time = new Date(notice.item.startsAt).toLocaleDateString();
     return (
       <tr>
         <td>{shop.item.name}</td>
-        <td>{notice ? new Date(notice.item.startsAt).toLocaleDateString() : "-"}</td>
+        <td>
+          {formatNoticeTime(time, notice.item.workhour)} ({notice.item.workhour}시간)
+        </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
           <NormalBadge status={isState} />
