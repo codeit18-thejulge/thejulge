@@ -27,7 +27,7 @@ const JobList = () => {
   const {data: jobData} = useGetNoticesQuery({offset, limit, sort, keyword, ...filterConditions});
   const userId = typeof window !== 'undefined' ? localStorage.getItem("userId") : null;
 
-  const {data: userData} = useGetMyInfoQuery(userId ?? "", {enabled: true});
+  const {data: userData} = useGetMyInfoQuery("c4551081-1936-4445-95d9-bfd555f7564c", {enabled: true});
   const userAddress = userData?.item?.address;
   const {data: recommendData} = useGetNoticesQuery(
     {
@@ -98,7 +98,7 @@ const JobList = () => {
             />
             <button className="bg-red-30 flex-shrink-0 px-12 py-6 rounded-5 text-16 text-white font-bold" onClick={handleFilterToggle}>상세 필터</button>
             {openFilter && 
-              <div className="absolute top-50 right-0 z-50 mobile:left-0">
+              <div className="absolute top-50 right--1 tablet:right-0 z-50">
                 <Filter 
                   isOpen={openFilter} 
                   onClose={() => setOpenFilter(false)} 
