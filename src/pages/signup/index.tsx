@@ -42,11 +42,16 @@ const Signup = () => {
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
     const { name, value } = event.target;
     let msg = "";
-    if (name === "email" && !emailRegEx.test(value) && !!value) {
+    if (!value) {
+      setErrorMsg((prev) => ({ ...prev, [name]: msg }));
+      return;
+    }
+
+    if (name === "email" && !emailRegEx.test(value)) {
       msg = "이메일 형식으로 작성해주세요.";
-    } else if (name === "password" && !pwdRegEx.test(value) && !!value) {
+    } else if (name === "password" && !pwdRegEx.test(value)) {
       msg = "8자 이상 입력해주세요.";
-    } else if (name === "pwdcheck" && signupData.password !== value && !!value) {
+    } else if (name === "pwdcheck" && signupData.password !== value) {
       msg = "비밀번호가 일치하지 않습니다.";
     }
 
@@ -73,7 +78,15 @@ const Signup = () => {
     }
   };
 
-  const handleSignup = () => {
+  const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (errorMsg.email || errorMsg.password || errorMsg.pwdcheck) {
+      setModalMessage("입력한 이메일 혹은 비밀번호를 확인해주세요");
+      setIsOpen(true);
+      return;
+    }
+
     postSignup(signupData);
   };
 
@@ -95,74 +108,72 @@ const Signup = () => {
       <Link href="/">
         <Logo className="mx-auto mb-40 w-248" />
       </Link>
-      <div className="mb-28">
-        <p className="mb-8">이메일</p>
-        <Input
-          name="email"
-          type="email"
-          className={inputClass}
-          onChange={handleSignupDataChange}
-          onBlur={handleBlur}
-          errorMsg={errorMsg.email}
-          aria-label="이메일 입력 영역"
-        />
-      </div>
-      <div className="mb-28">
-        <p className="mb-8">비밀번호</p>
-        <Input
-          name="password"
-          type="password"
-          className={inputClass}
-          onChange={handleSignupDataChange}
-          onBlur={handleBlur}
-          errorMsg={errorMsg.password}
-          aria-label="패스워드 입력 영역"
-        />
-      </div>
-      <div className="mb-28">
-        <p className="mb-8">비밀번호 확인</p>
-        <Input
-          name="pwdcheck"
-          type="password"
-          className={inputClass}
-          onChange={handleSignupDataChange}
-          onBlur={handleBlur}
-          errorMsg={errorMsg.pwdcheck}
-          aria-label="패스워드 확인 입력 영역"
-        />
-      </div>
-      <div className="mb-28">
-        <p className="mb-8">회원 유형</p>
-        <div className="flex justify-between">
-          <button
-            className={cn(typeClass, handleTypeStyle(PART))}
-            onClick={() => handleTypeSelect(PART)}
-            aria-label="알바님 선택"
-          >
-            {renderIcon(PART)}
-            알바님
-          </button>
-          <button
-            className={cn(typeClass, handleTypeStyle(BOSS))}
-            onClick={() => handleTypeSelect(BOSS)}
-            aria-label="사장님 선택"
-          >
-            {renderIcon(BOSS)}
-            사장님
-          </button>
+      <form method="post" onSubmit={handleSignup}>
+        <div className="mb-28">
+          <p className="mb-8">이메일</p>
+          <Input
+            name="email"
+            type="email"
+            className={inputClass}
+            onChange={handleSignupDataChange}
+            onBlur={handleBlur}
+            errorMsg={errorMsg.email}
+            aria-label="이메일 입력 영역"
+          />
         </div>
-      </div>
-      <div className="mb-16">
-        <Button
-          status="filled"
-          className={buttonClass}
-          onClick={handleSignup}
-          disabled={isPending}
-          aria-label="가입하기 버튼"
-        >
-          가입하기
-        </Button>
-      </div>
+        <div className="mb-28">
+          <p className="mb-8">비밀번호</p>
+          <Input
+            name="password"
+            type="password"
+            className={inputClass}
+            onChange={handleSignupDataChange}
+            onBlur={handleBlur}
+            errorMsg={errorMsg.password}
+            aria-label="패스워드 입력 영역"
+          />
+        </div>
+        <div className="mb-28">
+          <p className="mb-8">비밀번호 확인</p>
+          <Input
+            name="pwdcheck"
+            type="password"
+            className={inputClass}
+            onChange={handleSignupDataChange}
+            onBlur={handleBlur}
+            errorMsg={errorMsg.pwdcheck}
+            aria-label="패스워드 확인 입력 영역"
+          />
+        </div>
+        <div className="mb-28">
+          <p className="mb-8">회원 유형</p>
+          <div className="flex justify-between">
+            <button
+              type="button"
+              className={cn(typeClass, handleTypeStyle(PART))}
+              onClick={() => handleTypeSelect(PART)}
+              aria-label="알바님 선택"
+            >
+              {renderIcon(PART)}
+              알바님
+            </button>
+            <button
+              type="button"
+              className={cn(typeClass, handleTypeStyle(BOSS))}
+              onClick={() => handleTypeSelect(BOSS)}
+              aria-label="사장님 선택"
+            >
+              {renderIcon(BOSS)}
+              사장님
+            </button>
+          </div>
+        </div>
+        <div className="mb-16">
+          <Button type="submit" status="filled" className={buttonClass} disabled={isPending} aria-label="가입하기 버튼">
+            가입하기
+          </Button>
+        </div>
+      </form>
       <div className="flex justify-center gap-10">
         <span>계정이 있으신가요?</span>
         <Link href="/signin" aria-label="로그인하기 링크" className="text-blue-20 underline">
