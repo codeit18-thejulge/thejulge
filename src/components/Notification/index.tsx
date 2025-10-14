@@ -3,7 +3,6 @@ import NotificationItem from "./NotificationItem";
 import LoadingSpinner from "../LoadingSpinner";
 
 import { GetUserAlertsRequest, GetUserAlertsResponse, UserAlertItem } from "./userAlerts";
-import { USER_ALERTS } from "./mockData";
 import { useEffect, useState } from "react";
 
 interface NotificationProps {
@@ -21,10 +20,9 @@ const Notification = ({ userId, onClose }: NotificationProps) => {
   const getAlerts = async () => {
     try {
       // GET /users/{user_id}/alerts
-
-      const data = USER_ALERTS; // 임시 mockData 사용
-      const unreadAlerts = data.items.map((i) => i.item).filter((alert) => !alert.read); // 읽지 않은 알림만 필터링
-      setAlerts(unreadAlerts);
+      // const data = USER_ALERTS;
+      // const unreadAlerts = data.items.map((i) => i.item).filter((alert) => !alert.read); // 읽지 않은 알림만 필터링
+      // setAlerts(unreadAlerts);
     } catch (err) {
       console.error(err);
     } finally {
