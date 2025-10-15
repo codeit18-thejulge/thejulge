@@ -3,7 +3,7 @@ import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
 import { usePutMyInfoQuery } from "@/hooks/api/user/usePutMyInfoQuery";
 import { Option, SeoulAddress, UserInfoItem } from "@/types/global";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import IcXButton from "@/assets/svgs/ic_x.svg";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import SelectBox from "@/components/SelectBox";
 import MessageModal from "@/components/Modal/MessageModal";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
+import Layout from "@/components/Layout";
 
 const getServerSideProps = async () => {
   const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484"; // 추후 변경
@@ -147,6 +148,10 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
       />
     </div>
   );
+};
+
+ProfileRegister.getLayout = (page: ReactNode) => {
+  return <Layout>{page}</Layout>;
 };
 
 export { getServerSideProps };
