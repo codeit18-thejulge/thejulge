@@ -25,11 +25,12 @@ interface TableProps {
   res: GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"];
   isLoading?: boolean;
   error?: boolean;
+  handleApplicationClick?: (jobId: string) => void;
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
 }
 
-const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick, handleApplicationClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<
     GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
@@ -55,6 +56,7 @@ const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: Tabl
               key={item.item.id}
               item={item.item}
               userType={userType}
+              handleApplicationClick={handleApplicationClick}
               onHandleRejectClick={onHandleRejectClick}
               onHandleAcceptClick={onHandleAcceptClick}
             />
