@@ -18,9 +18,8 @@ const ProfileDetail = ({ userId }: Props) => {
 
   return (
     <div>
-      <div className="mx-auto max-w-6xl py-60">
-        <ProfileSection userId={userId} />
-      </div>
+      <ProfileSection userId={userId} />
+
       <div className="bg-gray-5 pb-120 pt-60">
         {hasApplicationLog ? <ApplicationLogSection userId={userId} /> : <EmptyApplicationLog />}
       </div>
