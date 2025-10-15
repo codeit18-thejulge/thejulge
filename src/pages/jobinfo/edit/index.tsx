@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
-import { PostShopNoticesRequest, usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
+import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
+import { useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
 import { getModalContent, ModalType, ModalProps } from "@/utils/registerModalContent";
 import { useState } from "react";
 import MessageModal from "@/components/Modal/MessageModal";
@@ -9,12 +10,15 @@ import Layout from "@/components/Layout";
 
 // 라우터쿼리 사용할 듯함
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
+const testJobinfoId = "c0d3734f-a1ba-453a-be56-5916f439470a";
 
-const RegisterJobinfo = () => {
+const EditJobInfo = () => {
   const shopId = testShopId;
+  const noticeId = testJobinfoId;
 
   const router = useRouter();
-  const { mutate: postShopNotice, isPending } = usePostShopNoticesQuery();
+  const { data: jobinfoData, isPending: isGetLoading } = useGetShopNoticeDetailQuery({ shopId, noticeId });
+  const { mutate: putShopNotice, isPending: isPutPending } = usePutShopNoticeDetailQuery();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<ModalProps>({
@@ -33,33 +37,49 @@ const RegisterJobinfo = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (data: FormData) => {
-    postShopNotice(
-      { shopId, data },
+  const handleSubmit = (formData: FormData) => {
+    putShopNotice(
+      { shopId, noticeId, data: formData },
       {
         onSuccess: () => {
           // 공고 상세로 이동
-          handleOpenModal("confirm", "공고 등록이 완료되었습니다.", () => router.replace(`/jobinfo`));
+          handleOpenModal("confirm", "공고 수정이 완료되었습니다.", () => router.replace(`/jobinfo`));
         },
         onError: () => {
-          // 가게 정보 상세로 이동
-          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => router.push(`/shopinfo`));
+          // 공고 상세로 이동
+          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => router.push(`/jobinfo`));
         },
       },
     );
   };
 
   const handleCloseClick = () => {
-    // 가게 정보 상세로 이동
-    handleOpenModal("action", "공고 등록을 취소하시겠습니까?", () => router.push(`/shopinfo`));
+    // 공고 상세로 이동
+    handleOpenModal("action", "수정을 취소하시겠습니까?", () => router.push(`/jobinfo`));
+  };
+
+  if (isGetLoading || !jobinfoData) {
+    return <div>Loading...</div>;
+  }
+
+  const defaultValues: FormData = {
+    hourlyPay: jobinfoData.item.hourlyPay,
+    startsAt: jobinfoData.item.startsAt,
+    workhour: jobinfoData.item.workhour,
+    description: jobinfoData.item.description,
   };
 
   return (
     <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
       <div className="relative">
         <IcClose onClick={handleCloseClick} className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32" />
-        <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 등록</h1>
-        <RegisterForm onSubmit={handleSubmit} isPending={isPending} submitLabel="등록" />
+        <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 수정</h1>
+        <RegisterForm
+          defaultValues={defaultValues}
+          onSubmit={handleSubmit}
+          isPending={isPutPending}
+          submitLabel="수정"
+        />
         <MessageModal
           isOpen={isModalOpen}
           message={modalData.message}
@@ -71,5 +91,6 @@ const RegisterJobinfo = () => {
   );
 };
 
-export default RegisterJobinfo;
-RegisterJobinfo.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
+export default EditJobInfo;
+
+EditJobInfo.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
