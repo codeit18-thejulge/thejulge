@@ -1,7 +1,5 @@
 
 import Filter from "@/components/Filter";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import ListPagination from "@/components/ListPagination";
 import Post from "@/components/Post";
 import SelectBox from "@/components/SelectBox";
@@ -9,6 +7,7 @@ import { SORT_OPTIONS } from "@/constants/SORT_OPTIONS";
 import { getNoticesRequest, useGetNoticesQuery } from "@/hooks/api/notice/useGetNoticesQuery";
 import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { NoticeSort, SeoulAddress } from "@/types/global";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -27,7 +26,7 @@ const JobList = () => {
   const {data: jobData} = useGetNoticesQuery({offset, limit, sort, keyword, ...filterConditions});
   const userId = typeof window !== 'undefined' ? localStorage.getItem("userId") : null;
 
-  const {data: userData} = useGetMyInfoQuery("c4551081-1936-4445-95d9-bfd555f7564c", {enabled: true});
+  const {data: userData} = useGetMyInfoQuery(userId ?? "", {enabled: !!userId});
   const userAddress = userData?.item?.address;
   const {data: recommendData} = useGetNoticesQuery(
     {
@@ -41,9 +40,7 @@ const JobList = () => {
     }
   );
 
-  const handleSearch = (searchInput: string) => {
-    router.push(`/joblist?keyword=${searchInput}`);
-  }
+
 
   const handleFilterToggle = () => {
     setOpenFilter((prev) => !prev);
@@ -58,7 +55,6 @@ const JobList = () => {
 
   return (
     <div>
-      <Header placeholder={keyword} onSearch={handleSearch}/>
       {keyword && keyword.trim() !== "" ? null : 
        (
         <div className="bg-red-10">
@@ -67,12 +63,14 @@ const JobList = () => {
             <div className="flex gap-4 tablet:gap-10 pb-60 pt-31 overflow-x-scroll">
               {recommendData?.items.map((data) => (
                 <div key={data.item.id} className="flex-shrink-0">
-                  <Post
+                  <Link href={`/jobinfo/${data.item.id}`}>
+                    <Post
                     {...data.item}
                     {...data.item.shop.item}
                     address={data.item.shop.item.address1 as SeoulAddress}
                     className="tablet:w-312 tablet:h-348 "
-                  />
+                    />
+                  </Link>                
                 </div>
               ))}
             </div>
@@ -112,19 +110,22 @@ const JobList = () => {
         </div>
         <div className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14">      
           {jobData?.items.map((data)=>(
-            <Post 
+            <Link 
               key={data.item.id}
-              {...data.item}
-              {...data.item.shop.item}
-              address={data.item.shop.item.address1 as SeoulAddress}
-            />
+              href={`/jobinfo/${data.item.id}`}
+            >
+              <Post 
+                {...data.item}
+                {...data.item.shop.item}
+                address={data.item.shop.item.address1 as SeoulAddress}
+              />
+            </Link>
           ))}
         </div>
       </div>
       <div className="mb-80 tablet:mb-60">
         <ListPagination limit={limit} count={jobData?.count ?? 0} hasNext={jobData?.hasNext ?? false} onPageChange={(pageNumber) => setPage(pageNumber)}/>
       </div>
-      <Footer/>
     </div>
   );
 };
