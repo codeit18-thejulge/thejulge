@@ -12,8 +12,8 @@ const EmployeeSection = () => {
     router.push("/joblist");
   };
   return (
-    <section className="mx-auto flex max-w-6xl items-center justify-between gap-24 px-16 py-80">
-      <div className="flex flex-col justify-center gap-12">
+    <section className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-24 px-16 py-80 tablet:flex-row">
+      <div className="flex flex-col items-center justify-center gap-12 tablet:items-start">
         <h2 className="text-32 font-bold">이런 알바는 어때요?</h2>
         <p className="text-24">
           지금 <span className="font-bold text-primary">The julge</span>에서 공고들을 만나보세요
@@ -21,7 +21,7 @@ const EmployeeSection = () => {
 
         <Button
           status="filled"
-          className="mt-24 py-16 text-20-bold transition hover:bg-red-40"
+          className="mt-24 max-w-300 py-16 text-20-bold transition hover:bg-red-40"
           onClick={handleJobClick}
         >
           공고 보러가기
