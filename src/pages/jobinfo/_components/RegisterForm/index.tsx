@@ -21,9 +21,10 @@ interface RegisterFormProps {
   defaultValues?: FormData;
   onSubmit: (data: FormData) => void;
   isPending?: boolean;
+  submitLabel?: string;
 }
 
-const RegisterForm = ({ defaultValues, onSubmit, isPending }: RegisterFormProps) => {
+const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: RegisterFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     hourlyPay: defaultValues?.hourlyPay ?? MINIMUM_WAGE,
     startsAt: defaultValues?.startsAt ?? dayjs().format("YYYY-MM-DDTHH:mm"),
@@ -121,7 +122,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending }: RegisterFormProps)
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
         </label>
         <Button type="submit" disabled={isPending || hasError} status="filled" className="m-auto h-48 tablet:w-312">
-          {isPending ? "등록 중..." : "등록하기"}
+          {isPending ? `${submitLabel} 중...` : `${submitLabel}하기`}
         </Button>
       </form>
     </>
