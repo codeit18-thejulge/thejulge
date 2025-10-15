@@ -63,7 +63,7 @@ const Signin = () => {
     }));
   };
 
-  const handleSignin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSigninSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (errorMsg.email || errorMsg.password) {
@@ -80,7 +80,7 @@ const Signin = () => {
       <Link href="/">
         <Logo className="mx-auto mb-40 w-248" />
       </Link>
-      <form method="post" onSubmit={handleSignin}>
+      <form method="post" onSubmit={handleSigninSubmit}>
         <div className="mb-28">
           <label className={labelClass} htmlFor="email">
             이메일
