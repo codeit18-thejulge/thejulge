@@ -6,7 +6,7 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_components/ModalContent";
 
-// 라우터쿼리 사용할 듯함
+// 추후 수정 예정
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
 
 const RegisterJobinfo = () => {

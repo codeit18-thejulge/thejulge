@@ -10,7 +10,7 @@ import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_compon
 import { InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 
-// 추후 변경
+// 추후 수정 예정
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
 const testJobinfoId = "c0d3734f-a1ba-453a-be56-5916f439470a";
 
