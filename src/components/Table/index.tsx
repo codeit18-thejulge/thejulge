@@ -25,11 +25,12 @@ interface TableProps {
   res: GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"];
   isLoading?: boolean;
   error?: boolean;
+  handleApplicationClick?: (jobId: string) => void;
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
 }
 
-const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick, handleApplicationClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<
     GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
@@ -38,28 +39,31 @@ const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: Tabl
     setTableData(res);
   }, [res]);
   return (
-    <table className={tableStyle.table}>
-      <colgroup>
-        <col className="w-228" />
-        <col className="w-300" />
-        <col className="w-200" />
-        <col className="w-162 tablet:w-220 desktop:w-236" />
-      </colgroup>
-      <thead className={tableStyle.theadColor}>
-        <TableHeader colTitle={headerTitles} />
-      </thead>
-      <tbody>
-        {tableData?.map((item) => (
-          <TableRow
-            key={item.item.id}
-            item={item.item}
-            userType={userType}
-            onHandleRejectClick={onHandleRejectClick}
-            onHandleAcceptClick={onHandleAcceptClick}           
-          />
-        ))}
-      </tbody>
-    </table>
+    <div className="tableOver">
+      <table className={tableStyle.table}>
+        <colgroup>
+          <col className="w-228" />
+          <col className="w-300" />
+          <col className="w-200" />
+          <col className="w-162 tablet:w-220 desktop:w-236" />
+        </colgroup>
+        <thead className={tableStyle.theadColor}>
+          <TableHeader colTitle={headerTitles} />
+        </thead>
+        <tbody>
+          {tableData?.map((item) => (
+            <TableRow
+              key={item.item.id}
+              item={item.item}
+              userType={userType}
+              handleApplicationClick={handleApplicationClick}
+              onHandleRejectClick={onHandleRejectClick}
+              onHandleAcceptClick={onHandleAcceptClick}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 export default Table;
