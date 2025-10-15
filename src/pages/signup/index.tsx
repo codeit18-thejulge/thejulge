@@ -79,7 +79,7 @@ const Signup = () => {
     }
   };
 
-  const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignupSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (errorMsg.email || errorMsg.password || errorMsg.pwdcheck) {
@@ -109,7 +109,7 @@ const Signup = () => {
       <Link href="/">
         <Logo className="mx-auto mb-40 w-248" />
       </Link>
-      <form method="post" onSubmit={handleSignup}>
+      <form method="post" onSubmit={handleSignupSubmit}>
         <div className="mb-28">
           <label className={labelClass} htmlFor="email">
             이메일
