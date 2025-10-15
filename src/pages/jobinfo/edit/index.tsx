@@ -7,6 +7,7 @@ import { useState } from "react";
 import MessageModal from "@/components/Modal/MessageModal";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 // 라우터쿼리 사용할 듯함
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
@@ -59,7 +60,11 @@ const EditJobInfo = () => {
   };
 
   if (isGetLoading || !jobinfoData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex h-[100dvh] items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   const defaultValues: FormData = {
