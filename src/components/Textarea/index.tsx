@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { ChangeEvent, forwardRef, TextareaHTMLAttributes } from "react";
+import { forwardRef, TextareaHTMLAttributes } from "react";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   errorMsg?: string;
