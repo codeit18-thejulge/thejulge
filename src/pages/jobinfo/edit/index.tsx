@@ -1,21 +1,39 @@
 import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
 import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
-import { useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
+import { getShopNoticeDetail, useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
 import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_components/ModalContent";
+import { InferGetServerSidePropsType } from "next";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
 
-// 라우터쿼리 사용할 듯함
+// 추후 변경
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
 const testJobinfoId = "c0d3734f-a1ba-453a-be56-5916f439470a";
 
-const EditJobInfo = () => {
+const getServerSideProps = async () => {
   const shopId = testShopId;
   const noticeId = testJobinfoId;
+  const queryClient = new QueryClient();
 
+  await queryClient.prefetchQuery({
+    queryKey: ["getShopNoticeDetail", shopId, noticeId],
+    queryFn: () => getShopNoticeDetail({ shopId, noticeId }),
+  });
+
+  return {
+    props: {
+      shopId,
+      noticeId,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
+
+const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { data: jobinfoData, isPending: isGetLoading } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   const { mutate: putShopNotice, isPending: isPutPending } = usePutShopNoticeDetailQuery();
@@ -95,6 +113,7 @@ const EditJobInfo = () => {
   );
 };
 
+export { getServerSideProps };
 export default EditJobInfo;
 
 EditJobInfo.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
