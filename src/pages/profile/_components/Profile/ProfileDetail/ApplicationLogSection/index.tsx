@@ -13,10 +13,12 @@ const LIMIT = 5;
 
 const ApplicationLogSection = ({ userId }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
+
   const offset = (currentPage - 1) * LIMIT;
+
   const { data, isLoading, isError, error } = useGetUserApplicationsQuery({ userId, params: { offset, limit: LIMIT } });
+
   const router = useRouter();
-  console.log("dd", data);
 
   const handlePageChange = () => {
     setCurrentPage(currentPage + 1);
@@ -35,7 +37,7 @@ const ApplicationLogSection = ({ userId }: Props) => {
   }
   const { items, limit, count, hasNext } = data;
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-12 px-24">
+    <div className="mx-auto flex max-w-6xl flex-col gap-12">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">신청내역</h2>
       <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
       <div>
