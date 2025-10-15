@@ -10,18 +10,24 @@ interface TableProps {
   hasNext: boolean;
   isLoading?: boolean;
   error?: boolean;
-  onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
-  onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
   onPageChange: (pageNumber: number) => void;
+  onModalMessage: (approval: "rejected" | "accepted") => void;
 }
 
-const JobInfoTable = ({ res, limit, count, hasNext, onPageChange }: TableProps) => {
+const JobInfoTable = ({ res, limit, count, hasNext, onPageChange, onModalMessage }: TableProps) => {
+  const onButtonClick = (approval: "rejected" | "accepted") => {
+    onModalMessage(approval);
+  };
+
   return (
     <>
       <div className="tableWrap">
-        <div className="tableOver">
-          <Table res={res} userType={"employer"} />
-        </div>
+        <Table
+          res={res}
+          userType={"employer"}
+          onHandleAcceptClick={onButtonClick}
+          onHandleRejectClick={onButtonClick}
+        />
         <div className="tableBottom">
           <ListPagination limit={limit} count={count} hasNext={hasNext} onPageChange={onPageChange} />
         </div>
