@@ -45,7 +45,7 @@ const ProfileSection = ({ userId }: Props) => {
         </div>
 
         <div>
-          <Button status="lined" className="px-136 py-14 text-16-bold" onClick={handleEditClick}>
+          <Button status="lined" className="w-169 px-136 py-14 text-16-bold" onClick={handleEditClick}>
             편집하기
           </Button>
         </div>
