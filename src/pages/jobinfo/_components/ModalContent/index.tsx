@@ -1,3 +1,6 @@
+import React from "react";
+import MessageModal from "@/components/Modal/MessageModal";
+
 export type ModalType = "confirm" | "action";
 
 export interface ModalButton {
@@ -13,8 +16,8 @@ export interface ModalProps {
 interface GetModalContentProps {
   type: ModalType;
   message: string;
-  onConfirm: () => void; // 확인 버튼 액션
-  onClose: () => void; // 모달 닫기
+  onConfirm: () => void;
+  onClose: () => void;
 }
 
 export const getModalContent = ({ type, message, onConfirm, onClose }: GetModalContentProps): ModalProps => {
@@ -25,3 +28,14 @@ export const getModalContent = ({ type, message, onConfirm, onClose }: GetModalC
   buttons.push({ buttonText: "확인", style: "filled", onClick: onConfirm, className: "w-120 h-48" });
   return { message, buttons };
 };
+
+interface ModalWrapperProps extends ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const ModalWrapper = ({ isOpen, message, buttons, onClose }: ModalWrapperProps) => {
+  return <MessageModal isOpen={isOpen} message={message} onClose={onClose} footers={buttons} />;
+};
+
+export default ModalWrapper;

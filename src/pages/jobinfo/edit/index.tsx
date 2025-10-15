@@ -2,12 +2,11 @@ import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
 import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
 import { useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
-import { getModalContent, ModalType, ModalProps } from "@/utils/registerModalContent";
 import { useState } from "react";
-import MessageModal from "@/components/Modal/MessageModal";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_components/ModalContent";
 
 // 라우터쿼리 사용할 듯함
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
@@ -85,11 +84,11 @@ const EditJobInfo = () => {
           isPending={isPutPending}
           submitLabel="수정"
         />
-        <MessageModal
+        <ModalWrapper
           isOpen={isModalOpen}
           message={modalData.message}
           onClose={() => setIsModalOpen(false)}
-          footers={modalData.buttons}
+          buttons={modalData.buttons}
         />
       </div>
     </div>

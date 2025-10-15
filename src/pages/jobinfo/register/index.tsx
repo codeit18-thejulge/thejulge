@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
-import { PostShopNoticesRequest, usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
-import { getModalContent, ModalType, ModalProps } from "@/utils/registerModalContent";
+import { usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
 import { useState } from "react";
-import MessageModal from "@/components/Modal/MessageModal";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_components/ModalContent";
 
 // 라우터쿼리 사용할 듯함
 const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
@@ -19,7 +18,7 @@ const RegisterJobinfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<ModalProps>({
     message: "",
-    buttons: [{ buttonText: "", style: "filled", onClick: () => {}, className: "" }],
+    buttons: [],
   });
 
   const handleOpenModal = (type: ModalType, message: string, onConfirm: () => void) => {
@@ -60,11 +59,11 @@ const RegisterJobinfo = () => {
         <IcClose onClick={handleCloseClick} className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32" />
         <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 등록</h1>
         <RegisterForm onSubmit={handleSubmit} isPending={isPending} submitLabel="등록" />
-        <MessageModal
+        <ModalWrapper
           isOpen={isModalOpen}
           message={modalData.message}
           onClose={() => setIsModalOpen(false)}
-          footers={modalData.buttons}
+          buttons={modalData.buttons}
         />
       </div>
     </div>
