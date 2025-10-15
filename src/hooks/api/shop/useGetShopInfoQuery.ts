@@ -12,7 +12,7 @@ export interface GetShopInfoResponse {
   links: Link[];
 }
 
-const getShopInfo = async (shopId: string): Promise<GetShopInfoResponse> => {
+export const getShopInfo = async (shopId: string): Promise<GetShopInfoResponse> => {
   const response = await instance.get(`/shops/${shopId}`);
   return response.data;
 };
