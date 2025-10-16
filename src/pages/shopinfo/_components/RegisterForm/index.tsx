@@ -8,12 +8,14 @@ import { PostShopRequest } from "@/hooks/api/shop/usePostShopQuery";
 import { Option } from "@/types/global";
 import { cn } from "@/utils";
 import { ChangeEvent, FormEvent, useState } from "react";
+import RegisterImage from "./RegisterImage";
 
 const MINIMUM_WAGE = Number(process.env.NEXT_PUBLIC_MINIMUM_WAGE);
 
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
 
+// FormData의 category, address1은 초기값 때문에 옵셔널로 지정
 export type FormData = Omit<PostShopRequest, "category" | "address1"> & {
   category?: PostShopRequest["category"];
   address1?: PostShopRequest["address1"];
@@ -53,6 +55,9 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
   };
   const handleSelectChange = (name: "category" | "address1") => (option: Option) => {
     setFormData((prev) => ({ ...prev, [name]: option.value }));
+  };
+  const handleImageChange = (url: string) => {
+    setFormData((prev) => ({ ...prev, imageUrl: url }));
   };
 
   const handleNameBlur = () => {
@@ -151,6 +156,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
         </div>
         {/*  */}
         가게 이미지
+        <RegisterImage initialUrl={formData.imageUrl} onUploaded={handleImageChange} />
         {/*  */}
         <label className={cn(labelStyle)}>
           <span>공고 설명</span>
