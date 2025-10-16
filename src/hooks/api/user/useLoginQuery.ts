@@ -28,8 +28,7 @@ export const useLoginQuery = () => {
   const router = useRouter();
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: postLogin,
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: () => {
       router.replace("/"); //공고리스트 제작 후 수정 필요
     },
     onError: () => {},
