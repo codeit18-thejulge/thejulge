@@ -12,6 +12,8 @@ import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
 
 const MINIMUM_WAGE = Number(process.env.NEXT_PUBLIC_MINIMUM_WAGE);
+const DEFUALT_SHOP_IMAGE =
+  "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%9D%B0%EC%83%89-%EC%84%B8%EB%9D%BC%EB%AF%B9-%EC%A0%91%EC%8B%9C%EC%97%90-%EC%A0%91%EC%8B%9C-N_Y88TWmGwA?utm_source=unsplash&utm_medium=referral";
 
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
@@ -90,7 +92,8 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
+    // 기본 이미지는 임의로 넣어둠
+    onSubmit({ ...formData, imageUrl: formData.imageUrl || DEFUALT_SHOP_IMAGE });
   };
 
   const requiredInputs: (keyof FormData)[] = ["name", "category", "address1", "address2", "originalHourlyPay"];
@@ -162,7 +165,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
         </div>
         <div className={cn(labelStyle)}>
           <span>가게 이미지</span>
-          <div className="relative w-fit">
+          <div className="relative w-full tablet:w-fit">
             <RegisterImage initialUrl={formData.imageUrl} onUploaded={handleImageChange} />
             {formData.imageUrl && (
               <button

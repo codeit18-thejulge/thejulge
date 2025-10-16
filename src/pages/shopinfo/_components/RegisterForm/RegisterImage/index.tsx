@@ -47,7 +47,9 @@ const RegisterImage = ({ onUploaded, initialUrl }: RegisterImageProps) => {
       onClick={handleClick}
       className="relative flex h-276 w-full cursor-pointer items-center justify-center rounded-6 border border-gray-30 bg-gray-10 hover:bg-gray-20 active:border-gray-50 tablet:w-480"
     >
-      {previewUrl && <Image src={previewUrl} alt="image preview" className="rounded-6 object-cover" fill />}
+      {previewUrl && (
+        <Image src={previewUrl} alt="image preview" className="rounded-6 object-cover" sizes="100vw" fill />
+      )}
       {!previewUrl && (
         <div className="flex flex-col items-center gap-10 text-gray-40">
           <IcCamera className="w-32" />
