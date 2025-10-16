@@ -17,7 +17,7 @@ export const getMyInfo = async (userId: string): Promise<GetMyInfoResponse> => {
   return response.data;
 };
 
-export const useGetMyInfoQuery = (userId: string, options?: { enabled?: boolean}) => {
+export const useGetMyInfoQuery = (userId: string, options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: ["getMyInfo", userId],
     queryFn: () => getMyInfo(userId),
