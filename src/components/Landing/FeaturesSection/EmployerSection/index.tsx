@@ -11,7 +11,7 @@ const EmployerSection = () => {
   };
 
   return (
-    <section className="mx-auto flex min-h-500 max-w-6xl items-center justify-between gap-24 px-16 py-80">
+    <section className="mx-auto flex min-h-500 max-w-6xl flex-col-reverse items-center justify-between gap-24 px-16 py-80 tablet:flex-row">
       <motion.div
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -21,7 +21,7 @@ const EmployerSection = () => {
       >
         <Image src={ImgJob} alt="공고 등록 카드" />
       </motion.div>
-      <div className="flex flex-col items-end justify-center gap-12">
+      <div className="flex flex-col items-center justify-center gap-12 tablet:items-end">
         <h2 className="text-32 font-bold">직원이 필요하신가요?</h2>
         <p className="text-24">
           <span className="font-bold text-primary">The julge</span>의 간단한 구인 시스템으로 인재들을 만나보세요
@@ -29,7 +29,7 @@ const EmployerSection = () => {
 
         <Button
           status="filled"
-          className="mt-24 py-16 text-20-bold transition hover:bg-red-40"
+          className="mt-24 max-w-300 py-16 text-20-bold transition hover:bg-red-40"
           onClick={handleShopClick}
         >
           등록 하러가기
