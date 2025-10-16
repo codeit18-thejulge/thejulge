@@ -147,7 +147,7 @@ const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSi
                  </Link> 
                 )))}
             </div>
-            {hasNextPage && <div ref={ref} style={{ height: "50px" }} />}
+            {hasNextPage && <div ref={ref} />}
             {isFetchingNextPage && <p>로딩 중...</p>}
           </div>
         </div>
