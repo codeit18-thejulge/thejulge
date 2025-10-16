@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
 import { Link, UserItem, UserType } from "@/types/global";
@@ -19,9 +20,13 @@ const postSignup = async ({ email, password, type }: SignupRequest): Promise<Sig
 };
 
 export const useSignupQuery = () => {
+  const router = useRouter();
   return useMutation({
     mutationFn: postSignup,
-    onSuccess: () => {},
+    onSuccess: () => {
+      alert("가입이 완료되었습니다.");
+      router.replace("/signin");
+    },
     onError: () => {},
   });
 };

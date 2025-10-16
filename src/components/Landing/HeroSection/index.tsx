@@ -22,13 +22,10 @@ const HeroSection = () => {
 
         <div className="mt-24 flex items-center justify-center gap-24 border-t border-gray-30 pt-24">
           <div className="text-center">
-            <div className="text-28-bold text-primary">{data?.count}</div>
-            <div className="text-14-bold">누적 공고</div>
-          </div>
-          <div className="h-45 w-1 bg-gray-30"></div>
-          <div className="text-center">
-            <div className="text-28-bold text-primary">5,678</div>
-            <div className="text-14-bold">등록 업체</div>
+            <div className="text-20-bold">지금까지 더줄게를 통해 올라온 공고</div>
+            <div className="text-28-bold">
+              총 <span className="text-38 text-primary">{data?.count.toLocaleString("ko-KR")}</span>개
+            </div>
           </div>
         </div>
       </div>
