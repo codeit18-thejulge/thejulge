@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-
+import { LoginResponse } from "@/hooks/api/user/useLoginQuery";
 const NEXT_PUBLIC_BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export default async function Handler(req: NextApiRequest, res: NextApiResponse) {
@@ -11,16 +11,19 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { email, password } = req.body;
 
-    const { data } = (await axios.post(`${NEXT_PUBLIC_BACKEND_API_URL}/token`, { email, password })).data;
+    const { data } = await axios.post<LoginResponse>(`${NEXT_PUBLIC_BACKEND_API_URL}/token`, {
+      email,
+      password,
+    });
 
     const { item } = data;
 
     const { token } = item;
-    const { userId } = item.user.item;
+    const userId = item.user.item.id;
 
     res.setHeader("Set-Cookie", [
-      `accessToken=${token}; Path=/ HttpOnly; Secure; SameSite=Strict;`,
-      `userId=${userId};  Path=/`,
+      `accessToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict;`,
+      `userId=${userId};  Path=/;`,
     ]);
 
     return res.status(200).json({
