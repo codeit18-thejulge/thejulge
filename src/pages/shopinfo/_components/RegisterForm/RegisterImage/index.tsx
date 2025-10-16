@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import IcCamera from "@/assets/svgs/ic_camera.svg";
 import { usePostPresignedURLQuery } from "@/hooks/api/image/usePostPresignedURLQuery";
 import { usePutPresignedURLQuery } from "@/hooks/api/image/usePutPresignedURLQuery";
@@ -19,6 +19,7 @@ const RegisterImage = ({ onUploaded, initialUrl }: RegisterImageProps) => {
   const handleClick = () => {
     fileInputRef.current?.click();
   };
+
   const handleFileSelect = async (file: File) => {
     setPreviewUrl(URL.createObjectURL(file));
     try {
@@ -28,7 +29,6 @@ const RegisterImage = ({ onUploaded, initialUrl }: RegisterImageProps) => {
       onUploaded(cleanUrl);
     } catch (err) {
       console.error(err);
-      // 이미지 업로드 실패 로직
     }
   };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +37,10 @@ const RegisterImage = ({ onUploaded, initialUrl }: RegisterImageProps) => {
       handleFileSelect(file);
     }
   };
+
+  useEffect(() => {
+    setPreviewUrl(initialUrl);
+  }, [initialUrl]);
 
   return (
     <div
