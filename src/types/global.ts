@@ -16,7 +16,7 @@ export interface UserItem {
 export interface UserInfoItem {
   name: string;
   phone: string;
-  address: string;
+  address: SeoulAddress;
   bio: string;
 }
 
@@ -24,7 +24,7 @@ export interface ShopItem {
   id: string;
   name: string;
   category: string;
-  address1: string;
+  address1: SeoulAddress;
   address2: string;
   description: string;
   imageUrl: string;

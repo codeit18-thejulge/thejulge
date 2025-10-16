@@ -1,7 +1,8 @@
 import TableHeader from "./components/TableHeader";
 import TableRow from "./components/TableRow";
 import { useState, useEffect } from "react";
-import { Notice } from "@/types/notice";
+import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
+import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import tableStyle from "@/styles/table.module.css";
 
 const TABLE_HEADER = {
@@ -21,20 +22,24 @@ const TABLE_HEADER = {
 
 interface TableProps {
   userType: keyof typeof TABLE_HEADER;
-  res: Notice[];
+  res: GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"];
+  isLoading?: boolean;
+  error?: boolean;
+  handleApplicationClick?: (jobId: string) => void;
   onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
   onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
-  onPageChange: () => void;
 }
 
-const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: TableProps) => {
+const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick, handleApplicationClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
-  const [tableData, setTableData] = useState<Notice[]>([]);
+  const [tableData, setTableData] = useState<
+    GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
+  >([]);
   useEffect(() => {
     setTableData(res);
   }, [res]);
   return (
-    <div className={tableStyle.tableWrap}>
+    <div className="tableOver">
       <table className={tableStyle.table}>
         <colgroup>
           <col className="w-228" />
@@ -46,11 +51,12 @@ const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick }: Tabl
           <TableHeader colTitle={headerTitles} />
         </thead>
         <tbody>
-          {tableData.map((item) => (
+          {tableData?.map((item) => (
             <TableRow
-              key={item.id}
-              item={item}
+              key={item.item.id}
+              item={item.item}
               userType={userType}
+              handleApplicationClick={handleApplicationClick}
               onHandleRejectClick={onHandleRejectClick}
               onHandleAcceptClick={onHandleAcceptClick}
             />

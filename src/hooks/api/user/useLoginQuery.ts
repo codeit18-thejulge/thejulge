@@ -1,4 +1,5 @@
-import { UserInfoItem, UserItem, UserType } from "@/types/global";
+import { useRouter } from "next/router";
+import { UserInfoItem, UserItem } from "@/types/global";
 import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
 
@@ -24,11 +25,15 @@ const postLogin = async ({ email, password }: LoginRequest): Promise<LoginRespon
 };
 
 export const useLoginQuery = () => {
-  return useMutation({
+  const router = useRouter();
+  const { mutate, isError, isPending, error } = useMutation({
     mutationFn: postLogin,
     onSuccess: (res) => {
       localStorage.setItem("accessToken", res.item.token);
+      localStorage.setItem("userId", res.item.user.item.id);
+      router.replace("/"); //공고리스트 제작 후 수정 필요
     },
     onError: () => {},
   });
+  return { mutate, isError, isPending, error };
 };

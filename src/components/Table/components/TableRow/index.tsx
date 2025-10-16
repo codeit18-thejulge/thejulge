@@ -1,25 +1,51 @@
 import { UserType } from "@/types/global";
 import NormalBadge from "@/components/Badge/NormalBadge";
+import { UserItem, UserInfoItem } from "@/types/global";
+import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
+import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import Button from "@/components/Button";
 import { useState, useEffect } from "react";
-import { Notice } from "@/types/notice";
+import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
+import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
 
+interface user {
+  user: {
+    item: UserItem & Partial<UserInfoItem>;
+    href: string;
+  };
+}
+
 // 테이블 값
 interface TableRowProps {
-  item: Notice;
+  item: GetShopApplicationsResponse["items"][0]["item"] | GetUserApplicationsResponse["items"][0]["item"];
   userType: UserType;
-  onHandleOpenClick?: () => void;
+  isLoading?: boolean;
+  error?: boolean;
+  handleApplicationClick?: (jobId: string) => void;
   onHandleRejectClick?: () => void;
   onHandleAcceptClick?: () => void;
 }
 
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
 
-const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, onHandleOpenClick }: TableRowProps) => {
-  const { user, shop, notice } = item;
+const TableRow = ({
+  item,
+  userType,
+  onHandleRejectClick,
+  onHandleAcceptClick,
+  handleApplicationClick,
+}: TableRowProps) => {
+  const { shop, notice } = item;
+  const { user } = item as user;
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
+
+  const jobId = item?.notice.item.id;
+
+  const handleRowClick = (jobId: string) => {
+    handleApplicationClick?.(jobId);
+  };
 
   useEffect(() => {
     setIsState(item.status);
@@ -27,15 +53,14 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, on
 
   if (userType === "employer") {
     // 신청자 목록 - 사장
+    const phoneNumber = user.item.phone || "-";
     return (
       <tr>
         <td>{user.item.name}</td>
         <td>
-          <p onClick={onHandleOpenClick} className={tableStyle.overText}>
-            {user.item.bio || "-"}
-          </p>
+          <p className={tableStyle.overText}>{user.item.bio || "-"}</p>
         </td>
-        <td>{user.item.phone || "-"}</td>
+        <td>{formatPhoneNumber(phoneNumber)}</td>
         <td>
           {isState === "pending" ? (
             <div className={tableStyle.btnGroup}>
@@ -62,10 +87,13 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick, on
     );
   } else {
     // 가게 목록 -알바
+    const time = new Date(notice.item.startsAt).toLocaleDateString();
     return (
-      <tr>
+      <tr onClick={() => handleRowClick(jobId)}>
         <td>{shop.item.name}</td>
-        <td>{notice ? new Date(notice.item.startsAt).toLocaleDateString() : "-"}</td>
+        <td>
+          {formatNoticeTime(time, notice.item.workhour)} ({notice.item.workhour}시간)
+        </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
           <NormalBadge status={isState} />
