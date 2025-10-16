@@ -2,7 +2,7 @@ import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
 import { Link, ShopItem, UserInfoItem, UserItem } from "@/types/global";
 
-export type PostShopRequest = ShopItem;
+export type PostShopRequest = Omit<ShopItem, "id">;
 
 export interface PostShopResponse {
   item: ShopItem & {
