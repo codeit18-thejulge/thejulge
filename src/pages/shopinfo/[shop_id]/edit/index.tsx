@@ -11,7 +11,7 @@ import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/pages/sh
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const shopId = "3eca591f-ec92-4e19-8968-fd2e268e468b"; //추후 params로 수정 예정
+  const shopId = context.params?.shop_id as string;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -45,17 +45,17 @@ const EditShopPage = ({ shopId }: InferGetServerSidePropsType<typeof getServerSi
       { shopId, data: { ...data, id: shopId, category: data.category, address1: data.address1 } },
       {
         onSuccess: () => {
-          handleOpenModal("confirm", "공고 수정이 완료되었습니다.", () => router.replace(`/shopinfo`));
+          handleOpenModal("confirm", "가게 정보 수정이 완료되었습니다.", () => router.replace(`/shopinfo/${shopId}`));
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => router.push(`/shopinfo`));
+          handleOpenModal("confirm", "가게 정보 수정에 실패했습니다.", () => router.push(`/shopinfo/${shopId}`));
         },
       },
     );
   };
 
   const handleCloseClick = () =>
-    handleOpenModal("action", "수정을 취소하시겠습니까?", () => router.push(`/shopinfo/${shopId}`));
+    handleOpenModal("action", "가게 정보 수정을 취소하시겠습니까?", () => router.push(`/shopinfo/${shopId}`));
 
   if (isLoading || !shopData) {
     return (

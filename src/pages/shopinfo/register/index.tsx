@@ -34,12 +34,11 @@ const RegisterJobinfo = () => {
     postShop(
       { ...data, category: data.category, address1: data.address1 },
       {
-        onSuccess: () => {
-          // 공고 상세로 이동
-          handleOpenModal("confirm", "가게 등록이 완료되었습니다.", () => router.replace(`/shopinfo`));
+        onSuccess: (res) => {
+          const shop_id = res.item.id;
+          handleOpenModal("confirm", "가게 등록이 완료되었습니다.", () => router.replace(`/shopinfo/${shop_id}`));
         },
         onError: () => {
-          // 가게 정보 상세로 이동
           handleOpenModal("confirm", "가게 등록에 실패했습니다.", () => router.push(`/shopinfo`));
         },
       },
@@ -47,7 +46,6 @@ const RegisterJobinfo = () => {
   };
 
   const handleCloseClick = () => {
-    // 가게 정보 상세로 이동
     handleOpenModal("action", "가게 등록을 취소하시겠습니까?", () => router.push(`/shopinfo`));
   };
 
