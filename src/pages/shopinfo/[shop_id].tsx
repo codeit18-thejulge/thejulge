@@ -1,16 +1,23 @@
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Post from "@/components/Post";
 import { CardAddress, CardCategory, CardDescription, CardImageBox, CardTitle } from "@/components/ShopInfo";
-import { getShopNotices, useGetShopNoticesQuery } from "@/hooks/api/notice/useGetShopNoticesQuery";
+import { useGetShopNoticesInfiniteQuery } from "@/hooks/api/notice/useGetShopNoticesInfiniteQuery";
+import { getShopNotices } from "@/hooks/api/notice/useGetShopNoticesQuery";
 import { getShopInfo, useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInfoQuery";
 import { SeoulAddress } from "@/types/global";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { InferGetServerSidePropsType } from "next";
+import { useInView } from "react-intersection-observer";import { InferGetServerSidePropsType } from "next";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export async function getServerSideProps() {
+  // 나중에 수정 예정
+  const shopId = "365c6cd0-883e-4b90-9fff-8bf0dae08815"; 
+  const userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMTkwOThkYi0xM2UyLTRlODEtOTZkZC05MWFhMmU1ZmJiZGIiLCJpYXQiOjE3NjA1NDUxNzd9.f5o7zA2Y0tL1YPmir_WGlSpNLJWOF8lERNbf5jB5tyg"
   
-  const shopId = "365c6cd0-883e-4b90-9fff-8bf0dae08815";//임시 shopId
   const queryClient = new QueryClient();
 
   await Promise.all([
@@ -18,11 +25,31 @@ export async function getServerSideProps() {
       queryKey:["getShopInfo", shopId],
       queryFn: () => getShopInfo(shopId),
     }),
-    queryClient.prefetchQuery({
-      queryKey: ["getShopNotices", shopId, 0, 6],
-      queryFn: () => getShopNotices({shopId, offset: 0, limit: 6}),
-    })
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["getShopNotices", shopId], 
+      queryFn: () => getShopNotices({ shopId, offset: 0, limit: 6 }),
+      initialPageParam: 0,
+    }),
   ])
+
+  if(!userToken) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      }
+    }
+  }
+
+  if(!shopId) {
+    return {
+      redirect: {
+        destination: "/shopinfo",
+        permanent: false,
+      }
+    }
+  }
+
   return {
     props: {
       shopId,
@@ -31,11 +58,44 @@ export async function getServerSideProps() {
   };
 }
 
-const ShopInfo = ({shopId}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
+  const {data: shopInfo, isLoading: shopInfoLoading} = useGetShopInfoQuery(shopId);
+  const { 
+    data: shopNotices, 
+    fetchNextPage,
+    hasNextPage,  
+    isFetchingNextPage, 
+  } = useGetShopNoticesInfiniteQuery({ shopId, limit: 6 });
 
-  const {data: shopInfo} = useGetShopInfoQuery(shopId);
-  const {data: shopNotices} = useGetShopNoticesQuery({shopId, offset: 0, limit: 6});
-  const hasShopNotices = shopNotices && shopNotices?.items.length > 0;
+  const { ref, inView } = useInView({
+    threshold: 0, 
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  
+  const hasShopNotices = shopNotices && shopNotices.pages[0].items.length > 0;
+  
+  const handleEditClick = () => {
+    router.push({
+      pathname: '/shopinfo/edit/',
+      query: {shop_id: shopId,}
+    });
+  }
+
+  const handleRegisterClick = () => {
+    router.push('/jobinfo/register')
+  }
+
+  if(shopInfoLoading) {
+    return <div><LoadingSpinner/></div>
+  }
+
+
   return (
     <div>
       <div className="flex gap-16 tablet:gap-24 flex-col max-w-351 tablet:max-w-680 desktop:max-w-964 mx-auto my-40 tablet:my-60">
@@ -56,8 +116,8 @@ const ShopInfo = ({shopId}: InferGetServerSidePropsType<typeof getServerSideProp
               <CardDescription description={shopInfo?.item.description}/>
             </div>
             <div className="flex gap-8">
-              <Button className="h-38" status="filled">편집하기</Button>
-              <Button className="h-38" status="lined">공고 등록하기</Button>
+              <Button onClick={handleEditClick}className="h-38" status="filled">편집하기</Button>
+              <Button onClick={handleRegisterClick} className="h-38" status="lined">공고 등록하기</Button>
             </div>
           </div>
         </div>
@@ -68,25 +128,35 @@ const ShopInfo = ({shopId}: InferGetServerSidePropsType<typeof getServerSideProp
           <div className="flex flex-col gap-16 tablet:gap-32 mobile:max-w-375 tablet:max-w-678 desktop:max-w-964 mx-auto px-12 tablet:px-0 pb-80 tablet:pb-120">
             <h1 className="text-20 font-bold tablet:text-28 pt-40 tablet:pt-60">내가 등록한 공고</h1>
             <div className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14">     
-              {shopNotices.items.map((notice) => (
-                <Post
+              {shopNotices.pages.flatMap((page) => 
+                page.items.map((notice) => (
+                <Link 
                   key={notice.item.id}
-                  {...notice.item}
-                  imageUrl={shopInfo?.item.imageUrl ?? ""}
-                  name={shopInfo?.item.name ?? ""}
-                  address={shopInfo?.item.address1 as SeoulAddress}
-                  originalHourlyPay={shopInfo?.item.originalHourlyPay as number}
-                />
-              ))}
+                  href={{
+                    pathname: '/employer/jobinfo',
+                    query: {notice_id: notice.item.id}
+                  }}
+                >
+                  <Post
+                    {...notice.item}
+                    imageUrl={shopInfo?.item.imageUrl ?? ""}
+                    name={shopInfo?.item.name ?? ""}
+                    address={shopInfo?.item.address1 as SeoulAddress}
+                    originalHourlyPay={shopInfo?.item.originalHourlyPay as number}
+                  />
+                 </Link> 
+                )))}
             </div>
+            {hasNextPage && <div ref={ref} style={{ height: "50px" }} />}
+            {isFetchingNextPage && <p>로딩 중...</p>}
           </div>
         </div>
       :
         <div className="bg-gray-5">
           <div className="max-w-351 tablet:max-w-680 desktop:max-w-964 mx-auto py-80 tablet:py-120">
-            <div className="flex flex-col justify-center items-center border h-195 bg-transparent rounded-12">
+            <div className="flex flex-col gap-24 justify-center items-center border h-195 bg-transparent rounded-12">
               <span>공고를 등록해보세요</span>
-              <Button className="w-108 h-37 tablet:w-346 tablet:h-47" status="filled">공고 등록하기</Button>
+              <Button onClick={handleRegisterClick} className="w-108 h-37 tablet:w-346 tablet:h-47" status="filled">공고 등록하기</Button>
             </div>
           </div>
         </div>
@@ -95,5 +165,5 @@ const ShopInfo = ({shopId}: InferGetServerSidePropsType<typeof getServerSideProp
   );
 };
 
-export default ShopInfo;
-ShopInfo.getLayout  = (page: React.ReactNode) => <Layout>{page}</Layout>
+export default ShopInfoDetail;
+ShopInfoDetail.getLayout  = (page: React.ReactNode) => <Layout>{page}</Layout>
