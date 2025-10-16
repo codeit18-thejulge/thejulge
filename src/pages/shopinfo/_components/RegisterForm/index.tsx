@@ -2,12 +2,13 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import SelectBox from "@/components/SelectBox";
 import Textarea from "@/components/Textarea";
+import IcClose from "@/assets/svgs/ic_close.svg";
 import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import { SHOP_CATEGORY_OPTIONS } from "@/constants/SHOP_CATEGORY";
 import { PostShopRequest } from "@/hooks/api/shop/usePostShopQuery";
 import { Option } from "@/types/global";
 import { cn } from "@/utils";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
 
 const MINIMUM_WAGE = Number(process.env.NEXT_PUBLIC_MINIMUM_WAGE);
@@ -58,6 +59,11 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
   };
   const handleImageChange = (url: string) => {
     setFormData((prev) => ({ ...prev, imageUrl: url }));
+  };
+
+  const handleImageDelete = (e: MouseEvent) => {
+    e.stopPropagation();
+    setFormData((prev) => ({ ...prev, imageUrl: "" }));
   };
 
   const handleNameBlur = () => {
@@ -154,10 +160,22 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
         </div>
-        {/*  */}
-        가게 이미지
-        <RegisterImage initialUrl={formData.imageUrl} onUploaded={handleImageChange} />
-        {/*  */}
+        <div className={cn(labelStyle)}>
+          <span>가게 이미지</span>
+          <div className="relative w-fit">
+            <RegisterImage initialUrl={formData.imageUrl} onUploaded={handleImageChange} />
+            {formData.imageUrl && (
+              <button
+                type="button"
+                aria-label="이미지 삭제"
+                onClick={handleImageDelete}
+                className="absolute right-10 top-10 z-10 flex h-32 w-32 items-center justify-center rounded-full bg-white opacity-40"
+              >
+                <IcClose className="w-24" />
+              </button>
+            )}
+          </div>
+        </div>
         <label className={cn(labelStyle)}>
           <span>공고 설명</span>
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
