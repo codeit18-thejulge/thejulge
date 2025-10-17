@@ -8,7 +8,8 @@ import { getShopNotices } from "@/hooks/api/notice/useGetShopNoticesQuery";
 import { getShopInfo, useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInfoQuery";
 import { SeoulAddress } from "@/types/global";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { useInView } from "react-intersection-observer";import { InferGetServerSidePropsType } from "next";
+import { useInView } from "react-intersection-observer"
+;import { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
