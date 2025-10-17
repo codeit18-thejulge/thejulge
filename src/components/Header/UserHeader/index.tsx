@@ -3,7 +3,32 @@ import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
 import Notification from "@/components/Notification";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GetServerSidePropsContext } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+
+const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  // const cookie = context.req.headers.cookie;
+  // const userId = getCookieValue(cookie, "userId");
+  // const shopId = getCookieValue(cookie, "shopId")??"";
+  const userId = "0f393807-2d97-4798-87d7-4eb126e5afd2";
+  const shopId = "f431e0c6-ace7-4d16-badc-3dcdb8dd75a8";
+
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["getMyInfo", userId],
+    queryFn: () => getMyInfo(userId),
+  });
+  return {
+    props: {
+      userId,
+      shopId,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 
@@ -51,7 +76,7 @@ const GuestMenu = () => {
   );
 };
 
-const UserMenu = ({ userType }: { userType: UserType }) => {
+const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) => {
   const [isNotiOpen, setIsNotiOpen] = useState(false);
 
   const handleNotiToggle = () => {
@@ -64,7 +89,7 @@ const UserMenu = ({ userType }: { userType: UserType }) => {
   return (
     <ul className="flex items-center gap-16 desktop:gap-40">
       <li>
-        <Link href={userMenuItem.userPage[userType].href} className={cn(linkStyle)}>
+        <Link href={`${userMenuItem.userPage[userType].href}/${shopId}`} className={cn(linkStyle)}>
           {userMenuItem.userPage[userType].title}
         </Link>
       </li>
@@ -78,28 +103,36 @@ const UserMenu = ({ userType }: { userType: UserType }) => {
           <IcNoti className="w-20 text-primary tablet:w-24" />
         </button>
         {isNotiOpen && (
-          <Notification
-            userId="user-01"
-            onClose={handleNotiClose}
-            className="fixed right-0 top-0 tablet:absolute tablet:top-32"
-          />
+          <Notification onClose={handleNotiClose} className="fixed right-0 top-0 tablet:absolute tablet:top-32" />
         )}
       </li>
     </ul>
   );
 };
 
-const UserHeader = () => {
-  // 전역으로 관리되는 유저 정보 사용할 예정
-  // (아직 어떤 구조가 될 지 몰라 대략적으로 변수로만 테스트 출력)
-  const userType: UserType = "employee";
-  const isLogined = true;
+const UserHeader = ({ userId, shopId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  // 임시로 localStorage 사용
+  const [tempUserId, setTempUserId] = useState("");
+
+  useEffect(() => {
+    const userIdFromStorage = localStorage.getItem("userId") || "";
+    setTempUserId(userIdFromStorage);
+  }, []);
+
+  const { data: userInfo } = useGetMyInfoQuery(tempUserId);
+
+  // 임시로 api 조회해서 사용
+  const tempShopId = userInfo?.item.shop?.item.id ?? "";
+
+  const userType: UserType = userInfo?.item.type ?? "employee";
+  const isLogined = Boolean(tempUserId);
 
   return (
     <nav className="order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40">
-      {isLogined ? <UserMenu userType={userType} /> : <GuestMenu />}
+      {isLogined ? <UserMenu userType={userType} shopId={tempShopId} /> : <GuestMenu />}
     </nav>
   );
 };
 
+export { getServerSideProps };
 export default UserHeader;
