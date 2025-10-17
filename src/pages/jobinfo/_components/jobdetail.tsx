@@ -13,7 +13,7 @@ import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopAp
 import { usePostShopApplicationQuery } from "@/hooks/api/application/usePostShopApplicationQuery";
 import {
   GetShopNoticeDetailRequest,
-  useGetShopNoticeDetailQuery,
+  GetShopNoticeDetailResponse,
 } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
 
 interface ButtonSetting {
@@ -23,7 +23,12 @@ interface ButtonSetting {
   className: string;
 }
 
-const JobDetail = ({ shopId, noticeId }: GetShopNoticeDetailRequest) => {
+interface JobDetailProps extends GetShopNoticeDetailRequest {
+  jobData: GetShopNoticeDetailResponse | undefined;
+  isPending: boolean;
+}
+
+const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => {
   const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isApply, setIsApply] = useState(false);
@@ -57,11 +62,6 @@ const JobDetail = ({ shopId, noticeId }: GetShopNoticeDetailRequest) => {
   const { data: userData } = useGetMyInfoQuery(userId);
 
   const { data: applyData } = useGetUserApplicationsQuery({ userId });
-
-  const { data: jobData, isPending } = useGetShopNoticeDetailQuery({
-    shopId,
-    noticeId,
-  });
 
   useEffect(() => {
     if (isApplySuccess) {
@@ -155,7 +155,7 @@ const JobDetail = ({ shopId, noticeId }: GetShopNoticeDetailRequest) => {
     return <LoadingSpinner />;
   }
 
-  const notice = jobData.item;
+  const notice = jobData?.item;
   const shop = notice?.shop.item;
 
   const handleApplyClick = () => {
