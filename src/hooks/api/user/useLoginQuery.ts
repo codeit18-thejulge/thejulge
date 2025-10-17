@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { UserInfoItem, UserItem } from "@/types/global";
-import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export interface LoginRequest {
   email: string;
@@ -20,17 +20,15 @@ export interface LoginResponse {
 }
 
 const postLogin = async ({ email, password }: LoginRequest): Promise<LoginResponse> => {
-  const response = await instance.post("/token", { email, password });
-  return response.data;
+  const response = await axios.post("/api/auth/login", { email, password });
+  return response.data.data;
 };
 
 export const useLoginQuery = () => {
   const router = useRouter();
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: postLogin,
-    onSuccess: (res) => {
-      localStorage.setItem("accessToken", res.item.token);
-      localStorage.setItem("userId", res.item.user.item.id);
+    onSuccess: () => {
       router.replace("/"); //공고리스트 제작 후 수정 필요
     },
     onError: () => {},

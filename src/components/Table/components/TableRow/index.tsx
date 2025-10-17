@@ -23,16 +23,29 @@ interface TableRowProps {
   userType: UserType;
   isLoading?: boolean;
   error?: boolean;
+  handleApplicationClick?: (jobId: string) => void;
   onHandleRejectClick?: () => void;
   onHandleAcceptClick?: () => void;
 }
 
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
 
-const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick }: TableRowProps) => {
+const TableRow = ({
+  item,
+  userType,
+  onHandleRejectClick,
+  onHandleAcceptClick,
+  handleApplicationClick,
+}: TableRowProps) => {
   const { shop, notice } = item;
   const { user } = item as user;
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
+
+  const jobId = item?.notice.item.id;
+
+  const handleRowClick = (jobId: string) => {
+    handleApplicationClick?.(jobId);
+  };
 
   useEffect(() => {
     setIsState(item.status);
@@ -76,7 +89,7 @@ const TableRow = ({ item, userType, onHandleRejectClick, onHandleAcceptClick }: 
     // 가게 목록 -알바
     const time = new Date(notice.item.startsAt).toLocaleDateString();
     return (
-      <tr>
+      <tr onClick={() => handleRowClick(jobId)}>
         <td>{shop.item.name}</td>
         <td>
           {formatNoticeTime(time, notice.item.workhour)} ({notice.item.workhour}시간)

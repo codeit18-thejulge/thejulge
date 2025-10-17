@@ -1,7 +1,7 @@
 import { UserInfoItem } from "@/types/global";
-import { instance } from "@/utils/instance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserItem, ShopItem, Link } from "@/types/global";
+import axios from "axios";
 
 export type PutMyInfoRequest = Partial<UserInfoItem>;
 
@@ -16,7 +16,7 @@ export interface PutMyInfoResponse {
 }
 
 const putMyInfo = async ({ userId, data }: { userId: string; data: PutMyInfoRequest }): Promise<PutMyInfoResponse> => {
-  const response = await instance.put(`/users/${userId}`, data);
+  const response = await axios.put(`/api/proxy/users/${userId}`, data);
   return response.data;
 };
 
