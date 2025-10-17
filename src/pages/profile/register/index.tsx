@@ -79,6 +79,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
 
   const handleConfirmClick = () => {
     setIsOpenModal(false);
+    router.back();
   };
 
   useEffect(() => {
