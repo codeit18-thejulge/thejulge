@@ -14,11 +14,12 @@ interface CARD_IMAGE {
   imageUrl: string;
   name: string;
   closed: boolean;
+  className?: string
 }
-const CardImageBox = ({ imageUrl = "", startsAt, name = "", closed }: CARD_IMAGE) => {
+const CardImageBox = ({ imageUrl = "", startsAt, name = "", closed, className}: CARD_IMAGE) => {
   const isPassed = isStartTimePassed(startsAt);
   return (
-    <div className="relative h-177 w-full overflow-hidden rounded-12 tablet:h-360 desktop:h-full desktop:max-w-539">
+    <div className={cn("relative h-177 w-full overflow-hidden rounded-12 tablet:h-360 desktop:h-full desktop:max-w-539",className)}>
       <Image layout="fill" objectFit="cover" src={imageUrl} alt={name} />
       {isPassed && (
         <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black opacity-70">
