@@ -14,6 +14,7 @@ import { useState } from "react";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
+import IcXButton from "@/assets/svgs/ic_x.svg";
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   const cookie =context.req.headers.cookie;
