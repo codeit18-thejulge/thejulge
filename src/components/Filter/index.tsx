@@ -7,7 +7,6 @@ import { useEscClose } from "@/hooks/useEscClose";
 import Input from "../Input";
 import Button from "../Button";
 import { getNoticesRequest } from "@/hooks/api/notice/useGetNoticesQuery";
-
 interface FilterProps {
   onClose: () => void;
   isOpen: boolean;
@@ -25,6 +24,9 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
   const [startsAt, setStartsAt] = useState("");
   const [pay, setPay] = useState("");
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
+
+  const today = new Date().toISOString().split('T')[0];
+  const isPayValid = !isNaN(Number(pay)) && pay.trim() !== "";
 
   const handleAddressClick = (address: string) => {
     const isSelected = selectedAddresses.includes(address);
@@ -69,13 +71,6 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
     onClose();
   }
 
-  const handleEnterKeyDown = (e: React.KeyboardEvent) => {
-    if(e.key === "Enter") {
-      e.preventDefault();
-      handleApply();
-    }
-  }
-
   useEscClose({ isOpen, closeOnEsc, onClose });
  
   if (!isOpen) {
@@ -83,7 +78,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
   }
 
   return (
-    <div ref={filterRef} className={cn(containerStyle, className)} onKeyDown={handleEnterKeyDown}>
+    <div ref={filterRef} className={cn(containerStyle, className)}>
       <div className="flex justify-between">
         <p className="font-sans text-xl font-bold text-black">상세 필터</p>
         <Ic_X onClick={onClose} className="cursor-pointer w-16 h-16" />
@@ -121,7 +116,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
       <hr />
       <div className="flex flex-col gap-8">
         <label htmlFor="startId">시작일</label>
-        <Input value={startsAt} id="startId" type="date" className="bg-transparent" onChange={(e) => setStartsAt(e.target.value)}/>
+        <Input value={startsAt} id="startId" type="date" min={today} className="bg-transparent" onChange={(e) => setStartsAt(e.target.value)}/>
       </div>
       <hr />
       <div className="flex flex-col gap-8">
@@ -137,7 +132,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: Filte
         <Button status="lined" className="flex-[1]" onClick={handleReset}>
           초기화
         </Button>
-        <Button status="filled" className="flex-[2]" onClick={() => handleApply()}>
+        <Button disabled={!isPayValid} status="filled" className="flex-[2]" onClick={() => handleApply()}>
           적용하기
         </Button>
       </div>
