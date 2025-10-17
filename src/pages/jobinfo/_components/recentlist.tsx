@@ -24,6 +24,7 @@ const RecentList = () => {
             address={job.address}
             originalHourlyPay={job.originalHourlyPay}
             id={`${job.shopId}/${job.id}`}
+            key={job.id}
           />
         ))}
       </div>
