@@ -7,6 +7,7 @@ import Notification from "@/components/Notification";
 import { useEffect, useState } from "react";
 import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { useRouter } from "next/router";
+import { getCookieValue } from "@/utils/getCookie";
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 
@@ -96,25 +97,24 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
 };
 
 const UserHeader = () => {
-  // 임시로 localStorage 사용
-  const [tempUserId, setTempUserId] = useState("");
+  const [userId, setUserId] = useState("");
+  const [shopId, setShopId] = useState("");
 
   useEffect(() => {
-    const userIdFromStorage = localStorage.getItem("userId") || "";
-    setTempUserId(userIdFromStorage);
-  }, []);
+    const userCookieId = getCookieValue(document.cookie, "userId") || "";
+    const shopCookieId = getCookieValue(document.cookie, "shopId") || "";
+    setUserId(userCookieId);
+    setShopId(shopCookieId);
+  });
 
-  const { data: userInfo } = useGetMyInfoQuery(tempUserId);
-
-  // 임시로 api 조회해서 사용
-  const tempShopId = userInfo?.item.shop?.item.id ?? "";
+  const { data: userInfo } = useGetMyInfoQuery(userId);
 
   const userType: UserType = userInfo?.item.type ?? "employee";
-  const isLogined = Boolean(tempUserId);
+  const isLogined = Boolean(userId);
 
   return (
     <nav className="order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40">
-      {isLogined ? <UserMenu userType={userType} shopId={tempShopId} /> : <GuestMenu />}
+      {isLogined ? <UserMenu userType={userType} shopId={shopId} /> : <GuestMenu />}
     </nav>
   );
 };
