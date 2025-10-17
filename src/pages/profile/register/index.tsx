@@ -3,19 +3,32 @@ import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
 import { usePutMyInfoQuery } from "@/hooks/api/user/usePutMyInfoQuery";
 import { Option, SeoulAddress, UserInfoItem } from "@/types/global";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import IcXButton from "@/assets/svgs/ic_x.svg";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import SelectBox from "@/components/SelectBox";
 import MessageModal from "@/components/Modal/MessageModal";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
+import Layout from "@/components/Layout";
+import { getCookieValue } from "@/utils/getCookie";
 
-const getServerSideProps = async () => {
-  const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484"; // 추후 변경
+const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId");
+
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["getMyInfo", userId],
@@ -31,6 +44,7 @@ const getServerSideProps = async () => {
 
 const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+
   const { data: userInfo } = useGetMyInfoQuery(userId);
   const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
 
@@ -60,11 +74,12 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   };
 
   const handleCancelClick = () => {
-    router.back();
+    router.push("/profile");
   };
 
   const handleConfirmClick = () => {
     setIsOpenModal(false);
+    router.back();
   };
 
   useEffect(() => {
@@ -94,7 +109,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   }, [profileData]);
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-32 py-60">
+    <div className="mx-auto flex max-w-5xl flex-col gap-32 px-24 py-60">
       <h2 className="flex items-center justify-between">
         <span className="text-20-bold tablet:text-28-bold">내 프로필</span>
         <button onClick={handleCancelClick}>
@@ -147,6 +162,10 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
       />
     </div>
   );
+};
+
+ProfileRegister.getLayout = (page: ReactNode) => {
+  return <Layout>{page}</Layout>;
 };
 
 export { getServerSideProps };

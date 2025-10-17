@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/api/proxy/:path*",
+      "destination": "https://bootcamp-api.codeit.kr/api/18-3/the-julge/:path*"
+    }
+  ]
+}

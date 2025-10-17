@@ -1,8 +1,9 @@
 import { cn } from "@/utils";
-import { ChangeEvent, forwardRef, TextareaHTMLAttributes } from "react";
+import { forwardRef, TextareaHTMLAttributes } from "react";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   errorMsg?: string;
+  placeholder?: string;
 }
 
 const textareaStyle = {
@@ -10,12 +11,12 @@ const textareaStyle = {
   error: "border-red-400",
 };
 
-const Textarea = forwardRef<HTMLTextAreaElement, Props>(({ errorMsg, ...props }, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, Props>(({ errorMsg, placeholder = "입력", ...props }, ref) => {
   return (
     <>
       <textarea
         ref={ref}
-        placeholder="입력"
+        placeholder={placeholder}
         className={cn(textareaStyle.basic, errorMsg && textareaStyle.error)}
         {...props}
       />

@@ -20,7 +20,7 @@ export interface getShopNoticesResponse {
   links: Link[];
 }
 
-const getShopNotices = async ({ shopId, offset, limit }: getShopNoticesRequest): Promise<getShopNoticesResponse> => {
+export const getShopNotices = async ({ shopId, offset, limit }: getShopNoticesRequest): Promise<getShopNoticesResponse> => {
   const response = await axios.get(`/api/proxy/shops/${shopId}/notices`, { params: { offset, limit } });
   return response.data;
 };
