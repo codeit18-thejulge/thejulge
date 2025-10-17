@@ -8,6 +8,7 @@ import { GetServerSidePropsContext } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 
 const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   // const cookie = context.req.headers.cookie;
@@ -77,6 +78,7 @@ const GuestMenu = () => {
 };
 
 const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) => {
+  const router = useRouter();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
 
   const handleNotiToggle = () => {
@@ -84,6 +86,13 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
   };
   const handleNotiClose = () => {
     setIsNotiOpen(false);
+  };
+
+  // 임시로 로컬스토리지 구현
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("shopId");
+    router.replace("/joblist");
   };
 
   return (
@@ -94,9 +103,9 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
         </Link>
       </li>
       <li>
-        <Link href={userMenuItem.logout.href} className={cn(linkStyle)}>
+        <button onClick={handleLogout} className={cn(linkStyle)}>
           {userMenuItem.logout.title}
-        </Link>
+        </button>
       </li>
       <li className="tablet:relative">
         <button aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
