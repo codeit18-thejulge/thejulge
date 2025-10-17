@@ -6,12 +6,13 @@ interface PageProps {
   limit: number; //한 페이지에 보여줄 갯수
   count: number; //총 갯수
   hasNext: boolean;
+  activePage:number;
   pagingMax?: number; //한번에 보일 최대 페이지 갯수
-  onPageChange?: (pageNumber: number) => void; // 부모에게 전달하는 콜백
+  onPageChange: (pageNumber: number) => void; // 부모에게 전달하는 콜백
 }
 
-const ListPagination = ({ limit = 5, count, hasNext, pagingMax = 7, onPageChange }: PageProps) => {
-  const [page, setPage] = useState(1); // 현재 페이지 상태
+const ListPagination = ({ limit = 5, count, hasNext, activePage=1, pagingMax = 7, onPageChange }: PageProps) => {
+  const [page, setPage] = useState(activePage); // 현재 페이지 상태
   const [isViewItem, setIsViewItem] = useState(1);
   const [isPrevBtn, isSetPrevBtn] = useState(false);
   const [isNextBtn, isSetNextBtn] = useState(false);
