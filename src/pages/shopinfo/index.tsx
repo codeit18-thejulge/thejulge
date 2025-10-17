@@ -1,23 +1,24 @@
 import Button from '@/components/Button';
 import Layout from '@/components/Layout';
+import { getCookieValue } from '@/utils/getCookie';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 const ShopInfo= () => {
   const router = useRouter();
-  
-  const shopId = "365c6cd0-883e-4b90-9fff-8bf0dae08815"; 
-
 
   const handleRegisterClick = () => {
     router.push('/shopinfo/register')
   }
 
   useEffect(() => {
+    const shopId = getCookieValue(document.cookie, "shopId");
+
     if (shopId) {
       router.push(`/shopinfo/${shopId}`);
     }
-  }, [shopId, router]);
+
+  }, [router]);
   
   return (
     <div>

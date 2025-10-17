@@ -9,31 +9,19 @@ import { getShopInfo, useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInf
 import { SeoulAddress } from "@/types/global";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer"
-;import { InferGetServerSidePropsType } from "next";
+;import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { getCookieValue } from "@/utils/getCookie";
 
-export async function getServerSideProps() {
-  // 나중에 수정 예정
-  const shopId = "365c6cd0-883e-4b90-9fff-8bf0dae08815"; 
-  const userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMTkwOThkYi0xM2UyLTRlODEtOTZkZC05MWFhMmU1ZmJiZGIiLCJpYXQiOjE3NjA1NDUxNzd9.f5o7zA2Y0tL1YPmir_WGlSpNLJWOF8lERNbf5jB5tyg"
-  
-  const queryClient = new QueryClient();
+export async function getServerSideProps(context:GetServerSidePropsContext) {
 
-  await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey:["getShopInfo", shopId],
-      queryFn: () => getShopInfo(shopId),
-    }),
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ["getShopNotices", shopId], 
-      queryFn: () => getShopNotices({ shopId, offset: 0, limit: 6 }),
-      initialPageParam: 0,
-    }),
-  ])
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId");
+  const shopId = getCookieValue(cookie, "shopId")
 
-  if(!userToken) {
+  if(!userId) {
     return {
       redirect: {
         destination: "/signin",
@@ -50,6 +38,22 @@ export async function getServerSideProps() {
       }
     }
   }
+
+  const queryClient = new QueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey:["getShopInfo", shopId],
+      queryFn: () => getShopInfo(shopId),
+    }),
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["getShopNotices", shopId], 
+      queryFn: () => getShopNotices({ shopId, offset: 0, limit: 6 }),
+      initialPageParam: 0,
+    }),
+  ])
+
+  
 
   return {
     props: {
@@ -68,7 +72,7 @@ const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSi
     hasNextPage,  
     isFetchingNextPage, 
   } = useGetShopNoticesInfiniteQuery({ shopId, limit: 6 });
-
+  
   const { ref, inView } = useInView({
     threshold: 0, 
   });
@@ -84,7 +88,6 @@ const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSi
   const handleEditClick = () => {
     router.push({
       pathname: '/shopinfo/edit/',
-      query: {shop_id: shopId,}
     });
   }
 
@@ -133,10 +136,7 @@ const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSi
                 page.items.map((notice) => (
                 <Link 
                   key={notice.item.id}
-                  href={{
-                    pathname: '/employer/jobinfo',
-                    query: {notice_id: notice.item.id}
-                  }}
+                  href='/employer/jobinfo'
                 >
                   <Post
                     {...notice.item}
