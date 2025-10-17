@@ -74,7 +74,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   };
 
   const handleCancelClick = () => {
-    router.back();
+    router.push("/profile");
   };
 
   const handleConfirmClick = () => {
