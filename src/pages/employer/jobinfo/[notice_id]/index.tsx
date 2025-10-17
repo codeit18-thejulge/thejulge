@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { InferGetServerSidePropsType } from "next";
-import JobInfoCard from "../../(components)/JobInfoCard";
-import JobInfoTable from "../../(components)/JobInfoTable";
+import JobInfoCard from "../../_components/JobInfoCard";
+import JobInfoTable from "../../_components/JobInfoTable";
 import MessageModal from "@/components/Modal/MessageModal";
 import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopApplicationQuery";
 import { useGetShopApplicationsQuery } from "@/hooks/api/application/useGetShopApplicationsQuery";
@@ -123,7 +123,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
             <div className="w-1/2 max-w-200">
               <Image src={IcNullBody} alt="" />
             </div>
-            <p>신청자가 없습니다</p>
+            <p>아직 신청한 알바 직원이 없어요.</p>
           </div>
         ) : (
           <>
