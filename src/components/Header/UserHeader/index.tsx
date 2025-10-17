@@ -109,7 +109,7 @@ const UserHeader = () => {
 
   const { data: userInfo } = useGetMyInfoQuery(userId);
 
-  const userType: UserType = userInfo?.item.type ?? "employee";
+  const userType: UserType = userInfo?.item?.type ?? "employee";
   const isLogined = Boolean(userId);
 
   return (
