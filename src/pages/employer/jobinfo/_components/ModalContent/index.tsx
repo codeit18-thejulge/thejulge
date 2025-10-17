@@ -21,11 +21,10 @@ interface GetModalContentProps {
 }
 
 export const getModalContent = ({ type, message, onConfirm, onClose }: GetModalContentProps): ModalProps => {
-  const buttons: ModalButton[] = [];
+  const buttons: ModalButton[] = [{ buttonText: "확인", style: "filled", onClick: onConfirm, className: "w-120 h-48" }];
   if (type === "action") {
     buttons.push({ buttonText: "취소", style: "lined", onClick: onClose, className: "w-120 h-48" });
   }
-  buttons.push({ buttonText: "확인", style: "filled", onClick: onConfirm, className: "w-120 h-48" });
   return { message, buttons };
 };
 
