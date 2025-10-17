@@ -20,7 +20,7 @@ export interface GetShopNoticeDetailResponse {
   links: Link[];
 }
 
-const getShopNoticeDetail = async ({
+export const getShopNoticeDetail = async ({
   shopId,
   noticeId,
 }: GetShopNoticeDetailRequest): Promise<GetShopNoticeDetailResponse> => {
