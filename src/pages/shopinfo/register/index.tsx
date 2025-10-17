@@ -3,7 +3,7 @@ import RegisterForm, { FormData } from "../_components/RegisterForm";
 import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_components/ModalWrapper";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../../../components/ModalWrapper";
 import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
 
 const RegisterJobinfo = () => {

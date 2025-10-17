@@ -4,7 +4,7 @@ import { usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQu
 import { useEffect, useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalContent";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { getCookieValue } from "@/utils/getCookie";
 
 const RegisterJobinfo = () => {

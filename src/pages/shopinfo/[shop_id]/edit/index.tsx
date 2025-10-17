@@ -7,7 +7,7 @@ import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/pages/shopinfo/_components/ModalWrapper";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

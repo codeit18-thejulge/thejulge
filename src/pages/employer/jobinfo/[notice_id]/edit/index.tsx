@@ -6,7 +6,7 @@ import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalContent";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getCookieValue } from "@/utils/getCookie";
