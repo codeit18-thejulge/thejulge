@@ -1,24 +1,32 @@
 import Ic_X from "@/assets/svgs/ic_X.svg";
 import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ClosedBadge from "../Badge/ClosedBadge";
 import { cn } from "@/utils";
 import { useEscClose } from "@/hooks/useEscClose";
 import Input from "../Input";
 import Button from "../Button";
-
+import { getNoticesRequest } from "@/hooks/api/notice/useGetNoticesQuery";
 interface FilterProps {
   onClose: () => void;
   isOpen: boolean;
-  closeOnEsc: boolean;
+  closeOnEsc?: boolean;
+  onApply: (filters: getNoticesRequest) => void;
+  className?: string;
 }
 
 const MAX_SELECTION = 3;
 const containerStyle =
   "flex w-375 flex-col gap-24 rounded-10 border border-gray-20 px-12 py-24 shadow-md tablet:w-390 tablet:px-20";
 
-const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
+const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className}: FilterProps) => {
+  const filterRef = useRef<HTMLDivElement>(null);
+  const [startsAt, setStartsAt] = useState("");
+  const [pay, setPay] = useState("");
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
+
+  const today = new Date().toISOString().split('T')[0];
+  const isPayValid = !isNaN(Number(pay)) && pay.trim() !== "";
 
   const handleAddressClick = (address: string) => {
     const isSelected = selectedAddresses.includes(address);
@@ -41,17 +49,39 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
     );
   };
 
-  useEscClose({ isOpen, closeOnEsc, onClose });
+  const handleReset = () => {
+    setSelectedAddresses([]);
+    setStartsAt("");
+    setPay("");
+  };
 
+  const handleApply = () => {
+    const filters: getNoticesRequest = {};
+    if(selectedAddresses.length > 0) {
+      filters.address = selectedAddresses;
+    }
+    if(startsAt) {
+      filters.startsAtGte = `${startsAt}T00:00:00Z`;
+    }
+
+    if(pay && !isNaN(Number(pay))) {
+      filters.hourlyPayGte = Number(pay);
+    }
+    onApply(filters);
+    onClose();
+  }
+
+  useEscClose({ isOpen, closeOnEsc, onClose });
+ 
   if (!isOpen) {
     return null;
   }
 
   return (
-    <div className={containerStyle}>
+    <div ref={filterRef} className={cn(containerStyle, className)}>
       <div className="flex justify-between">
         <p className="font-sans text-xl font-bold text-black">상세 필터</p>
-        <Ic_X onClick={onClose} className="cursor-pointer" />
+        <Ic_X onClick={onClose} className="cursor-pointer w-16 h-16" />
       </div>
       <div className="flex flex-col gap-12">
         <p className="font-sans text-16 text-black">위치</p>
@@ -85,28 +115,24 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true }: FilterProps) => {
       </div>
       <hr />
       <div className="flex flex-col gap-8">
-        <label htmlFor="hi">시작일</label>
-        <Input id="hi" className="bg-transparent" />
+        <label htmlFor="startId">시작일</label>
+        <Input value={startsAt} id="startId" type="date" min={today} className="bg-transparent" onChange={(e) => setStartsAt(e.target.value)}/>
       </div>
       <hr />
       <div className="flex flex-col gap-8">
-        <label htmlFor="hi2">금액</label>
+        <label htmlFor="payId">금액</label>
         <div className="flex items-center gap-12">
           <div className="w-full max-w-170">
-            <Input
-              id="hi2"
-              isUnit="원"
-              className="w-full flex-grow bg-transparent px-20 py-16 focus:outline-none"
-            />{" "}
+            <Input value={pay} id="payId" isUnit="원" className="bg-transparent" onChange={(e) => setPay(e.target.value)}/>
           </div>
           <span>이상부터</span>
         </div>
       </div>
       <div className="flex h-48 gap-8">
-        <Button status="lined" className="flex-[1]">
+        <Button status="lined" className="flex-[1]" onClick={handleReset}>
           초기화
         </Button>
-        <Button status="filled" className="flex-[2]">
+        <Button disabled={!isPayValid} status="filled" className="flex-[2]" onClick={() => handleApply()}>
           적용하기
         </Button>
       </div>

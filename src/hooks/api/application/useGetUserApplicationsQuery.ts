@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { instance } from "@/utils/instance";
 import { ApplicationItem, Link, NoticeItem, ShopItem } from "@/types/global";
+import axios from "axios";
 
 export interface GetUserApplicationsRequest {
   userId: string;
@@ -35,7 +35,7 @@ const getUserApplications = async ({
   userId,
   params,
 }: GetUserApplicationsRequest): Promise<GetUserApplicationsResponse> => {
-  const response = await instance.get(`/users/${userId}/applications`, { params });
+  const response = await axios.get(`/api/proxy/users/${userId}/applications`, { params });
   return response.data;
 };
 
