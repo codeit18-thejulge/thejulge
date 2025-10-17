@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import RegisterForm, { FormData } from "../_components/RegisterForm";
+import RegisterForm, { FormData } from "@/pages/employer/jobinfo/_components/RegisterForm";
 import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
 import { getShopNoticeDetail, useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
 import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../_components/ModalContent";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalContent";
 import { InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 
