@@ -20,8 +20,8 @@ const ApplicationLogSection = ({ userId }: Props) => {
 
   const router = useRouter();
 
-  const handlePageChange = () => {
-    setCurrentPage(currentPage + 1);
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
   };
 
   const handleApplicationClick = (jobId: string) => {
@@ -41,7 +41,13 @@ const ApplicationLogSection = ({ userId }: Props) => {
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">신청내역</h2>
       <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
       <div>
-        <ListPagination limit={limit} count={count} hasNext={hasNext} />
+        <ListPagination
+          limit={limit}
+          count={count}
+          hasNext={hasNext}
+          activePage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );
