@@ -2,6 +2,7 @@ import ListPagination from "@/components/ListPagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Table from "@/components/Table";
 import { useGetUserApplicationsQuery } from "@/hooks/api/application/useGetUserApplicationsQuery";
+import { p } from "framer-motion/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -32,12 +33,17 @@ const ApplicationLogSection = ({ userId }: Props) => {
     return <LoadingSpinner />;
   }
 
-  if (isError || !data) {
-    return isError ? <p>{error.message}</p> : <p>데이터를 불러오지 못했습니다</p>;
+  if (isError) {
+    return <p>{error.message}</p>;
   }
+
+  if (!data) {
+    return null;
+  }
+
   const { items, limit, count, hasNext } = data;
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-12">
+    <div className="mx-auto flex max-w-5xl flex-col gap-12 px-24">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">신청내역</h2>
       <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
       <div>

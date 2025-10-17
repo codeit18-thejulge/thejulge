@@ -6,6 +6,7 @@ import ProfileDetail from "@/pages/profile/_components/Profile/ProfileDetail";
 import Layout from "@/components/Layout";
 import { ReactNode } from "react";
 import { getCookieValue } from "@/utils/getCookie";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
@@ -35,7 +36,11 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 };
 
 const Profile = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: userInfo, isError, error } = useGetMyInfoQuery(userId);
+  const { data: userInfo, isError, error, isLoading } = useGetMyInfoQuery(userId);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   if (isError) {
     return <p>{error.message}</p>;

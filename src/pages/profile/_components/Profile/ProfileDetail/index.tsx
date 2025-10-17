@@ -11,10 +11,10 @@ const ProfileDetail = ({ userId }: Props) => {
   const { data: userApplication } = useGetUserApplicationsQuery({ userId });
 
   if (!userApplication) {
-    return <p>데이터를 불러오지 못했습니다</p>;
+    return null;
   }
 
-  const hasApplicationLog = userApplication?.items.length > 0;
+  const hasApplicationLog = userApplication.items.length > 0;
 
   return (
     <div>

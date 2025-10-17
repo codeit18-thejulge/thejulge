@@ -17,15 +17,19 @@ const ProfileSection = ({ userId }: Props) => {
     return <LoadingSpinner />;
   }
 
-  if (isError || !data) {
-    return isError ? <p>{error.message}</p> : <p>데이터를 불러오지 못했습니다</p>;
+  if (isError) {
+    return <p>{error.message}</p>;
   }
 
+  if (!data) {
+    return null;
+  }
   const { item } = data;
 
   const handleEditClick = () => {
     router.push("/profile/register");
   };
+
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-24 px-24 py-60 desktop:flex-row">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">내 프로필</h2>
