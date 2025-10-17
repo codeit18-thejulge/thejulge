@@ -1,0 +1,76 @@
+import React, { useEffect, useState } from "react";
+import styles from "@/styles/pagination.module.css";
+import Pagination from "react-js-pagination";
+
+interface PageProps {
+  limit: number; //한 페이지에 보여줄 갯수
+  count: number; //총 갯수
+  hasNext: boolean;
+  activePage:number;
+  pagingMax?: number; //한번에 보일 최대 페이지 갯수
+  onPageChange: (pageNumber: number) => void; // 부모에게 전달하는 콜백
+}
+
+const ListPagination = ({ limit = 5, count, hasNext, activePage=1, pagingMax = 7, onPageChange }: PageProps) => {
+  const [page, setPage] = useState(activePage); // 현재 페이지 상태
+  const [isViewItem, setIsViewItem] = useState(1);
+  const [isPrevBtn, isSetPrevBtn] = useState(false);
+  const [isNextBtn, isSetNextBtn] = useState(false);
+
+  useEffect(() => {
+    if (count > limit * pagingMax) {
+      isSetPrevBtn(true);
+      isSetNextBtn(true);
+      setIsViewItem(pagingMax);
+    } else {
+      if (count % limit > 0) {
+        setIsViewItem(count / limit + 1);
+      } else {
+        setIsViewItem(count / limit);
+      }
+
+      isSetPrevBtn(false);
+      isSetNextBtn(false);
+    }
+  }, [limit, count, pagingMax, isPrevBtn, isNextBtn]);
+
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber); // 페이지 전환 시 현재 페이지 업데이트
+    onPageChange?.(pageNumber); // 부모에게 페이지 번호 전달
+  };
+
+  const disabled = () => {
+    if (!isPrevBtn) {
+      return styles.hidden;
+    }
+
+    if (page === 1) {
+      return `${styles.customBtn} ${styles.disabled}`;
+    }
+
+    return styles.customBtn;
+  };
+
+  const totalRecords = count; // 전체 레코드(항목) 수
+
+  return (
+    <Pagination
+      onChange={handlePageChange} // 페이지 변경 시 호출될 함수
+      activePage={page} // 현재 활성화된 페이지
+      itemsCountPerPage={limit} // 페이지당 항목 수
+      totalItemsCount={totalRecords} // 전체 항목 수
+      pageRangeDisplayed={isViewItem} // 페이지 번호 범위에 보여줄 최대 페이지 수
+      prevPageText={"‹"}
+      nextPageText={"›"}
+      innerClass={styles.pagination}
+      itemClass={styles.pageItem}
+      activeClass={styles.activePage}
+      itemClassPrev={disabled()}
+      itemClassNext={hasNext && isNextBtn ? styles.customBtn : styles.hidden}
+      itemClassFirst={styles.hidden}
+      itemClassLast={styles.hidden}
+    />
+  );
+};
+
+export default ListPagination;

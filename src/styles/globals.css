@@ -1,27 +1,64 @@
+/* font */
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* color custom */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --white: #ffffff;
+  --black: #111322;
+  --primary: #ea3c12;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  --gray-5: #fafafa;
+  --gray-10: #f2f2f3;
+  --gray-20: #e5e4e7;
+  --gray-30: #cbc9cf;
+  --gray-40: #a4a1aa;
+  --gray-50: #7d7986;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  --red-10: #ffebe7;
+  --red-20: #ffaf9b;
+  --red-30: #ff8d72;
+  --red-40: #ff4040;
+
+  --blue-10: #cce6ff;
+  --blue-20: #0080ff;
+
+  --green-10: #d4f7d4;
+  --green-20: #20a81e;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .textOverScroll::-webkit-scrollbar {
+    width: 2px;
   }
+  .textOverScroll::-webkit-scrollbar-thumb {
+    background-color: var(--red-20);
+  }
+
+  .tableWrap {
+    width: 100%;
+    border: 1px solid var(--gray-10);
+    border-radius: .625rem;
+    -webkit-border-radius: .625rem;
+    -moz-border-radius: .625rem;
+    -ms-border-radius: .625rem;
+    -o-border-radius: .625rem;
+}
+
+  .tableOver {
+    overflow-x: auto;
+  }
+
+  .tableBottom {
+    padding: 0.75rem;
+  }
+}
+
+/* select box scroll custom */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 }
