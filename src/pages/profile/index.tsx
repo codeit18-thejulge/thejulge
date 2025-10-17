@@ -1,19 +1,31 @@
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import type { InferGetServerSidePropsType } from "next";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import EmptyProfile from "@/pages/profile/_components/Profile/EmptyProfile";
 import ProfileDetail from "@/pages/profile/_components/Profile/ProfileDetail";
 import Layout from "@/components/Layout";
 import { ReactNode } from "react";
+import { getCookieValue } from "@/utils/getCookie";
 
-const getServerSideProps = async () => {
-  const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484";
+const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId");
   const queryClient = new QueryClient();
+
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
 
   await queryClient.prefetchQuery({
     queryKey: ["getMyInfo", userId],
     queryFn: () => getMyInfo(userId),
   });
+
   return {
     props: {
       userId,

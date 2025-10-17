@@ -8,15 +8,27 @@ import IcXButton from "@/assets/svgs/ic_x.svg";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import SelectBox from "@/components/SelectBox";
 import MessageModal from "@/components/Modal/MessageModal";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import Layout from "@/components/Layout";
+import { getCookieValue } from "@/utils/getCookie";
 
-const getServerSideProps = async () => {
-  const userId = "d931b357-2c45-4ba7-a3b4-1b09e6b53484"; // 추후 변경
+const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId");
+
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["getMyInfo", userId],
@@ -32,6 +44,7 @@ const getServerSideProps = async () => {
 
 const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+
   const { data: userInfo } = useGetMyInfoQuery(userId);
   const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
 
