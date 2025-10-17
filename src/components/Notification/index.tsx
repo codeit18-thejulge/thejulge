@@ -2,7 +2,7 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import NotificationItem from "./NotificationItem";
 import LoadingSpinner from "../LoadingSpinner";
 import { UserAlertItem } from "./userAlerts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/utils";
 import { useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
 import { usePutUserAlertsQuery } from "@/hooks/api/alert/usePutUserAlertsQuery";
@@ -23,14 +23,14 @@ const Notification = ({ onClose, className }: NotificationProps) => {
   const isAllRead = !isPending && alerts.length === 0;
   const isUnread = !isPending && alerts.length > 0;
 
-  const getAlerts = async () => {
+  const getAlerts = useCallback(async () => {
     try {
       const unreadAlerts = alertData?.items.map((i) => i.item).filter((alert) => !alert.read) ?? [];
       setAlerts(unreadAlerts);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [alertData]);
 
   const handleAlertRead = async (alertId: string) => {
     try {
@@ -42,8 +42,10 @@ const Notification = ({ onClose, className }: NotificationProps) => {
   };
 
   useEffect(() => {
-    getAlerts();
-  }, []);
+    if (userId) {
+      getAlerts();
+    }
+  }, [userId, getAlerts]);
 
   return (
     <section
