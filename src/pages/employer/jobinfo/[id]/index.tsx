@@ -1,25 +1,53 @@
 import { useEffect, useState } from "react";
-import JobInfoCard from "../(components)/JobInfoCard";
-import JobInfoTable from "../(components)/JobInfoTable";
+import type { InferGetServerSidePropsType } from "next";
+import JobInfoCard from "../../(components)/JobInfoCard";
+import JobInfoTable from "../../(components)/JobInfoTable";
 import MessageModal from "@/components/Modal/MessageModal";
 import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopApplicationQuery";
 import { useGetShopApplicationsQuery } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import IcCheck from "@/assets/svgs/ic_check.svg";
+import Image from "next/image";
+import IcNullBody from "@/assets/svgs/ic_exc.png";
+import { GetServerSidePropsContext } from "next";
+import { getCookieValue } from "@/utils/getCookie";
 import Layout from "@/components/Layout";
 import { ReactNode } from "react";
 
+const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId") || "";
+  const shopId = getCookieValue(cookie, "shopId") || "";
+  const noticeId = context.params?.notice_id as string;
+
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      shopId,
+      noticeId,
+    },
+  };
+};
+
 const LIMIT = 5;
 
-const JopInfo = () => {
-  const SHOP_ID = "17957ee1-4c08-4bc2-be93-c6c682409456";
-  const NOTICE_ID = "68f89e1d-de9b-4079-81f6-83dfa432aea4";
+const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const NOTICE_ID = noticeId;
+  const SHOP_ID = shopId as string;
 
   const [modalMessage, setModalMessage] = useState("");
   const [approval, setApproval] = useState<"rejected" | "accepted" | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false);
   const [sandId, setSandId] = useState("");
 
-  const [page, setPage] = useState(1); //페이지 네이션
+  const [page, setPage] = useState(1); //페이지네이션
 
   const { data, isLoading, isError, error, refetch } = useGetShopApplicationsQuery({
     shopId: SHOP_ID,
@@ -90,25 +118,37 @@ const JopInfo = () => {
   return (
     <>
       <div className="px-12 tablet:px-32">
-        <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-          <JobInfoCard res={res} bgColor={"bg-white"} />
-        </section>
-        <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-          <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
-          <JobInfoTable
-            res={res}
-            limit={LIMIT}
-            count={totalCount}
-            hasNext={hasNextPage}
-            activePage={page}
-            isLoading={isLoading}
-            error={isError}
-            onPageChange={onHandlePageChange}
-            onModalMessage={onModalMessage}
-            onHandleSandId={onHandleSandId}
-          />
-        </section>
+        {!isLoading && res.length === 0 ? (
+          <div className="flex h-screen flex-col items-center justify-center gap-y-20">
+            <div className="w-1/2 max-w-200">
+              <Image src={IcNullBody} alt="" />
+            </div>
+            <p>신청자가 없습니다</p>
+          </div>
+        ) : (
+          <>
+            <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
+              <JobInfoCard res={res} bgColor={"bg-white"} />
+            </section>
+            <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
+              <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
+              <JobInfoTable
+                res={res}
+                limit={LIMIT}
+                count={totalCount}
+                hasNext={hasNextPage}
+                activePage={page}
+                isLoading={isLoading}
+                error={isError}
+                onPageChange={onHandlePageChange}
+                onModalMessage={onModalMessage}
+                onHandleSandId={onHandleSandId}
+              />
+            </section>
+          </>
+        )}
       </div>
+
       {isOpen && (
         <MessageModal
           isOpen={isOpen}
@@ -143,4 +183,5 @@ JopInfo.getLayout = (page: ReactNode) => {
   return <Layout>{page}</Layout>;
 };
 
+export { getServerSideProps };
 export default JopInfo;
