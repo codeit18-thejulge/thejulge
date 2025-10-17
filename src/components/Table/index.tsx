@@ -26,15 +26,24 @@ interface TableProps {
   isLoading?: boolean;
   error?: boolean;
   handleApplicationClick?: (jobId: string) => void;
-  onHandleRejectClick?: () => void; // 거절 버튼 클릭 시 호출
-  onHandleAcceptClick?: () => void; // 승인 버튼 클릭 시 호출
+  onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
+  onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
+  onHandleSandId?: (sandId: string) => void;
 }
 
-const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick, handleApplicationClick }: TableProps) => {
+const Table = ({
+  userType,
+  res,
+  onHandleRejectClick,
+  onHandleAcceptClick,
+  handleApplicationClick,
+  onHandleSandId,
+}: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<
     GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
   >([]);
+
   useEffect(() => {
     setTableData(res);
   }, [res]);
@@ -59,6 +68,7 @@ const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick, handle
               handleApplicationClick={handleApplicationClick}
               onHandleRejectClick={onHandleRejectClick}
               onHandleAcceptClick={onHandleAcceptClick}
+              onHandleSandId={onHandleSandId}
             />
           ))}
         </tbody>
@@ -66,4 +76,5 @@ const Table = ({ userType, res, onHandleRejectClick, onHandleAcceptClick, handle
     </div>
   );
 };
+
 export default Table;
