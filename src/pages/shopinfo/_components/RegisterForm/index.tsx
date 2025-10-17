@@ -11,7 +11,7 @@ import { cn } from "@/utils";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
 
-const MINIMUM_WAGE = Number(process.env.NEXT_PUBLIC_MINIMUM_WAGE);
+const MINIMUM_WAGE = 10030;
 const DEFUALT_SHOP_IMAGE =
   "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%9D%B0%EC%83%89-%EC%84%B8%EB%9D%BC%EB%AF%B9-%EC%A0%91%EC%8B%9C%EC%97%90-%EC%A0%91%EC%8B%9C-N_Y88TWmGwA?utm_source=unsplash&utm_medium=referral";
 
