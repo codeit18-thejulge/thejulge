@@ -41,12 +41,12 @@
   .tableWrap {
     width: 100%;
     border: 1px solid var(--gray-10);
-    border-radius: .625rem;
-    -webkit-border-radius: .625rem;
-    -moz-border-radius: .625rem;
-    -ms-border-radius: .625rem;
-    -o-border-radius: .625rem;
-}
+    border-radius: 0.625rem;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    -ms-border-radius: 0.625rem;
+    -o-border-radius: 0.625rem;
+  }
 
   .tableOver {
     overflow-x: auto;
@@ -54,6 +54,12 @@
 
   .tableBottom {
     padding: 0.75rem;
+  }
+}
+
+@media all and (min-width: 1000px) {
+  .tableOver {
+    overflow-x: hidden;
   }
 }
 
