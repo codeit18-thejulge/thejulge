@@ -35,7 +35,8 @@ interface ModalWrapperProps extends ModalProps {
 }
 
 const ModalWrapper = ({ isOpen, message, buttons = [], onClose }: ModalWrapperProps) => {
-  return <MessageModal isOpen={isOpen} message={message} onClose={onClose} footers={buttons} />;
+  const modalButtons = buttons ?? [];
+  return <MessageModal isOpen={isOpen} message={message} onClose={onClose} footers={modalButtons} />;
 };
 
 export default ModalWrapper;
