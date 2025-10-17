@@ -2,6 +2,7 @@ import IcNoti from "@/assets/svgs/ic_notification.svg";
 import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
+import { useLogoutQuery } from "@/hooks/api/user/useLogoutQuery";
 
 const USER_MENU_LABEL_MAP = {
   employee: "내 프로필",
@@ -28,6 +29,12 @@ const GuestMenu = () => {
 };
 
 const UserMenu = ({ userType, userPage }: { userType: UserType; userPage: string }) => {
+  const { mutate: postLogout } = useLogoutQuery();
+
+  const handleLogoutClick = () => {
+    postLogout();
+  };
+
   return (
     <ul className="flex items-center gap-16 desktop:gap-40">
       <li>
@@ -36,9 +43,9 @@ const UserMenu = ({ userType, userPage }: { userType: UserType; userPage: string
         </Link>
       </li>
       <li>
-        <Link href="/" className={cn(linkStyle)}>
+        <button className={cn(linkStyle)} onClick={handleLogoutClick}>
           로그아웃
-        </Link>
+        </button>
       </li>
       <li>
         <button aria-label="알림 열기" className="flex">
