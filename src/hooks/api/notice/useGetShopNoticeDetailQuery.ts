@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { instance } from "@/utils/instance";
 import { ApplicationItem, Link, NoticeItem, ShopItem } from "@/types/global";
+import axios from "axios";
 
 export interface GetShopNoticeDetailRequest {
   shopId: string;
@@ -20,11 +20,11 @@ export interface GetShopNoticeDetailResponse {
   links: Link[];
 }
 
-const getShopNoticeDetail = async ({
+export const getShopNoticeDetail = async ({
   shopId,
   noticeId,
 }: GetShopNoticeDetailRequest): Promise<GetShopNoticeDetailResponse> => {
-  const response = await instance.get(`/shops/${shopId}/notices/${noticeId}`);
+  const response = await axios.get(`/api/proxy/shops/${shopId}/notices/${noticeId}`);
   return response.data;
 };
 
