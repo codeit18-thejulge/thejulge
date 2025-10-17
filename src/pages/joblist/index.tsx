@@ -10,11 +10,10 @@ import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery
 import { NoticeSort, SeoulAddress } from "@/types/global";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import IcXButton from "@/assets/svgs/ic_x.svg";
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   const cookie =context.req.headers.cookie;
@@ -51,7 +50,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     ? router.query.keyword[0]
     : router.query.keyword || ""; 
     
-  const {data: jobData} = useGetNoticesQuery({offset, limit, sort, keyword, ...filterConditions});
+  const {data: jobData, isLoading, isError} = useGetNoticesQuery({offset, limit, sort, keyword, ...filterConditions});
   const hasJobData = jobData?.items && jobData.items.length > 0;
   const {data: userData} = useGetMyInfoQuery(userId ?? "", {enabled: !!userId});
   const userAddress = userData?.item?.address;
@@ -70,14 +69,28 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   const handleFilterToggle = () => {
     setOpenFilter((prev) => !prev);
   }
-  if (!jobData) {return <LoadingSpinner />;}
 
   const handleApplyFilter = (newFilters: getNoticesRequest) => {
     setFilterConditions(newFilters);
     setPage(1);
   };
 
+  useEffect(() => {
+    if(isLoading) {
+      const timeOut = setTimeout(() => {
+        window.alert("네트워크 환경을 확인해 주세요.")
+        router.push("/")
+      }, 20000);
+      return () => clearTimeout(timeOut);
+    }
+  },[isLoading, router])
+
+  if (isLoading) {return <LoadingSpinner />;}
+  if(isError) { return <div>공고를 불러오는 중에 오류가 발생했습니다.</div>}
+  if (!jobData) {return <div>텅;; 아직 올라온 공고가 없습니다.</div>}
+  
   return (
+
     <div>
       {keyword && keyword.trim() !== "" ? null : 
        (
