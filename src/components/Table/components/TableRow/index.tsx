@@ -9,7 +9,6 @@ import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
-import { useRouter } from "next/router";
 
 interface user {
   user: {
@@ -41,7 +40,6 @@ const TableRow = ({
   onHandleAcceptClick,
   handleApplicationClick,
 }: TableRowProps) => {
-  const router = useRouter();
   const { shop, notice } = item;
   const { user } = item as user;
 
@@ -51,10 +49,6 @@ const TableRow = ({
 
   const handleRowClick = (jobId: string) => {
     handleApplicationClick?.(jobId);
-  };
-
-  const handleLinkClick = (url: string) => {
-    router.push(url);
   };
 
   useEffect(() => {
@@ -68,7 +62,6 @@ const TableRow = ({
       <tr
         onClick={(e) => {
           e.stopPropagation();
-          handleLinkClick(user.href);
         }}
       >
         <td>{user.item.name}</td>
