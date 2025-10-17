@@ -14,13 +14,17 @@ export interface RecentJob extends Omit<NoticeItem, "description"> {
 }
 
 export function getRecentViewedJobs(): RecentJob[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") {
+    return [];
+  }
   const data = localStorage.getItem(STORAGE_KEY);
   return data ? JSON.parse(data) : [];
 }
 
 export function addRecentViewedJob(job: Omit<RecentJob, "viewedAt">) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") {
+    return;
+  }
 
   const existing = getRecentViewedJobs();
   const filtered = existing.filter((p) => p.id !== job.id);
