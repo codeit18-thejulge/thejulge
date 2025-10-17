@@ -10,10 +10,11 @@ import { Option } from "@/types/global";
 import { cn } from "@/utils";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
+import { usePostPresignedURLQuery } from "@/hooks/api/image/usePostPresignedURLQuery";
+import { usePutPresignedURLQuery } from "@/hooks/api/image/usePutPresignedURLQuery";
 
 const MINIMUM_WAGE = 10030;
-const DEFUALT_SHOP_IMAGE =
-  "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%9D%B0%EC%83%89-%EC%84%B8%EB%9D%BC%EB%AF%B9-%EC%A0%91%EC%8B%9C%EC%97%90-%EC%A0%91%EC%8B%9C-N_Y88TWmGwA?utm_source=unsplash&utm_medium=referral";
+const DEFAULT_IMAGE_PATH = "/images/img_shopdefault.jpg";
 
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
@@ -43,6 +44,9 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
   });
   const [displayPay, setDisplayPay] = useState(formData.originalHourlyPay.toLocaleString());
   const [errMSg, setErrMsg] = useState({ name: "", category: "", address1: "", address2: "", originalHourlyPay: "" });
+
+  const { mutateAsync: postPresignedURL } = usePostPresignedURLQuery();
+  const { mutateAsync: putImage } = usePutPresignedURLQuery();
 
   const handlePayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const payInput = e.target.value.replace(/,/g, "");
@@ -90,10 +94,27 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     setErrMsg((prev) => ({ ...prev, originalHourlyPay: message }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 기본 이미지는 임의로 넣어둠
-    onSubmit({ ...formData, imageUrl: formData.imageUrl || DEFUALT_SHOP_IMAGE });
+
+    // defualt image 업로드
+    if (!formData.imageUrl && DEFAULT_IMAGE_PATH) {
+      try {
+        // file 형태로 이미지 가져오기
+        const response = await fetch(DEFAULT_IMAGE_PATH);
+        const blob = await response.blob();
+        const file = new File([blob], "default_shop.jpg", { type: blob.type });
+
+        // uploadImageS3
+        const { item } = await postPresignedURL({ name: file.name });
+        await putImage({ presignedURL: item.url, file });
+        const cleanUrl = item.url.split("?")[0];
+        formData.imageUrl = cleanUrl;
+      } catch (err) {
+        console.error("기본 이미지 업로드 실패", err);
+      }
+    }
+    onSubmit(formData);
   };
 
   const requiredInputs: (keyof FormData)[] = ["name", "category", "address1", "address2", "originalHourlyPay"];
