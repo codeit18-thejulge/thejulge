@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { SeoulAddress } from "@/types/global";
 import IcCheck from "@/assets/svgs/ic_check.svg";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Button from "@/components/Button";
@@ -7,6 +8,7 @@ import MessageModal from "@/components/Modal/MessageModal";
 import { CardImageBox, CardTime, CardAddress, CardPay, CardDescription } from "@/components/ShopInfo";
 import { getCookieValue } from "@/utils/getCookie";
 import { isStartTimePassed } from "@/utils/formatTime";
+import { addRecentViewedJob } from "@/utils/recentList";
 import { useGetUserApplicationsQuery } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopApplicationQuery";
@@ -103,6 +105,24 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
     }
     setIsProfile(profile);
   }, [userId]);
+
+  useEffect(() => {
+    if (!jobData) {
+      return;
+    }
+    addRecentViewedJob({
+      id: noticeId,
+      hourlyPay: jobData?.item.hourlyPay as number,
+      startsAt: jobData?.item.startsAt as string,
+      workhour: jobData?.item.workhour as number,
+      closed: jobData?.item.closed as boolean,
+      name: jobData?.item.shop.item.name as string,
+      imageUrl: jobData?.item.shop.item.imageUrl as string,
+      address: jobData?.item.shop.item.address1 as SeoulAddress,
+      originalHourlyPay: jobData?.item.shop.item.originalHourlyPay as number,
+      shopId,
+    });
+  }, [jobData]);
 
   const getFooters = useCallback((): ButtonSetting[] => {
     if (!isProfile && userId) {
