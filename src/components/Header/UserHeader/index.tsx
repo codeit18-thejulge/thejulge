@@ -4,32 +4,8 @@ import { UserType } from "@/types/global";
 import { cn } from "@/utils";
 import Notification from "@/components/Notification";
 import { useEffect, useState } from "react";
-import { GetServerSidePropsContext } from "next";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { useRouter } from "next/router";
-
-const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  // const cookie = context.req.headers.cookie;
-  // const userId = getCookieValue(cookie, "userId");
-  // const shopId = getCookieValue(cookie, "shopId")??"";
-  const userId = "0f393807-2d97-4798-87d7-4eb126e5afd2";
-  const shopId = "f431e0c6-ace7-4d16-badc-3dcdb8dd75a8";
-
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["getMyInfo", userId],
-    queryFn: () => getMyInfo(userId),
-  });
-  return {
-    props: {
-      userId,
-      shopId,
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 
@@ -119,7 +95,7 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
   );
 };
 
-const UserHeader = ({ userId, shopId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const UserHeader = () => {
   // 임시로 localStorage 사용
   const [tempUserId, setTempUserId] = useState("");
 
@@ -142,6 +118,4 @@ const UserHeader = ({ userId, shopId }: InferGetServerSidePropsType<typeof getSe
     </nav>
   );
 };
-
-export { getServerSideProps };
 export default UserHeader;
