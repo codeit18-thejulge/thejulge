@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { instance } from "@/utils/instance";
 import { AlertItem, ApplicationItem, ShopItem, NoticeItem, Link } from "@/types/global";
+import axios from "axios";
 
 export interface PutUserAlertsRequest {
   userId: string;
@@ -33,7 +33,7 @@ export interface PutUserAlertsResponse {
 }
 
 const putUserAlerts = async ({ userId, alertId }: PutUserAlertsRequest): Promise<PutUserAlertsResponse> => {
-  const response = await instance.put(`/users/${userId}/alerts/${alertId}`);
+  const response = await axios.put(`/api/proxy/users/${userId}/alerts/${alertId}`);
   return response.data;
 };
 

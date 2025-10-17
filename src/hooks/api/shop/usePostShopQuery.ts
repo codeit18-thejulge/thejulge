@@ -1,6 +1,6 @@
-import { instance } from "@/utils/instance";
 import { useMutation } from "@tanstack/react-query";
 import { Link, ShopItem, UserInfoItem, UserItem } from "@/types/global";
+import axios from "axios";
 
 export type PostShopRequest = ShopItem;
 
@@ -15,7 +15,7 @@ export interface PostShopResponse {
 }
 
 const postShop = async (data: PostShopRequest): Promise<PostShopResponse> => {
-  const response = await instance.post("/shops", data);
+  const response = await axios.post("/api/proxy/shops", data);
   return response.data;
 };
 
