@@ -2,6 +2,7 @@ import IcNoti from "@/assets/svgs/ic_notification.svg";
 import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
+import { useLogoutQuery } from "@/hooks/api/user/useLogoutQuery";
 import Notification from "@/components/Notification";
 import { useEffect, useState } from "react";
 import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
@@ -64,11 +65,10 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
     setIsNotiOpen(false);
   };
 
-  // 임시로 로컬스토리지 구현
-  const handleLogout = () => {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("shopId");
-    router.replace("/joblist");
+  const { mutate: postLogout } = useLogoutQuery();
+
+  const handleLogoutClick = () => {
+    postLogout();
   };
 
   return (
@@ -79,8 +79,8 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
         </Link>
       </li>
       <li>
-        <button onClick={handleLogout} className={cn(linkStyle)}>
-          {userMenuItem.logout.title}
+        <button className={cn(linkStyle)} onClick={handleLogoutClick}>
+          로그아웃
         </button>
       </li>
       <li className="tablet:relative">

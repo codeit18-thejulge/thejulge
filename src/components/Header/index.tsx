@@ -3,7 +3,12 @@ import Link from "next/link";
 import SearchInput from "./SearchInput";
 import UserHeader from "./UserHeader";
 
-const Header = () => {
+interface HeaderProps {
+  placeholder?: string;
+  onSearch?: (search: string) => void;
+}
+
+const Header = ({placeholder, onSearch}: HeaderProps) => {
   return (
     <header role="banner" className={"sticky flex w-full justify-center bg-white"}>
       <div className="w-full max-w-1088">
@@ -11,7 +16,7 @@ const Header = () => {
           <Link href="/joblist" aria-label="공고 리스트 페이지로 이동" className="shrink-0">
             <Logo className="w-84 tablet:w-112" />
           </Link>
-          <SearchInput />
+          <SearchInput placeholder={placeholder} onSearch={onSearch} />
           <UserHeader />
         </div>
       </div>
