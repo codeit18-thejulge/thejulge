@@ -87,7 +87,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
 
   if (isLoading) {return <LoadingSpinner />;}
   if(isError) { return <div>공고를 불러오는 중에 오류가 발생했습니다.</div>}
-  if (!jobData) {return <div>텅;; 아직 올라온 공고가 없습니다.</div>}
+  if (!hasJobData) {return <div>텅;; 아직 올라온 공고가 없습니다.</div>}
   
   return (
 
