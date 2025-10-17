@@ -17,17 +17,21 @@ const ProfileSection = ({ userId }: Props) => {
     return <LoadingSpinner />;
   }
 
-  if (isError || !data) {
-    return isError ? <p>{error.message}</p> : <p>데이터를 불러오지 못했습니다</p>;
+  if (isError) {
+    return <p>{error.message}</p>;
   }
 
+  if (!data) {
+    return null;
+  }
   const { item } = data;
 
   const handleEditClick = () => {
     router.push("/profile/register");
   };
+
   return (
-    <div className="flex">
+    <div className="mx-auto flex max-w-5xl flex-col gap-24 px-24 py-60 desktop:flex-row">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">내 프로필</h2>
       <section className="flex flex-[2] justify-between rounded-xl bg-red-10 p-32">
         <div className="flex flex-col gap-12">
@@ -41,11 +45,15 @@ const ProfileSection = ({ userId }: Props) => {
             <IcAddress className="h-20 w-20 text-red-30" />
             <p className="text-16-regular text-gray-50">선호 지역: {item.address}</p>
           </div>
-          <p className="text-16-regular">{item.bio}</p>
+          <p className="mt-24 text-16-regular">{item.bio}</p>
         </div>
 
-        <div>
-          <Button status="lined" className="px-136 py-14 text-16-bold" onClick={handleEditClick}>
+        <div className="relative">
+          <Button
+            status="lined"
+            className="absolute right-0 flex h-48 w-108 items-center justify-center py-14 text-16-bold tablet:w-169"
+            onClick={handleEditClick}
+          >
             편집하기
           </Button>
         </div>
