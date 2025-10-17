@@ -1,4 +1,3 @@
-import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import JobInfoCard from "../(components)/JobInfoCard";
 import JobInfoTable from "../(components)/JobInfoTable";
@@ -12,15 +11,17 @@ import { ReactNode } from "react";
 const LIMIT = 5;
 
 const JopInfo = () => {
-  const SHOP_ID = "30edfcc1-16de-4af0-8464-870fc28798dd";
-  const NOTICE_ID = "99c62f0c-95cf-4445-9a67-b4f7ad3480ee";
+  const SHOP_ID = "17957ee1-4c08-4bc2-be93-c6c682409456";
+  const NOTICE_ID = "68f89e1d-de9b-4079-81f6-83dfa432aea4";
 
   const [modalMessage, setModalMessage] = useState("");
   const [approval, setApproval] = useState<"rejected" | "accepted" | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false);
+  const [sandId, setSandId] = useState("");
 
-  const [page, setPage] = useState(1);
-  const { data } = useGetShopApplicationsQuery({
+  const [page, setPage] = useState(1); //페이지 네이션
+
+  const { data, isLoading, isError, error, refetch } = useGetShopApplicationsQuery({
     shopId: SHOP_ID,
     noticeId: NOTICE_ID,
     params: {
@@ -37,15 +38,6 @@ const JopInfo = () => {
     setPage(pageNumber);
   };
 
-  // 페이지네이션 요청
-  // useEffect(() => {
-  //   refetch();
-  // }, [refetch]);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, []);
-
   const handleClose = () => {
     setIsOpen(!isOpen);
   };
@@ -60,17 +52,40 @@ const JopInfo = () => {
     }
   };
 
+  //===승인 거절
   const mutation = usePutShopApplicationQuery();
-
-  const handleSubmit = (status: "accepted" | "rejected") => {
-    mutation.mutate({
-      shopId: SHOP_ID,
-      noticeId: NOTICE_ID,
-      applicationId: data?.items[0].item.user.item.id || "",
-      data: { status },
-    });
+  const handleSubmit = (sandId: string, status: "accepted" | "rejected") => {
+    mutation.mutate(
+      {
+        shopId: data?.items[0].item.shop.item.id || "",
+        noticeId: data?.items[0].item.notice.item.id || "",
+        applicationId: sandId || "",
+        data: { status },
+      },
+      {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: (error) => {
+          console.error("실패했어요:", error);
+        },
+      },
+    );
     setIsOpen(false);
   };
+
+  const onHandleSandId = (sandId: string) => {
+    setSandId(sandId);
+  };
+
+  //승인 요청 보낼 아이디
+  useEffect(() => {
+    setSandId(sandId);
+  }, [sandId]);
+
+  if (isError) {
+    return <p>{error.message}</p>;
+  }
 
   return (
     <>
@@ -85,8 +100,12 @@ const JopInfo = () => {
             limit={LIMIT}
             count={totalCount}
             hasNext={hasNextPage}
+            activePage={page}
+            isLoading={isLoading}
+            error={isError}
             onPageChange={onHandlePageChange}
             onModalMessage={onModalMessage}
+            onHandleSandId={onHandleSandId}
           />
         </section>
       </div>
@@ -107,7 +126,7 @@ const JopInfo = () => {
               buttonText: "예",
               onClick: () => {
                 if (approval === "rejected" || approval === "accepted") {
-                  handleSubmit(approval);
+                  handleSubmit(sandId, approval);
                 }
               },
               style: "filled",
