@@ -208,7 +208,7 @@ const JobDetail = ({ shopId, noticeId }: GetShopNoticeDetailRequest) => {
   };
 
   const footers = getFooters();
-  const isPassed = isStartTimePassed(notice.startsAt);
+  const isPassed = isStartTimePassed(notice.startsAt) || jobData.item.closed;
 
   return (
     <>
@@ -245,7 +245,7 @@ const JobDetail = ({ shopId, noticeId }: GetShopNoticeDetailRequest) => {
               disabled={isApplyPending || isPassed}
               onClick={handleApplyClick}
             >
-              {isPassed ? "신청 마감" : "신청하기"}
+              {isPassed ? "신청 불가" : "신청하기"}
             </Button>
           )}
         </div>
