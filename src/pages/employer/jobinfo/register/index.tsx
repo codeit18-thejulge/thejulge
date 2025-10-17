@@ -71,4 +71,6 @@ const RegisterJobinfo = () => {
 };
 
 export default RegisterJobinfo;
-RegisterJobinfo.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
+RegisterJobinfo.getLayout = (page: React.ReactNode) => {
+  <Layout>{page}</Layout>;
+};
