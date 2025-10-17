@@ -4,7 +4,7 @@ import { ChangeEvent, forwardRef, useState } from "react";
 
 interface SearchInputProps {
   placeholder?: string;
-  onSearch: (search: string) => void;
+  onSearch?: (search: string) => void;
 }
 
 const SEARCH_PLACEHOLDER = "가게 이름으로 찾아보세요";
@@ -19,7 +19,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({placeholder
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if(e.key === "Enter") {
       if(inputValue.trim()) {
-        onSearch(inputValue);
+        onSearch?.(inputValue);
       }
     }
   }

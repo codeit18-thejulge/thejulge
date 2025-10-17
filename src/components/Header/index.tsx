@@ -6,7 +6,7 @@ import UserHeader from "./UserHeader";
 
 interface HeaderProps {
   placeholder?: string;
-  onSearch: (search: string) => void;
+  onSearch?: (search: string) => void;
 }
 
 const Header = ({placeholder, onSearch}: HeaderProps) => {
