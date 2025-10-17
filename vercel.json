@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/18-3/the-julge/api/:path*",
+      "destination": "https://bootcamp-api.codeit.kr/api/18-3/the-julge/:path*"
+    }
+  ]
+}
