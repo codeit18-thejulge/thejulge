@@ -7,16 +7,24 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalContent";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { getCookieValue } from "@/utils/getCookie";
 
-// 추후 수정 예정
-const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
-const testJobinfoId = "c0d3734f-a1ba-453a-be56-5916f439470a";
+const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId") || "";
+  const shopId = getCookieValue(cookie, "shopId") || "";
+  const noticeId = context.params?.notice_id as string;
 
-const getServerSideProps = async () => {
-  const shopId = testShopId;
-  const noticeId = testJobinfoId;
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -60,20 +68,19 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
       { shopId, noticeId, data: formData },
       {
         onSuccess: () => {
-          // 공고 상세로 이동
-          handleOpenModal("confirm", "공고 수정이 완료되었습니다.", () => router.replace(`/jobinfo`));
+          handleOpenModal("confirm", "공고 수정이 완료되었습니다.", () =>
+            router.replace(`/employer/jobinfo/${noticeId}`),
+          );
         },
         onError: () => {
-          // 공고 상세로 이동
-          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => router.push(`/jobinfo`));
+          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => router.push(`/employer/jobinfo/${noticeId}`));
         },
       },
     );
   };
 
   const handleCloseClick = () => {
-    // 공고 상세로 이동
-    handleOpenModal("action", "수정을 취소하시겠습니까?", () => router.push(`/jobinfo`));
+    handleOpenModal("action", "수정을 취소하시겠습니까?", () => router.push(`/employer/jobinfo/${noticeId}`));
   };
 
   if (isGetLoading || !jobinfoData) {

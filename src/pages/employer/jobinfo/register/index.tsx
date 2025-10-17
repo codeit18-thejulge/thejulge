@@ -1,16 +1,19 @@
 import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
 import { usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalContent";
-
-// 추후 수정 예정
-const testShopId = "3eca591f-ec92-4e19-8968-fd2e268e468b";
+import { getCookieValue } from "@/utils/getCookie";
 
 const RegisterJobinfo = () => {
-  const shopId = testShopId;
+  const [shopId, setShopId] = useState("");
+
+  useEffect(() => {
+    const shopCookieId = getCookieValue(document.cookie, "shopId") || "";
+    setShopId(shopCookieId);
+  }, []);
 
   const router = useRouter();
   const { mutate: postShopNotice, isPending } = usePostShopNoticesQuery();
@@ -36,21 +39,21 @@ const RegisterJobinfo = () => {
     postShopNotice(
       { shopId, data },
       {
-        onSuccess: () => {
-          // 공고 상세로 이동
-          handleOpenModal("confirm", "공고 등록이 완료되었습니다.", () => router.replace(`/jobinfo`));
+        onSuccess: (res) => {
+          const notice_id = res.item.id;
+          handleOpenModal("confirm", "공고 등록이 완료되었습니다.", () =>
+            router.replace(`/employer/jobinfo/${notice_id}`),
+          );
         },
         onError: () => {
-          // 가게 정보 상세로 이동
-          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => router.push(`/shopinfo`));
+          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => router.push(`/shopinfo/${shopId}`));
         },
       },
     );
   };
 
   const handleCloseClick = () => {
-    // 가게 정보 상세로 이동
-    handleOpenModal("action", "공고 등록을 취소하시겠습니까?", () => router.push(`/shopinfo`));
+    handleOpenModal("action", "공고 등록을 취소하시겠습니까?", () => router.push(`/shopinfo/${shopId}`));
   };
 
   return (
