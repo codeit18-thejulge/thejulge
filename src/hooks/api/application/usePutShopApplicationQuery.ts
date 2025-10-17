@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { instance } from "@/utils/instance";
 import { ApplicationItem, Link, NoticeItem, ShopItem, UserInfoItem, UserItem } from "@/types/global";
+import axios from "axios";
 
 export interface PutShopApplicationRequest {
   shopId: string;
@@ -35,7 +35,10 @@ const putShopApplication = async ({
   applicationId,
   data,
 }: PutShopApplicationRequest): Promise<PutShopApplicationResponse> => {
-  const response = await instance.put(`/shops/${shopId}/notices/${noticeId}/applications/${applicationId}`, data);
+  const response = await axios.put(
+    `/api/proxy/shops/${shopId}/notices/${noticeId}/applications/${applicationId}`,
+    data,
+  );
   return response.data;
 };
 
