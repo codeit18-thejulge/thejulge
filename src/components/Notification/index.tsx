@@ -6,30 +6,25 @@ import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/utils";
 import { useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
 import { usePutUserAlertsQuery } from "@/hooks/api/alert/usePutUserAlertsQuery";
+import { getCookieValue } from "@/utils/getCookie";
 
 interface NotificationProps {
   onClose: () => void;
   className?: string;
 }
 const Notification = ({ onClose, className }: NotificationProps) => {
-  // 임시로 로컬에서 가져옴
-  const userId = localStorage.getItem("userId") || "";
-
-  const { data: alertData, isPending } = useGetUserAlertsQuery({ userId });
-  const { mutateAsync: putUserAlerts } = usePutUserAlertsQuery();
-
+  const [userId, setUserId] = useState("");
   const [alerts, setAlerts] = useState<UserAlertItem[]>([]);
+
+  const { data: alertData, isPending } = useGetUserAlertsQuery({ userId, options: { enabled: !!userId } });
+  const { mutateAsync: putUserAlerts } = usePutUserAlertsQuery();
 
   const isAllRead = !isPending && alerts.length === 0;
   const isUnread = !isPending && alerts.length > 0;
 
   const getAlerts = useCallback(async () => {
-    try {
-      const unreadAlerts = alertData?.items.map((i) => i.item).filter((alert) => !alert.read) ?? [];
-      setAlerts(unreadAlerts);
-    } catch (err) {
-      console.error(err);
-    }
+    const unreadAlerts = alertData?.items.map((i) => i.item).filter((alert) => !alert.read) ?? [];
+    setAlerts(unreadAlerts);
   }, [alertData]);
 
   const handleAlertRead = async (alertId: string) => {
@@ -40,6 +35,10 @@ const Notification = ({ onClose, className }: NotificationProps) => {
       console.error(err);
     }
   };
+  useEffect(() => {
+    const userCookieId = getCookieValue(document.cookie, "userId") || "";
+    setUserId(userCookieId);
+  }, []);
 
   useEffect(() => {
     if (userId) {
