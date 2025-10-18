@@ -9,7 +9,7 @@ import { getCookieValue } from "@/utils/getCookie";
 import useCheckAuth from "@/hooks/useCheckAuth";
 
 const RegisterJobinfo = () => {
-  useCheckAuth("employer", "/joblist");
+  useCheckAuth("employer", true);
 
   const [shopId, setShopId] = useState("");
 

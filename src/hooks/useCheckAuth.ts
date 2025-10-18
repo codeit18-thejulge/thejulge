@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { getCookieValue } from "@/utils/getCookie";
 
-const useCheckAuth = (requiredUserType?: string, redirectPath?: string, requireShop: boolean = false) => {
+const useCheckAuth = (requiredUserType?: string, requireShop: boolean = false, redirectPath?: string) => {
   const router = useRouter();
 
   useEffect(() => {

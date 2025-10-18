@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 const ShopInfo = () => {
-  useCheckAuth("employer", "/joblist");
+  useCheckAuth("employer");
+
   const router = useRouter();
 
   const handleRegisterClick = () => {

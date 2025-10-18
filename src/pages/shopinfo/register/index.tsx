@@ -8,7 +8,7 @@ import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
 import useCheckAuth from "@/hooks/useCheckAuth";
 
 const RegisterJobinfo = () => {
-  useCheckAuth("employer", "/joblist");
+  useCheckAuth("employer");
 
   const router = useRouter();
   const { mutate: postShop, isPending } = usePostShopQuery();

@@ -10,30 +10,17 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { useRouter } from "next/router";
 import { getCookieValue } from "@/utils/getCookie";
+import { checkAuthSSR } from "@/utils/checkAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { redirect } = checkAuthSSR(context, "employer", true);
+  if (redirect) {
+    return { redirect };
+  }
   const cookie = context.req.headers.cookie;
-  const userId = getCookieValue(cookie, "userId") || "";
   const shopId = getCookieValue(cookie, "shopId") || "";
 
-  if (!userId) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-  if (!shopId) {
-    return {
-      redirect: {
-        destination: "/joblist",
-        permanent: false,
-      },
-    };
-  }
   const queryClient = new QueryClient();
-
   await queryClient.prefetchQuery({
     queryKey: ["getShopInfo", shopId],
     queryFn: () => getShopInfo(shopId),
