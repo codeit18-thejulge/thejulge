@@ -50,7 +50,9 @@ const RegisterJobinfo = () => {
           );
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => {});
+          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => {
+            setIsModalOpen(false);
+          });
         },
       },
     );
