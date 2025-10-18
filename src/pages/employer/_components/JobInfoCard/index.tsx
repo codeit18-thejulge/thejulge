@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { cn } from "@/utils";
 import Button from "@/components/Button";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
@@ -11,20 +10,17 @@ interface ArticleProps {
   isLoading?: boolean;
   error?: boolean;
   bgColor: string;
+  noticeId: string;
 }
 
-const JobInfoCard = ({ res, bgColor, isLoading, ...props }: ArticleProps) => {
-  const [cardData, setCardData] = useState<GetShopApplicationsResponse["items"]>([]);
-  useEffect(() => {
-    setCardData(res);
-  }, [res]);
-
-  const item = cardData.length > 0 ? cardData[0].item : null;
+const JobInfoCard = ({ res, bgColor, noticeId, ...props }: ArticleProps) => {
+  const item = res.length > 0 ? res[0].item : null;
 
   //페이지 링크
+
   const router = useRouter();
   const onHandleClick = () => {
-    router.push("/"); //공고편집하기로 가기
+    router.push(`/employer/jobinfo/${noticeId}/edit`); //공고편집하기로 가기
   };
 
   return (
