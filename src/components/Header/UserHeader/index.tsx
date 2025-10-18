@@ -3,11 +3,11 @@ import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
 import { useLogoutQuery } from "@/hooks/api/user/useLogoutQuery";
-import Notification from "@/components/Notification";
 import { useEffect, useState } from "react";
 import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import { useRouter } from "next/router";
 import { getCookieValue } from "@/utils/getCookie";
+import NotificationWrapper from "@/components/NotificationWrapper";
+import Notification from "@/components/Notification";
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 
@@ -56,7 +56,6 @@ const GuestMenu = () => {
 };
 
 const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) => {
-  const router = useRouter();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
 
   const handleNotiToggle = () => {
@@ -88,9 +87,7 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
         <button aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
           <IcNoti className="w-20 text-primary tablet:w-24" />
         </button>
-        {isNotiOpen && (
-          <Notification onClose={handleNotiClose} className="fixed right-0 top-0 tablet:absolute tablet:top-32" />
-        )}
+        {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} />}
       </li>
     </ul>
   );
@@ -105,7 +102,7 @@ const UserHeader = () => {
     const shopCookieId = getCookieValue(document.cookie, "shopId") || "";
     setUserId(userCookieId);
     setShopId(shopCookieId);
-  });
+  }, []);
 
   const { data: userInfo } = useGetMyInfoQuery(userId);
 
