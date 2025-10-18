@@ -4,11 +4,11 @@ import { UserItem, UserInfoItem } from "@/types/global";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import Button from "@/components/Button";
-import { useState, useEffect } from "react";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
+import { useRef, useState } from "react";
 
 interface user {
   user: {
@@ -25,25 +25,25 @@ interface TableRowProps {
   error?: boolean;
   isState?: string;
   handleApplicationClick?: (jobId: string) => void;
-  onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
-  onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
-  onHandleSandId?: (sandId: string) => void;
+  handleRejectClick?: (approval: "rejected" | "accepted", sendId: string) => void;
+  handleAcceptClick?: (approval: "rejected" | "accepted", sendId: string) => void;
+  handleVolunteerClick?: (volunteerId: string) => void;
 }
 
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
 
-const TableRow = ({
-  item,
-  userType,
-  onHandleSandId,
-  onHandleRejectClick,
-  onHandleAcceptClick,
-  handleApplicationClick,
-}: TableRowProps) => {
+const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handleApplicationClick }: TableRowProps) => {
   const { shop, notice } = item;
   const { user } = item as user;
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
+  const toggleLine = useRef<HTMLTableRowElement>(null);
+
+  const handleLineOpenClick = () => {
+    if (toggleLine.current) {
+      setIsOpen((prev) => !prev);
+    }
+  };
 
   const jobId = item?.notice.item.id;
 
@@ -51,34 +51,30 @@ const TableRow = ({
     handleApplicationClick?.(jobId);
   };
 
-  useEffect(() => {
-    setIsState(item.status);
-  }, [item.status]);
-
   if (userType === "employer") {
     // 신청자 목록 - 사장
-    const phoneNumber = user.item.phone || "-";
     return (
       <tr
+        ref={toggleLine}
         onClick={(e) => {
           e.stopPropagation();
+          handleLineOpenClick();
         }}
       >
         <td>{user.item.name}</td>
         <td>
-          <p className={tableStyle.overText}>{user.item.bio || "-"}</p>
+          <p className={`${tableStyle.overText} ${isOpen && tableStyle.open}`}>{user.item.bio || "-"}</p>
         </td>
-        <td>{formatPhoneNumber(phoneNumber)}</td>
+        <td>{formatPhoneNumber(user.item.phone || "-")}</td>
         <td>
-          {isState === "pending" ? (
+          {item.status === "pending" ? (
             <div className={tableStyle.btnGroup}>
               <Button
                 className={cn("border-primary text-primary", BUTTON_STYLE)}
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
-                  onHandleRejectClick?.("rejected");
-                  onHandleSandId?.(item.id);
+                  handleRejectClick?.("rejected", item.id);
                 }}
               >
                 거절하기
@@ -88,15 +84,14 @@ const TableRow = ({
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
-                  onHandleAcceptClick?.("accepted");
-                  onHandleSandId?.(item.id);
+                  handleAcceptClick?.("accepted", item.id);
                 }}
               >
                 승인하기
               </Button>
             </div>
           ) : (
-            <NormalBadge status={isState} />
+            <NormalBadge status={item.status} />
           )}
         </td>
       </tr>
@@ -117,7 +112,7 @@ const TableRow = ({
         </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
-          <NormalBadge status={isState} />
+          <NormalBadge status={item.status} />
         </td>
       </tr>
     );

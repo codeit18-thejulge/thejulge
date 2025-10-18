@@ -1,5 +1,6 @@
 import TableHeader from "./components/TableHeader";
 import TableRow from "./components/TableRow";
+import { ResultStatus } from "@/types/global";
 import { useState, useEffect } from "react";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
@@ -26,18 +27,17 @@ interface TableProps {
   isLoading?: boolean;
   error?: boolean;
   handleApplicationClick?: (jobId: string) => void;
-  onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
-  onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
-  onHandleSandId?: (sandId: string) => void;
+  handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
+  handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
+  handleVolunteerClick?: (volunteerId: string) => void;
 }
 
 const Table = ({
   userType,
   res,
-  onHandleRejectClick,
-  onHandleAcceptClick,
+  handleRejectClick,
+  handleAcceptClick,
   handleApplicationClick,
-  onHandleSandId,
 }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<
@@ -48,7 +48,7 @@ const Table = ({
     setTableData(res);
   }, [res]);
   return (
-    <div className="tableOver">
+    <div className="tableOver min-h-300 tablet:min-h-420">
       <table className={tableStyle.table}>
         <colgroup>
           <col className="w-228" />
@@ -66,9 +66,8 @@ const Table = ({
               item={item.item}
               userType={userType}
               handleApplicationClick={handleApplicationClick}
-              onHandleRejectClick={onHandleRejectClick}
-              onHandleAcceptClick={onHandleAcceptClick}
-              onHandleSandId={onHandleSandId}
+              handleRejectClick={handleRejectClick}
+              handleAcceptClick={handleAcceptClick}             
             />
           ))}
         </tbody>
