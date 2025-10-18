@@ -49,14 +49,25 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
 
   const keyword = Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword || "";
 
-  const { data: jobData, isLoading, isError } = useGetNoticesQuery({ offset, limit, sort, ...filterConditions });
+  const jobDataApiParams: getNoticesRequest = { offset, limit, sort, ...filterConditions };
+
+  if (sort === "time") {
+    const oneHourFromNow = new Date();
+    oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
+    const startsAtGteTime = oneHourFromNow.toISOString().split(".")[0] + "Z";
+    if (!jobDataApiParams.startsAtGte || jobDataApiParams.startsAtGte < startsAtGteTime) {
+      jobDataApiParams.startsAtGte = startsAtGteTime;
+    }
+  }
+
+  const { data: jobData, isLoading, isError } = useGetNoticesQuery(jobDataApiParams);
   const { data: userData, isLoading: isUserDataLoading } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
   const userAddress = userData?.item?.address;
   const { data: recommendData, isLoading: isRecommendDataLoading } = useGetNoticesQuery(
     {
       offset: 0,
       limit: 3,
-      sort: "time",
+      sort: "pay",
       address: userAddress,
     },
     {
