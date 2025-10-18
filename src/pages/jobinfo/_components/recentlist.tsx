@@ -25,8 +25,8 @@ const RecentList = () => {
               imageUrl={job.imageUrl}
               address={job.address}
               originalHourlyPay={job.originalHourlyPay}
-              id={`${job.shopId}/${job.id}`}
               key={job.id}
+              id={`${job.shopId}/${job.id}`}
             />
           </Link>
         ))}

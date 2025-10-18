@@ -36,15 +36,10 @@ const Post = ({
 }: Props) => {
   const router = useRouter();
 
-  const handlePostClick = () => {
-    router.push(`/jobinfo/${id}`);
-  };
-
   const isPassed = isStartTimePassed(startsAt);
   return (
     <section className={cn(postStyles.basic, (closed || isPassed) && postStyles.closed, className)}>
       <button
-        onClick={handlePostClick}
         className="flex w-full flex-grow flex-col justify-between gap-12 tablet:gap-20"
         aria-label="Notice Detail"
       >
