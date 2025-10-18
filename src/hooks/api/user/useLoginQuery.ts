@@ -29,7 +29,7 @@ export const useLoginQuery = () => {
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: postLogin,
     onSuccess: () => {
-      router.replace("/"); //공고리스트 제작 후 수정 필요
+      router.replace("/joblist");
     },
     onError: () => {},
   });
