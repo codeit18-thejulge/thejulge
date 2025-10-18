@@ -45,7 +45,9 @@ const ApplicationLogSection = ({ userId }: Props) => {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-12 px-24">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">신청내역</h2>
-      <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
+      <div className="tableOver min-h-420">
+        <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
+      </div>
       <div>
         <ListPagination
           limit={limit}
