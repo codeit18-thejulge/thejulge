@@ -73,7 +73,7 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
           );
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => router.push(`/employer/jobinfo/${noticeId}`));
+          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => {});
         },
       },
     );
