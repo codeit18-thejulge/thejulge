@@ -50,7 +50,7 @@ const Notification = ({ onClose, className }: NotificationProps) => {
     <section
       aria-label="알림"
       className={cn(
-        "flex h-dvh w-dvw flex-col gap-16 bg-white px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]",
+        "flex h-full w-full flex-col gap-16 bg-white px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]",
         className,
       )}
     >
