@@ -25,7 +25,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
     const cookies = [
       `accessToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict;`,
       `userId=${userId}; Path=/; `,
-      `userType=${type};`,
+      `userType=${type}; Path=/;`,
     ];
 
     // 로그인 후 받아온 userId를 통해서 내 정보 조회 요청하는 코드입니다~
