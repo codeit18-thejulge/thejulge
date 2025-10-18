@@ -9,11 +9,21 @@ import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { useRouter } from "next/router";
+import { getCookieValue } from "@/utils/getCookie";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  const shopId = context.params?.shop_id as string;
-  const queryClient = new QueryClient();
+  const cookie = context.req.headers.cookie;
+  const userId = getCookieValue(cookie, "userId") || "";
+  const shopId = getCookieValue(cookie, "shopId") || "";
 
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
   if (!shopId) {
     return {
       redirect: {
@@ -22,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       },
     };
   }
+  const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["getShopInfo", shopId],
