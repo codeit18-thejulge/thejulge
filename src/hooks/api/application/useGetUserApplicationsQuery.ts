@@ -39,9 +39,13 @@ const getUserApplications = async ({
   return response.data;
 };
 
-export const useGetUserApplicationsQuery = ({ userId, params }: GetUserApplicationsRequest) => {
+export const useGetUserApplicationsQuery = (
+  { userId, params }: GetUserApplicationsRequest,
+  options?: { enabled?: boolean },
+) => {
   return useQuery({
     queryKey: ["getUserApplications", userId, params],
     queryFn: () => getUserApplications({ userId, params }),
+    enabled: options?.enabled ?? true,
   });
 };

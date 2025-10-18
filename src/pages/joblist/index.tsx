@@ -170,7 +170,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
                   {...data.item}
                   {...data.item.shop.item}
                   address={data.item.shop.item.address1 as SeoulAddress}
-                  id={`${data.item.shop.item.id}/${data.item.id}`}
+                  id={data.item.shop.item.id}
                 />
               </Link>
             ))}
