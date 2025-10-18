@@ -21,7 +21,7 @@ interface GetModalContentProps {
 }
 
 export const getModalContent = ({ type, message, onConfirm, onClose }: GetModalContentProps): ModalProps => {
-  const buttons: ModalButton[] = [{ buttonText: "", style: "filled", onClick: () => {}, className: "" }];
+  const buttons: ModalButton[] = [];
   if (type === "action") {
     buttons.push({ buttonText: "취소", style: "lined", onClick: onClose, className: "w-120 h-48" });
   }
@@ -34,7 +34,7 @@ interface ModalWrapperProps extends ModalProps {
   onClose: () => void;
 }
 
-const ModalWrapper = ({ isOpen, message, buttons = [], onClose }: ModalWrapperProps) => {
+const ModalWrapper = ({ isOpen, message, buttons, onClose }: ModalWrapperProps) => {
   return <MessageModal isOpen={isOpen} message={message} onClose={onClose} footers={buttons} />;
 };
 

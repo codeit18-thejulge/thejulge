@@ -16,7 +16,7 @@ export const useLogoutQuery = () => {
   return useMutation({
     mutationFn: postLogout,
     onSuccess: () => {
-      router.back();
+      router.replace("/joblist");
     },
   });
 };

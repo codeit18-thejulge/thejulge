@@ -23,7 +23,7 @@ export interface UserInfoItem {
 export interface ShopItem {
   id: string;
   name: string;
-  category: string;
+  category: ShopCategory;
   address1: SeoulAddress;
   address2: string;
   description: string;
@@ -53,7 +53,7 @@ export interface ApplicationItem {
   createdAt: string;
 }
 
-export type ShopCategory = "한식 " | "중식 " | "일식 " | "양식 " | "분식 " | "카페 " | "편의점 " | "기타";
+export type ShopCategory = "한식" | "중식" | "일식" | "양식" | "분식" | "카페" | "편의점" | "기타";
 
 export type UserType = "employee" | "employer";
 
