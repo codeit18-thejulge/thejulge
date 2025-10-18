@@ -24,7 +24,7 @@ interface TableRowProps {
   isLoading?: boolean;
   error?: boolean;
   isState?: string;
-  handleApplicationClick?: (jobId: string) => void;
+  handleApplicationClick?: (shopId: string, jobId: string) => void;
   onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
   onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
   onHandleSandId?: (sandId: string) => void;
@@ -46,9 +46,9 @@ const TableRow = ({
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
 
   const jobId = item?.notice.item.id;
-
-  const handleRowClick = (jobId: string) => {
-    handleApplicationClick?.(jobId);
+  const shopId = item?.shop.item.id;
+  const handleRowClick = (shopId: string, jobId: string) => {
+    handleApplicationClick?.(shopId, jobId);
   };
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const TableRow = ({
       <tr
         onClick={(e) => {
           e.stopPropagation();
-          handleRowClick(jobId);
+          handleRowClick(shopId, jobId);
         }}
       >
         <td>{shop.item.name}</td>

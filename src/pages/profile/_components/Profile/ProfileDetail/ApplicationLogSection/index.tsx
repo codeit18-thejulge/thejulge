@@ -2,7 +2,6 @@ import ListPagination from "@/components/ListPagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Table from "@/components/Table";
 import { useGetUserApplicationsQuery } from "@/hooks/api/application/useGetUserApplicationsQuery";
-import { p } from "framer-motion/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -25,8 +24,8 @@ const ApplicationLogSection = ({ userId }: Props) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleApplicationClick = (jobId: string) => {
-    router.push(`/jobinfo/${jobId}`);
+  const handleApplicationClick = (shopId: string, jobId: string) => {
+    router.push(`/jobinfo/${shopId}/${jobId}`);
   };
 
   if (isLoading) {
@@ -45,7 +44,9 @@ const ApplicationLogSection = ({ userId }: Props) => {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-12 px-24">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">신청내역</h2>
-      <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
+      <div className="tableOver min-h-420">
+        <Table userType="employee" res={items} handleApplicationClick={handleApplicationClick} />
+      </div>
       <div>
         <ListPagination
           limit={limit}

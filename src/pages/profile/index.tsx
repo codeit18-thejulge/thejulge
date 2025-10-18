@@ -11,12 +11,22 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
   const userId = getCookieValue(cookie, "userId");
+  const userType = getCookieValue(cookie, "userType");
   const queryClient = new QueryClient();
 
   if (!userId) {
     return {
       redirect: {
         destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  if (userType !== "employee") {
+    return {
+      redirect: {
+        destination: `/shopinfo`,
         permanent: false,
       },
     };
