@@ -34,8 +34,8 @@ export interface GetUserAlertsResponse {
       };
       links: Link[];
     };
-    links: Link[];
   }>;
+  links: Link[];
 }
 
 const getUserAlerts = async ({ userId, params }: GetUserAlertsRequest): Promise<GetUserAlertsResponse> => {
