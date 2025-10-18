@@ -6,8 +6,11 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { getCookieValue } from "@/utils/getCookie";
+import useCheckAuth from "@/hooks/useCheckAuth";
 
 const RegisterJobinfo = () => {
+  useCheckAuth("employer", true);
+
   const [shopId, setShopId] = useState("");
 
   useEffect(() => {
@@ -46,7 +49,9 @@ const RegisterJobinfo = () => {
           );
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => {});
+          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => {
+            setIsModalOpen(false);
+          });
         },
       },
     );

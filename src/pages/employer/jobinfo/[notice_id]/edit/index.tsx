@@ -10,23 +10,18 @@ import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/componen
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getCookieValue } from "@/utils/getCookie";
+import { checkAuthSSR } from "@/utils/checkAuth";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { redirect } = checkAuthSSR(context, "employer", true);
+  if (redirect) {
+    return { redirect };
+  }
   const cookie = context.req.headers.cookie;
-  const userId = getCookieValue(cookie, "userId") || "";
   const shopId = getCookieValue(cookie, "shopId") || "";
   const noticeId = context.params?.notice_id as string;
 
-  if (!userId) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
   const queryClient = new QueryClient();
-
   await queryClient.prefetchQuery({
     queryKey: ["getShopNoticeDetail", shopId, noticeId],
     queryFn: () => getShopNoticeDetail({ shopId, noticeId }),
@@ -73,7 +68,9 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
           );
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => {});
+          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => {
+            setIsModalOpen(false);
+          });
         },
       },
     );
