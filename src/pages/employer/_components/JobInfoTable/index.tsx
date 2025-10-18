@@ -1,5 +1,6 @@
 import Table from "@/components/Table";
 import ListPagination from "@/components/ListPagination";
+import { ResultStatus } from "@/types/global";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -11,10 +12,9 @@ interface TableProps {
   hasNext: boolean;
   isLoading?: boolean;
   error?: boolean;
-  activePage: number; 
+  activePage: number;
   onPageChange: (pageNumber: number) => void;
-  onModalMessage: (approval: "rejected" | "accepted") => void;
-  onHandleSandId?: (sandId: string) => void;
+  onModalMessage: (approval: ResultStatus, sendId: string) => void;
 }
 
 const JobInfoTable = ({
@@ -25,11 +25,10 @@ const JobInfoTable = ({
   isLoading,
   activePage,
   onPageChange,
-  onModalMessage,
-  onHandleSandId,
+  onModalMessage, //상위로 승인.거절값 전달
 }: TableProps) => {
-  const onButtonClick = (approval: "rejected" | "accepted") => {
-    onModalMessage(approval);
+  const onButtonClick = (approval: ResultStatus, sendId: string) => {
+    onModalMessage(approval, sendId);
   };
 
   return (
@@ -38,13 +37,7 @@ const JobInfoTable = ({
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <Table           
-            res={res}
-            userType={"employer"}
-            onHandleAcceptClick={onButtonClick}
-            onHandleRejectClick={onButtonClick}
-            onHandleSandId={onHandleSandId}
-           />
+          <Table res={res} userType={"employer"} handleAcceptClick={onButtonClick} handleRejectClick={onButtonClick} />
         )}
         <div className="tableBottom">
           <ListPagination
