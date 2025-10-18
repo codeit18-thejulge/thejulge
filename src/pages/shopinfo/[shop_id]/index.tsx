@@ -19,8 +19,7 @@ export async function getServerSideProps(context:GetServerSidePropsContext) {
 
   const cookie = context.req.headers.cookie;
   const userId = getCookieValue(cookie, "userId");
-  //const shopId = getCookieValue(cookie, "shopId")
-  const shopId = "90cb8cc0-dfc6-4ced-843d-3116f073960f"
+  const shopId = getCookieValue(cookie, "shopId")
   if(!userId) {
     return {
       redirect: {
