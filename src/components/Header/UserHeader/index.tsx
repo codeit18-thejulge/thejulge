@@ -3,9 +3,11 @@ import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
 import { useLogoutQuery } from "@/hooks/api/user/useLogoutQuery";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getCookieValue } from "@/utils/getCookie";
 import NotificationWrapper from "@/components/NotificationWrapper";
+import { useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
+import { UserAlertItem } from "@/components/Notification";
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 const navStyle = "order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40";
@@ -63,7 +65,10 @@ const UserHeader = () => {
   // 알림 위치 때문에 버튼 ref로 DOM 좌표 가져옴
   const btnRef = useRef<HTMLButtonElement>(null);
 
+  const { data: alertData } = useGetUserAlertsQuery({ userId, options: { enabled: !!userId } });
   const { mutateAsync: postLogout } = useLogoutQuery();
+
+  const hasUnread = alertData?.items?.some((i) => !i.item.read) ?? false;
 
   const handleLogoutClick = async () => {
     await postLogout();
@@ -118,7 +123,7 @@ const UserHeader = () => {
         </li>
         <li className="tablet:relative">
           <button ref={btnRef} aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
-            <IcNoti className="w-20 text-primary tablet:w-24" />
+            <IcNoti className={cn("w-20 tablet:w-24", hasUnread ? "text-primary" : "text-black")} />
           </button>
           {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} btnRef={btnRef} />}
         </li>

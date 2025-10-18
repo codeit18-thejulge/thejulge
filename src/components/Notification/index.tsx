@@ -1,12 +1,13 @@
 import IcClose from "@/assets/svgs/ic_close.svg";
 import NotificationItem from "./NotificationItem";
 import LoadingSpinner from "../LoadingSpinner";
-import { UserAlertItem } from "./userAlerts";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/utils";
-import { useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
+import { GetUserAlertsResponse, useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
 import { usePutUserAlertsQuery } from "@/hooks/api/alert/usePutUserAlertsQuery";
 import { getCookieValue } from "@/utils/getCookie";
+
+export type UserAlertItem = GetUserAlertsResponse["items"][number]["item"];
 
 interface NotificationProps {
   onClose: () => void;
@@ -20,7 +21,7 @@ const Notification = ({ onClose, className }: NotificationProps) => {
   const { mutateAsync: putUserAlerts } = usePutUserAlertsQuery();
 
   const isAllRead = !isPending && alerts.length === 0;
-  const isUnread = !isPending && alerts.length > 0;
+  const hasUnread = !isPending && alerts.length > 0;
 
   const getAlerts = useCallback(async () => {
     const unreadAlerts = alertData?.items?.map((i) => i.item).filter((alert) => !alert.read) ?? [];
@@ -50,7 +51,7 @@ const Notification = ({ onClose, className }: NotificationProps) => {
     <section
       aria-label="알림"
       className={cn(
-        "flex h-full w-full flex-col gap-16 bg-white px-20 py-40 tablet:max-h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]",
+        "flex h-full w-full flex-col gap-16 bg-white px-20 py-40 tablet:h-400 tablet:w-368 tablet:rounded-10 tablet:border tablet:border-gray-30 tablet:py-24 tablet:shadow-[0_2px_8px_var(--gray-30)]",
         className,
       )}
     >
@@ -63,7 +64,7 @@ const Notification = ({ onClose, className }: NotificationProps) => {
 
       <h2 className="text-16-regular text-gray-50">
         {isAllRead && <>모든 알림을 확인했어요</>}
-        {isUnread && (
+        {hasUnread && (
           <>
             <span className="text-16-bold text-black">{alerts.length}</span>개의 읽지 않은 알림이 있어요
           </>
