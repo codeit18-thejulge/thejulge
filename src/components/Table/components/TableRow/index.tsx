@@ -47,7 +47,7 @@ const TableRow = ({
 
   const jobId = item?.notice.item.id;
   const shopId = item?.shop.item.id;
-  const handleRowClick = (jobId: string) => {
+  const handleRowClick = (shopId: string, jobId: string) => {
     handleApplicationClick?.(shopId, jobId);
   };
 
@@ -108,7 +108,7 @@ const TableRow = ({
       <tr
         onClick={(e) => {
           e.stopPropagation();
-          handleRowClick(jobId);
+          handleRowClick(shopId, jobId);
         }}
       >
         <td>{shop.item.name}</td>
