@@ -37,21 +37,19 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
 const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-  const [sort, setSort] = useState<NoticeSort>("time");
+  const { query } = router;
   const [openFilter, setOpenFilter] = useState(false);
-  const [filterConditions, setFilterConditions] = useState<getNoticesRequest>({});
-  const [page, setPage] = useState(1);
+  const page = Number(query.page) || 1;
+  const sort = (query.sort as NoticeSort) || "time";
+  const { page: _page, sort: _sort, ...filterConditions } = query;
+
   const limit = 6;
   const offset = (page - 1) * limit;
   const activePage = page;
 
   const keyword = Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword || "";
 
-  const {
-    data: jobData,
-    isLoading,
-    isError,
-  } = useGetNoticesQuery({ offset, limit, sort, keyword, ...filterConditions });
+  const { data: jobData, isLoading, isError } = useGetNoticesQuery({ offset, limit, sort, ...filterConditions });
   const { data: userData, isLoading: isUserDataLoading } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
   const userAddress = userData?.item?.address;
   const { data: recommendData, isLoading: isRecommendDataLoading } = useGetNoticesQuery(
@@ -78,8 +76,51 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   };
 
   const handleApplyFilter = (newFilters: getNoticesRequest) => {
-    setFilterConditions(newFilters);
-    setPage(1);
+    const cleanFilters = Object.fromEntries(
+      Object.entries(newFilters).filter(([_, v]) => v !== null && v !== ""),
+    ) as getNoticesRequest;
+    setOpenFilter(false);
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...query,
+          ...cleanFilters,
+          page: 1,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...query,
+          page: pageNumber,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handleSortChange = (option: { value: string }) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...query,
+          sort: option.value as NoticeSort,
+          page: 1,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   useEffect(() => {
@@ -168,7 +209,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
                 placeholder={SORT_OPTIONS.find((option) => option.value === sort)?.label}
                 className="min-w-114 border-none bg-gray-10 px-12 py-8 text-14 font-bold"
                 dropdownClassname="border-gray-10"
-                onChange={(option) => setSort(option.value as NoticeSort)}
+                onChange={handleSortChange}
               />
               <button
                 className="h-40 flex-shrink-0 rounded-5 bg-red-30 px-12 py-6 text-16 font-bold text-white"
@@ -212,7 +253,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
                 placeholder={SORT_OPTIONS.find((option) => option.value === sort)?.label}
                 className="min-w-114 border-none bg-gray-10 px-12 py-8 text-14 font-bold"
                 dropdownClassname="border-gray-10"
-                onChange={(option) => setSort(option.value as NoticeSort)}
+                onChange={handleSortChange}
               />
               <button
                 className="h-40 flex-shrink-0 rounded-5 bg-red-30 px-12 py-6 text-16 font-bold text-white"
@@ -246,7 +287,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
           count={jobData?.count ?? 0}
           activePage={activePage}
           hasNext={jobData?.hasNext ?? false}
-          onPageChange={(pageNumber) => setPage(pageNumber)}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>
