@@ -1,4 +1,4 @@
-import Filter from "@/components/Filter";
+import Filter from "@/pages/joblist/_components/Filter";
 import Layout from "@/components/Layout";
 import ListPagination from "@/components/ListPagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -45,7 +45,6 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   const offset = (page - 1) * limit;
   const activePage = page;
 
-  //검색 기능 헤더에서 만들어주면 바꿀 예정
   const keyword = Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword || "";
 
   const {
@@ -53,10 +52,9 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     isLoading,
     isError,
   } = useGetNoticesQuery({ offset, limit, sort, keyword, ...filterConditions });
-  const hasJobData = jobData?.items && jobData.items.length > 0;
-  const { data: userData } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
+  const { data: userData, isLoading: isUserDataLoading } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
   const userAddress = userData?.item?.address;
-  const { data: recommendData } = useGetNoticesQuery(
+  const { data: recommendData, isLoading: isRecommendDataLoading } = useGetNoticesQuery(
     {
       offset: 0,
       limit: 3,
@@ -67,6 +65,13 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
       enabled: !!userAddress,
     },
   );
+
+  const hasJobData = jobData?.items && jobData.items.length > 0;
+  const hasRecommendData = recommendData?.items && recommendData.items.length > 0;
+  const hasUserAddress = !!userData?.item?.address;
+  const isEmployer = userData?.item?.type === "employer";
+  const hasKeyword = keyword?.trim() !== "";
+  const recommendShow = isEmployer && hasKeyword;
 
   const handleFilterToggle = () => {
     setOpenFilter((prev) => !prev);
@@ -93,34 +98,55 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   if (isError) {
     return <div>공고를 불러오는 중에 오류가 발생했습니다.</div>;
   }
-  if (!hasJobData) {
-    return <div>텅;; 아직 올라온 공고가 없습니다.</div>;
-  }
 
   return (
     <div>
-      {keyword && keyword.trim() !== "" ? null : (
+      {recommendShow ? null : (
         <div className="bg-red-10">
           <div className="mx-auto pl-12 mobile:max-w-350 tablet:max-w-678 tablet:pl-0 desktop:max-w-964">
             <h1 className="pt-60 text-20 font-bold tablet:text-28">맞춤 공고</h1>
             {userId ? (
-              <div className="flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
-                {recommendData?.items.map((data) => (
-                  <div key={data.item.id} className="flex-shrink-0">
-                    <Link href={`/jobinfo/${data.item.shop.item.id}/${data.item.id}`}>
-                      <Post
-                        {...data.item}
-                        {...data.item.shop.item}
-                        address={data.item.shop.item.address1 as SeoulAddress}
-                        className="tablet:h-348 tablet:w-312"
-                      />
-                    </Link>
+              isUserDataLoading ? (
+                <div className="flex justify-center pb-100 pt-40">
+                  <LoadingSpinner />
+                </div>
+              ) : hasUserAddress ? (
+                isRecommendDataLoading ? (
+                  <div className="flex justify-center pb-100 pt-40">
+                    <LoadingSpinner />
                   </div>
-                ))}
-              </div>
+                ) : hasRecommendData ? (
+                  <div className="flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
+                    {recommendData?.items.map((data) => (
+                      <div key={data.item.id} className="flex-shrink-0">
+                        <Link href={`/jobinfo/${data.item.shop.item.id}/${data.item.id}`}>
+                          <Post
+                            {...data.item}
+                            {...data.item.shop.item}
+                            address={data.item.shop.item.address1 as SeoulAddress}
+                            className="tablet:h-348 tablet:w-312"
+                          />
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex justify-center pb-100 pt-40">
+                    <p className="text-14 font-bold tablet:text-20">
+                      아쉽지만, 고객님 주소 주변에는 알바를 구하는 가게가 없습니다😔
+                    </p>
+                  </div>
+                )
+              ) : (
+                <div className="flex justify-center pb-100 pt-40">
+                  <p className="text-14 font-bold tablet:text-20">프로필 등록을 해서 주소 맞춤 공고를 확인해보세요!</p>
+                </div>
+              )
             ) : (
               <div className="flex justify-center pb-100 pt-40">
-                <p className="text-14 font-bold tablet:text-20">로그인하고 맞춤 공고를 확인해보세요!</p>
+                <p className="text-14 font-bold tablet:text-20">
+                  로그인과 프로필 등록을 해서 맞춤 공고를 확인해보세요!
+                </p>
               </div>
             )}
           </div>
