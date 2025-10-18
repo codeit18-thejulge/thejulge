@@ -1,11 +1,11 @@
 import Ic_X from "@/assets/svgs/ic_x.svg";
 import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
 import { useRef, useState } from "react";
-import ClosedBadge from "../Badge/ClosedBadge";
+import ClosedBadge from "../../../../components/Badge/ClosedBadge";
 import { cn } from "@/utils";
 import { useEscClose } from "@/hooks/useEscClose";
-import Input from "../Input";
-import Button from "../Button";
+import Input from "../../../../components/Input";
+import Button from "../../../../components/Button";
 import { getNoticesRequest } from "@/hooks/api/notice/useGetNoticesQuery";
 interface FilterProps {
   onClose: () => void;
@@ -127,7 +127,9 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
       </div>
       <hr />
       <div className="flex flex-col gap-8">
-        <label htmlFor="payId">금액</label>
+        <label htmlFor="payId">
+          금액<span className="text-red-30">*</span>
+        </label>
         <div className="flex items-center gap-12">
           <div className="w-full max-w-170">
             <Input
