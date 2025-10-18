@@ -25,6 +25,14 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
       },
     };
   }
+  if (!shopId) {
+    return {
+      redirect: {
+        destination: "/joblist",
+        permanent: false,
+      },
+    };
+  }
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

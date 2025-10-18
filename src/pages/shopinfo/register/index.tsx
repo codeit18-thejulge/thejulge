@@ -5,8 +5,12 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../../../components/ModalWrapper";
 import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
+import useCheckAuth from "@/hooks/useCheckAuth";
 
 const RegisterJobinfo = () => {
+  // 로그인 여부, 유저 타입 체크
+  useCheckAuth("employer", "/joblist");
+
   const router = useRouter();
   const { mutate: postShop, isPending } = usePostShopQuery();
 
@@ -40,7 +44,7 @@ const RegisterJobinfo = () => {
           handleOpenModal("confirm", "가게 등록이 완료되었습니다.", () => router.replace(`/shopinfo/${shop_id}`));
         },
         onError: () => {
-          handleOpenModal("confirm", "가게 등록에 실패했습니다.", () => router.push(`/shopinfo`));
+          handleOpenModal("confirm", "가게 등록에 실패했습니다.", () => setIsModalOpen(false));
         },
       },
     );

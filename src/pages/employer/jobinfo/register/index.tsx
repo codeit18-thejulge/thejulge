@@ -6,8 +6,12 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { getCookieValue } from "@/utils/getCookie";
+import useCheckAuth from "@/hooks/useCheckAuth";
 
 const RegisterJobinfo = () => {
+  // 로그인 여부, 유저 타입 체크
+  useCheckAuth("employer", "/joblist");
+
   const [shopId, setShopId] = useState("");
 
   useEffect(() => {
