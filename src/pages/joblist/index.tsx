@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
+import SelectBar from "./_components/SelectBar";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
@@ -82,6 +83,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   const hasKeyword = keyword?.trim() !== "";
   const recommendShow = isEmployer && hasKeyword;
 
+  console.log(recommendShow);
   const handleFilterToggle = () => {
     setOpenFilter((prev) => !prev);
   };
@@ -153,7 +155,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
 
   return (
     <div>
-      {recommendShow ? null : (
+      {recommendShow ? (
         <div className="bg-red-10">
           <div className="mx-auto pl-12 mobile:max-w-350 tablet:max-w-678 tablet:pl-0 desktop:max-w-964">
             <h1 className="pt-60 text-20 font-bold tablet:text-28">맞춤 공고</h1>
@@ -203,7 +205,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
             )}
           </div>
         </div>
-      )}
+      ) : null}
       {hasJobData ? (
         <div className="mx-auto mb-40 mt-60 px-12 mobile:max-w-375 tablet:max-w-678 tablet:px-0 desktop:max-w-964">
           <div className="mb-16 flex flex-col items-start justify-start gap-16 tablet:mb-40 tablet:flex-row tablet:items-center tablet:justify-between">
@@ -214,32 +216,14 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
             ) : (
               <h2 className="text-20 font-bold tablet:text-28">전체 공고</h2>
             )}
-            <div className="relative flex gap-10">
-              <SelectBox
-                options={SORT_OPTIONS}
-                placeholder={SORT_OPTIONS.find((option) => option.value === sort)?.label}
-                className="min-w-114 border-none bg-gray-10 px-12 py-8 text-14 font-bold"
-                dropdownClassname="border-gray-10"
-                onChange={handleSortChange}
-              />
-              <button
-                className="h-40 flex-shrink-0 rounded-5 bg-red-30 px-12 py-6 text-16 font-bold text-white"
-                onClick={handleFilterToggle}
-              >
-                상세 필터
-              </button>
-              {openFilter && (
-                <div className="absolute right--1 top-50 z-50 tablet:right-0">
-                  <Filter
-                    isOpen={openFilter}
-                    onClose={() => setOpenFilter(false)}
-                    closeOnEsc={true}
-                    className={"bg-white"}
-                    onApply={handleApplyFilter}
-                  />
-                </div>
-              )}
-            </div>
+            <SelectBar
+              sort={sort}
+              openFilter={openFilter}
+              onCloseFilter={() => setOpenFilter(false)}
+              onSortChange={handleSortChange}
+              onFilterToggle={handleFilterToggle}
+              onApplyFilter={handleApplyFilter}
+            />
           </div>
           <div className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14">
             {jobData?.items.map((data) => (
@@ -258,32 +242,14 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
         <div className="mx-auto mt-40 pl-12 mobile:max-w-350 tablet:max-w-678 tablet:pl-0 desktop:max-w-964">
           <div className="flex justify-between">
             <h2 className="text-20 font-bold tablet:text-28">전체 공고</h2>
-            <div className="relative flex gap-10">
-              <SelectBox
-                options={SORT_OPTIONS}
-                placeholder={SORT_OPTIONS.find((option) => option.value === sort)?.label}
-                className="min-w-114 border-none bg-gray-10 px-12 py-8 text-14 font-bold"
-                dropdownClassname="border-gray-10"
-                onChange={handleSortChange}
-              />
-              <button
-                className="h-40 flex-shrink-0 rounded-5 bg-red-30 px-12 py-6 text-16 font-bold text-white"
-                onClick={handleFilterToggle}
-              >
-                상세 필터
-              </button>
-              {openFilter && (
-                <div className="absolute right--1 top-50 z-50 tablet:right-0">
-                  <Filter
-                    isOpen={openFilter}
-                    onClose={() => setOpenFilter(false)}
-                    closeOnEsc={true}
-                    className={"bg-white"}
-                    onApply={handleApplyFilter}
-                  />
-                </div>
-              )}
-            </div>
+            <SelectBar
+              sort={sort}
+              openFilter={openFilter}
+              onCloseFilter={() => setOpenFilter(false)}
+              onSortChange={handleSortChange}
+              onFilterToggle={handleFilterToggle}
+              onApplyFilter={handleApplyFilter}
+            />
           </div>
 
           <div className="mt-100 flex justify-center">
