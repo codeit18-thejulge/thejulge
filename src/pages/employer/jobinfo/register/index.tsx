@@ -46,7 +46,7 @@ const RegisterJobinfo = () => {
           );
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => router.push(`/shopinfo/${shopId}`));
+          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => {});
         },
       },
     );
