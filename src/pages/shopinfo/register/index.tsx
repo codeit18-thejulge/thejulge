@@ -8,7 +8,6 @@ import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
 import useCheckAuth from "@/hooks/useCheckAuth";
 
 const RegisterJobinfo = () => {
-  // 로그인 여부, 유저 타입 체크
   useCheckAuth("employer", "/joblist");
 
   const router = useRouter();
