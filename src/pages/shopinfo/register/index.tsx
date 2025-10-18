@@ -36,6 +36,7 @@ const RegisterJobinfo = () => {
       {
         onSuccess: (res) => {
           const shop_id = res.item.id;
+          document.cookie = `shopId=${shop_id}; Path=/;`;
           handleOpenModal("confirm", "가게 등록이 완료되었습니다.", () => router.replace(`/shopinfo/${shop_id}`));
         },
         onError: () => {
