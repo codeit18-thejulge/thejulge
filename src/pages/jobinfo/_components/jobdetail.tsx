@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { SeoulAddress } from "@/types/global";
 import IcCheck from "@/assets/svgs/ic_check.svg";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Button from "@/components/Button";
@@ -110,18 +109,29 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
       return;
     }
     addRecentViewedJob({
-      id: noticeId,
-      hourlyPay: jobData?.item.hourlyPay as number,
-      startsAt: jobData?.item.startsAt as string,
-      workhour: jobData?.item.workhour as number,
-      closed: jobData?.item.closed as boolean,
-      name: jobData?.item.shop.item.name as string,
-      imageUrl: jobData?.item.shop.item.imageUrl as string,
-      address: jobData?.item.shop.item.address1 as SeoulAddress,
-      originalHourlyPay: jobData?.item.shop.item.originalHourlyPay as number,
+      noticeId,
       shopId,
     });
   }, [jobData]);
+
+  const handleCancelClick = () => {
+    putShopApplication(
+      {
+        shopId,
+        noticeId,
+        applicationId,
+        data: {
+          status: "canceled",
+        },
+      },
+      {
+        onSuccess: () => {
+          setIsApply(false);
+          setIsOpen(!isOpen);
+        },
+      },
+    );
+  };
 
   const getFooters = useCallback((): ButtonSetting[] => {
     if (!isProfile && userId) {
@@ -202,25 +212,6 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
         },
         onError: (err) => {
           console.error("신청 에러:", err);
-        },
-      },
-    );
-  };
-
-  const handleCancelClick = () => {
-    putShopApplication(
-      {
-        shopId,
-        noticeId,
-        applicationId,
-        data: {
-          status: "canceled",
-        },
-      },
-      {
-        onSuccess: () => {
-          setIsApply(false);
-          setIsOpen(!isOpen);
         },
       },
     );
