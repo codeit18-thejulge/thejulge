@@ -4,7 +4,6 @@ import { UserType } from "@/types/global";
 import { cn } from "@/utils";
 import { useLogoutQuery } from "@/hooks/api/user/useLogoutQuery";
 import { useEffect, useState } from "react";
-import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { getCookieValue } from "@/utils/getCookie";
 import NotificationWrapper from "@/components/NotificationWrapper";
 import Notification from "@/components/Notification";
@@ -25,11 +24,11 @@ const userMenuItem = {
   userPage: {
     employee: {
       title: "내 프로필",
-      href: "/profile",
+      href: () => "/profile",
     },
     employer: {
       title: "내 가게",
-      href: "/shopinfo",
+      href: (shopId?: string) => (shopId ? `/shopinfo/${shopId}` : "/shopinfo"),
     },
   },
   logout: {
@@ -55,8 +54,20 @@ const GuestMenu = () => {
   );
 };
 
-const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) => {
+const UserHeader = () => {
+  const [userId, setUserId] = useState("");
+  const [userType, setUserType] = useState<UserType | null>(null);
+  const [shopId, setShopId] = useState("");
   const [isNotiOpen, setIsNotiOpen] = useState(false);
+
+  const { mutateAsync: postLogout } = useLogoutQuery();
+
+  const handleLogoutClick = async () => {
+    await postLogout();
+    setUserId("");
+    setUserType(null);
+    setShopId("");
+  };
 
   const handleNotiToggle = () => {
     setIsNotiOpen((prev) => !prev);
@@ -65,53 +76,46 @@ const UserMenu = ({ userType, shopId }: { userType: UserType; shopId: string }) 
     setIsNotiOpen(false);
   };
 
-  const { mutate: postLogout } = useLogoutQuery();
-
-  const handleLogoutClick = () => {
-    postLogout();
-  };
-
-  return (
-    <ul className="flex items-center gap-16 desktop:gap-40">
-      <li>
-        <Link href={`${userMenuItem.userPage[userType].href}/${shopId}`} className={cn(linkStyle)}>
-          {userMenuItem.userPage[userType].title}
-        </Link>
-      </li>
-      <li>
-        <button className={cn(linkStyle)} onClick={handleLogoutClick}>
-          로그아웃
-        </button>
-      </li>
-      <li className="tablet:relative">
-        <button aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
-          <IcNoti className="w-20 text-primary tablet:w-24" />
-        </button>
-        {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} />}
-      </li>
-    </ul>
-  );
-};
-
-const UserHeader = () => {
-  const [userId, setUserId] = useState("");
-  const [shopId, setShopId] = useState("");
-
   useEffect(() => {
-    const userCookieId = getCookieValue(document.cookie, "userId") || "";
-    const shopCookieId = getCookieValue(document.cookie, "shopId") || "";
-    setUserId(userCookieId);
-    setShopId(shopCookieId);
+    const id = getCookieValue(document.cookie, "userId") || "";
+    const type = getCookieValue(document.cookie, "userType");
+    const shop = getCookieValue(document.cookie, "shopId") || "";
+    setUserId(id);
+    setShopId(shop);
+
+    if (type === "employee" || type === "employer") {
+      setUserType(type);
+    } else {
+      setUserType(null);
+    }
   }, []);
 
-  const { data: userInfo } = useGetMyInfoQuery(userId);
-
-  const userType: UserType = userInfo?.item?.type ?? "employee";
-  const isLogined = Boolean(userId);
+  if (!userId) {
+    return <GuestMenu />;
+  }
 
   return (
     <nav className="order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40">
-      {isLogined ? <UserMenu userType={userType} shopId={shopId} /> : <GuestMenu />}
+      <ul className="flex items-center gap-16 desktop:gap-40">
+        {userType && (
+          <li>
+            <Link href={userMenuItem.userPage[userType].href(shopId)} className={cn(linkStyle)}>
+              {userMenuItem.userPage[userType].title}
+            </Link>
+          </li>
+        )}
+        <li>
+          <button className={cn(linkStyle)} onClick={handleLogoutClick}>
+            로그아웃
+          </button>
+        </li>
+        <li className="tablet:relative">
+          <button aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
+            <IcNoti className="w-20 text-primary tablet:w-24" />
+          </button>
+          {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} />}
+        </li>
+      </ul>
     </nav>
   );
 };
