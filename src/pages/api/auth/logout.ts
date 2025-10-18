@@ -9,6 +9,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     "accessToken=; Path=/; HttpOnly; Max-Age=0;",
     "userId=; Path=/; Max-Age=0;",
     "shopId=; Path=/; Max-Age=0;",
+    "userType=; path=/; Max-Age=0;",
   ];
   res.setHeader("Set-Cookie", cookies);
 
