@@ -2,7 +2,6 @@ import ListPagination from "@/components/ListPagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Table from "@/components/Table";
 import { useGetUserApplicationsQuery } from "@/hooks/api/application/useGetUserApplicationsQuery";
-import { p } from "framer-motion/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -25,8 +24,8 @@ const ApplicationLogSection = ({ userId }: Props) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleApplicationClick = (jobId: string) => {
-    router.push(`/jobinfo/${jobId}`);
+  const handleApplicationClick = (shopId: string, jobId: string) => {
+    router.push(`/jobinfo/${shopId}/${jobId}`);
   };
 
   if (isLoading) {
