@@ -8,7 +8,7 @@ const ShopInfo= () => {
   const router = useRouter();
 
   const handleRegisterClick = () => {
-    router.push('/shopinfo/register')
+    router.push('/employer/jobinfo/register')
   }
 
   useEffect(() => {
