@@ -20,7 +20,6 @@ export async function getServerSideProps(context:GetServerSidePropsContext) {
   const cookie = context.req.headers.cookie;
   const userId = getCookieValue(cookie, "userId");
   const shopId = getCookieValue(cookie, "shopId")
-
   if(!userId) {
     return {
       redirect: {
@@ -53,8 +52,6 @@ export async function getServerSideProps(context:GetServerSidePropsContext) {
     }),
   ])
 
-  
-
   return {
     props: {
       shopId,
@@ -84,15 +81,13 @@ const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSi
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   
   const hasShopNotices = shopNotices && shopNotices.pages[0].items.length > 0;
-  
+
   const handleEditClick = () => {
-    router.push({
-      pathname: '/shopinfo/edit/',
-    });
+    router.push(`/shopinfo/${shopId}/edit`);
   }
 
   const handleRegisterClick = () => {
-    router.push('/jobinfo/register')
+    router.push('/employer/jobinfo/register')
   }
 
   if(shopInfoLoading) {
@@ -149,7 +144,7 @@ const ShopInfoDetail = ({shopId}: InferGetServerSidePropsType<typeof getServerSi
                 )))}
             </div>
             {hasNextPage && <div ref={ref} />}
-            {isFetchingNextPage && <p>로딩 중...</p>}
+            {isFetchingNextPage && <LoadingSpinner />}
           </div>
         </div>
       :
