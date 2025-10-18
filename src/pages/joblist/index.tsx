@@ -1,10 +1,7 @@
-import Filter from "@/pages/joblist/_components/Filter";
 import Layout from "@/components/Layout";
 import ListPagination from "@/components/ListPagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Post from "@/components/Post";
-import SelectBox from "@/components/SelectBox";
-import { SORT_OPTIONS } from "@/constants/SORT_OPTIONS";
 import { getNoticesRequest, useGetNoticesQuery } from "@/hooks/api/notice/useGetNoticesQuery";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
 import { NoticeSort, SeoulAddress } from "@/types/global";
@@ -76,14 +73,19 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     },
   );
 
+  const sortedRecommedData = recommendData?.items.sort((a, b) => {
+    const A = new Date(a.item.startsAt);
+    const B = new Date(b.item.startsAt);
+    return B.getTime() - A.getTime();
+  });
+
   const hasJobData = jobData?.items && jobData.items.length > 0;
   const hasRecommendData = recommendData?.items && recommendData.items.length > 0;
   const hasUserAddress = !!userData?.item?.address;
-  const isEmployer = userData?.item?.type === "employer";
-  const hasKeyword = keyword?.trim() !== "";
-  const recommendShow = isEmployer && hasKeyword;
+  const isEmployee = userData?.item?.type === "employee";
+  const isKeywordEmpty = !keyword || keyword?.trim() === "";
+  const recommendShow = isEmployee && isKeywordEmpty;
 
-  console.log(recommendShow);
   const handleFilterToggle = () => {
     setOpenFilter((prev) => !prev);
   };
@@ -171,7 +173,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
                   </div>
                 ) : hasRecommendData ? (
                   <div className="flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
-                    {recommendData?.items.map((data) => (
+                    {sortedRecommedData?.map((data) => (
                       <div key={data.item.id} className="flex-shrink-0">
                         <Link href={`/jobinfo/${data.item.shop.item.id}/${data.item.id}`}>
                           <Post
@@ -251,7 +253,6 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
               onApplyFilter={handleApplyFilter}
             />
           </div>
-
           <div className="mt-100 flex justify-center">
             <p className="text-14 font-bold tablet:text-20">조건에 맞는 공고가 없습니다.</p>
           </div>
