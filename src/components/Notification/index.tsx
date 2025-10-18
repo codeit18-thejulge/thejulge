@@ -62,7 +62,6 @@ const Notification = ({ onClose, className }: NotificationProps) => {
       </header>
 
       <h2 className="text-16-regular text-gray-50">
-        {isPending && <>Loading...</>}
         {isAllRead && <>모든 알림을 확인했어요</>}
         {isUnread && (
           <>
