@@ -1,22 +1,14 @@
 import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
-import { usePostShopNoticesQuery } from "@/hooks/api/notice/usePostShopNoticesQuery";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
-import { getCookieValue } from "@/utils/getCookie";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../../../components/ModalWrapper";
+import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
 
 const RegisterJobinfo = () => {
-  const [shopId, setShopId] = useState("");
-
-  useEffect(() => {
-    const shopCookieId = getCookieValue(document.cookie, "shopId") || "";
-    setShopId(shopCookieId);
-  }, []);
-
   const router = useRouter();
-  const { mutate: postShopNotice, isPending } = usePostShopNoticesQuery();
+  const { mutate: postShop, isPending } = usePostShopQuery();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<ModalProps>({
@@ -36,24 +28,25 @@ const RegisterJobinfo = () => {
   };
 
   const handleSubmit = (data: FormData) => {
-    postShopNotice(
-      { shopId, data },
+    if (!data.category || !data.address1) {
+      return;
+    }
+    postShop(
+      { ...data, category: data.category, address1: data.address1 },
       {
         onSuccess: (res) => {
-          const notice_id = res.item.id;
-          handleOpenModal("confirm", "공고 등록이 완료되었습니다.", () =>
-            router.replace(`/employer/jobinfo/${notice_id}`),
-          );
+          const shop_id = res.item.id;
+          handleOpenModal("confirm", "가게 등록이 완료되었습니다.", () => router.replace(`/shopinfo/${shop_id}`));
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 등록에 실패했습니다.", () => router.push(`/shopinfo/${shopId}`));
+          handleOpenModal("confirm", "가게 등록에 실패했습니다.", () => router.push(`/shopinfo`));
         },
       },
     );
   };
 
   const handleCloseClick = () => {
-    handleOpenModal("action", "공고 등록을 취소하시겠습니까?", () => router.push(`/shopinfo/${shopId}`));
+    handleOpenModal("action", "가게 등록을 취소하시겠습니까?", () => router.push(`/shopinfo`));
   };
 
   return (
@@ -64,7 +57,7 @@ const RegisterJobinfo = () => {
             onClick={handleCloseClick}
             className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32"
           />
-          <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 등록</h1>
+          <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">내 가게</h1>
           <RegisterForm onSubmit={handleSubmit} isPending={isPending} submitLabel="등록" />
           <ModalWrapper
             isOpen={isModalOpen}
