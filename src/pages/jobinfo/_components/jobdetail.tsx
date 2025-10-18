@@ -61,9 +61,8 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
     isSuccess: isCancelSuccess,
   } = usePutShopApplicationQuery();
 
-  const { data: userData } = useGetMyInfoQuery(userId);
-
-  const { data: applyData } = useGetUserApplicationsQuery({ userId });
+  const { data: userData } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
+  const { data: applyData } = useGetUserApplicationsQuery({ userId }, { enabled: !!userId });
 
   useEffect(() => {
     if (isApplySuccess) {
