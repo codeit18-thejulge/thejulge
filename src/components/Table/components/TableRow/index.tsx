@@ -23,9 +23,11 @@ interface TableRowProps {
   userType: UserType;
   isLoading?: boolean;
   error?: boolean;
+  isState?: string;
   handleApplicationClick?: (jobId: string) => void;
-  onHandleRejectClick?: () => void;
-  onHandleAcceptClick?: () => void;
+  onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
+  onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
+  onHandleSandId?: (sandId: string) => void;
 }
 
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
@@ -33,12 +35,14 @@ const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 ta
 const TableRow = ({
   item,
   userType,
+  onHandleSandId,
   onHandleRejectClick,
   onHandleAcceptClick,
   handleApplicationClick,
 }: TableRowProps) => {
   const { shop, notice } = item;
   const { user } = item as user;
+
   const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
 
   const jobId = item?.notice.item.id;
@@ -55,7 +59,11 @@ const TableRow = ({
     // 신청자 목록 - 사장
     const phoneNumber = user.item.phone || "-";
     return (
-      <tr>
+      <tr
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <td>{user.item.name}</td>
         <td>
           <p className={tableStyle.overText}>{user.item.bio || "-"}</p>
@@ -67,14 +75,22 @@ const TableRow = ({
               <Button
                 className={cn("border-primary text-primary", BUTTON_STYLE)}
                 status={"lined"}
-                onClick={onHandleRejectClick}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation();
+                  onHandleRejectClick?.("rejected");
+                  onHandleSandId?.(item.id);
+                }}
               >
                 거절하기
               </Button>
               <Button
                 className={cn("border-blue-20 text-blue-20", BUTTON_STYLE)}
                 status={"lined"}
-                onClick={onHandleAcceptClick}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation();
+                  onHandleAcceptClick?.("accepted");
+                  onHandleSandId?.(item.id);
+                }}
               >
                 승인하기
               </Button>
@@ -89,7 +105,12 @@ const TableRow = ({
     // 가게 목록 -알바
     const time = new Date(notice.item.startsAt).toLocaleDateString();
     return (
-      <tr onClick={() => handleRowClick(jobId)}>
+      <tr
+        onClick={(e) => {
+          e.stopPropagation();
+          handleRowClick(jobId);
+        }}
+      >
         <td>{shop.item.name}</td>
         <td>
           {formatNoticeTime(time, notice.item.workhour)} ({notice.item.workhour}시간)

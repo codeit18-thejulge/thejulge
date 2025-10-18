@@ -66,7 +66,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({ ...formData, startsAt: dayjs(formData.startsAt).toISOString() });
   };
 
   const hasError = Object.values(errMSg).some((msg) => msg);
