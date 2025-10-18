@@ -9,6 +9,7 @@ import NotificationWrapper from "@/components/NotificationWrapper";
 import Notification from "@/components/Notification";
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
+const navStyle = "order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40";
 
 const guestMenuItem = {
   signin: {
@@ -88,14 +89,18 @@ const UserHeader = () => {
     } else {
       setUserType(null);
     }
-  }, []);
+  }, [userId, userType, shopId]);
 
   if (!userId) {
-    return <GuestMenu />;
+    return (
+      <nav className={navStyle}>
+        <GuestMenu />
+      </nav>
+    );
   }
 
   return (
-    <nav className="order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40">
+    <nav className={navStyle}>
       <ul className="flex items-center gap-16 desktop:gap-40">
         {userType && (
           <li>

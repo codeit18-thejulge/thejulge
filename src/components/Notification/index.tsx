@@ -16,21 +16,21 @@ const Notification = ({ onClose, className }: NotificationProps) => {
   const [userId, setUserId] = useState("");
   const [alerts, setAlerts] = useState<UserAlertItem[]>([]);
 
-  const { data: alertData, isPending } = useGetUserAlertsQuery({ userId, options: { enabled: !!userId } });
+  const { data: alertData, isPending, refetch } = useGetUserAlertsQuery({ userId, options: { enabled: !!userId } });
   const { mutateAsync: putUserAlerts } = usePutUserAlertsQuery();
 
   const isAllRead = !isPending && alerts.length === 0;
   const isUnread = !isPending && alerts.length > 0;
 
   const getAlerts = useCallback(async () => {
-    const unreadAlerts = alertData?.items.map((i) => i.item).filter((alert) => !alert.read) ?? [];
+    const unreadAlerts = alertData?.items?.map((i) => i.item).filter((alert) => !alert.read) ?? [];
     setAlerts(unreadAlerts);
   }, [alertData]);
 
   const handleAlertRead = async (alertId: string) => {
     try {
-      const res = await putUserAlerts({ userId, alertId });
-      setAlerts(res.items.map((i) => i.item).filter((alert) => !alert.read));
+      await putUserAlerts({ userId, alertId });
+      refetch();
     } catch (err) {
       console.error(err);
     }

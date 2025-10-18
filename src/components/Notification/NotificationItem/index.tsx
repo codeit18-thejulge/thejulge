@@ -6,6 +6,12 @@ import { UserAlertItem } from "../userAlerts";
 const statusColor = {
   accepted: { bg: "bg-blue-20", text: "text-blue-20" },
   rejected: { bg: "bg-primary", text: "text-primary" },
+  canceled: { bg: "bg-gray-50", text: "text-gray-50" },
+};
+const resultMsg = {
+  accepted: "승인",
+  rejected: "거절",
+  canceled: "취소",
 };
 
 interface NotificationItemProps {
@@ -15,10 +21,6 @@ interface NotificationItemProps {
 
 const NotificationItem = ({ alert, onAlertRead }: NotificationItemProps) => {
   const shopName = alert.shop.item.name;
-  const resultMsg = {
-    accepted: "승인",
-    rejected: "거절",
-  };
 
   const createdTime = formatCreatedTime(alert.createdAt);
   const { startsAt, workhour } = alert.notice.item;
