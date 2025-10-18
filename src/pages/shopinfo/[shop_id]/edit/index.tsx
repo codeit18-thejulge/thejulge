@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getShopInfo, useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInfoQuery";
 import { usePutShopInfoQuery } from "@/hooks/api/shop/usePutShopInfoQuery";
@@ -10,9 +10,18 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { useRouter } from "next/router";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const shopId = context.params?.shop_id as string;
   const queryClient = new QueryClient();
+
+  if (!shopId) {
+    return {
+      redirect: {
+        destination: "/joblist",
+        permanent: false,
+      },
+    };
+  }
 
   await queryClient.prefetchQuery({
     queryKey: ["getShopInfo", shopId],
