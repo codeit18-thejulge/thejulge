@@ -3,11 +3,10 @@ import Link from "next/link";
 import { UserType } from "@/types/global";
 import { cn } from "@/utils";
 import { useLogoutQuery } from "@/hooks/api/user/useLogoutQuery";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCookieValue } from "@/utils/getCookie";
 import NotificationWrapper from "@/components/NotificationWrapper";
 import { useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
-import { UserAlertItem } from "@/components/Notification";
 
 const linkStyle = "text-14-bold tablet:text-16-bold";
 const navStyle = "order-2 ml-auto flex h-30 shrink-0 tablet:order-3 tablet:h-40";

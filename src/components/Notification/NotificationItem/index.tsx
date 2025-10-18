@@ -1,7 +1,7 @@
 import IcCheckSquare from "@/assets/svgs/ic_check-square.svg";
 import { formatCreatedTime, formatNoticeTime } from "@/utils/formatTime";
 import { cn } from "@/utils";
-import { UserAlertItem } from "../userAlerts";
+import { UserAlertItem } from "../index";
 
 const statusColor = {
   accepted: { bg: "bg-blue-20", text: "text-blue-20" },
