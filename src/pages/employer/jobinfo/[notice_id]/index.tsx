@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
 import type { InferGetServerSidePropsType } from "next";
+import { useState } from "react";
 import JobInfoCard from "../../_components/JobInfoCard";
 import JobInfoTable from "../../_components/JobInfoTable";
 import MessageModal from "@/components/Modal/MessageModal";
 import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopApplicationQuery";
 import { useGetShopApplicationsQuery } from "@/hooks/api/application/useGetShopApplicationsQuery";
+import { ResultStatus } from "@/types/global";
 import IcCheck from "@/assets/svgs/ic_check.svg";
 import Image from "next/image";
 import IcNullBody from "@/assets/svgs/ic_exc.png";
@@ -39,19 +40,16 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 const LIMIT = 5;
 
 const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const NOTICE_ID = noticeId;
-  const SHOP_ID = shopId as string;
-
   const [modalMessage, setModalMessage] = useState("");
-  const [approval, setApproval] = useState<"rejected" | "accepted" | undefined>(undefined);
+  const [approval, setApproval] = useState<ResultStatus | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false);
-  const [sandId, setSandId] = useState("");
+  const [sendId, setSendId] = useState("");
 
   const [page, setPage] = useState(1); //페이지네이션
 
   const { data, isLoading, isError, error, refetch } = useGetShopApplicationsQuery({
-    shopId: SHOP_ID,
-    noticeId: NOTICE_ID,
+    shopId: shopId,
+    noticeId: noticeId,
     params: {
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
@@ -66,12 +64,15 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
     setPage(pageNumber);
   };
 
+  //모달 닫기
   const handleClose = () => {
     setIsOpen(!isOpen);
   };
 
-  const onModalMessage = (approval: "rejected" | "accepted") => {
+  // 승인 거절 받아서 모달 메세지 생성
+  const onModalMessage = (approval: ResultStatus, sendId: string) => {
     setApproval(approval);
+    setSendId(sendId);
     setIsOpen(true);
     if (approval === "rejected") {
       setModalMessage("신청을 거절하시겠어요?");
@@ -82,12 +83,12 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
 
   //===승인 거절
   const mutation = usePutShopApplicationQuery();
-  const handleSubmit = (sandId: string, status: "accepted" | "rejected") => {
+  const handleApprovalClick = (status: ResultStatus, sendId: string) => {
     mutation.mutate(
       {
         shopId: data?.items[0].item.shop.item.id || "",
         noticeId: data?.items[0].item.notice.item.id || "",
-        applicationId: sandId || "",
+        applicationId: sendId || "",
         data: { status },
       },
       {
@@ -101,15 +102,6 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
     );
     setIsOpen(false);
   };
-
-  const onHandleSandId = (sandId: string) => {
-    setSandId(sandId);
-  };
-
-  //승인 요청 보낼 아이디
-  useEffect(() => {
-    setSandId(sandId);
-  }, [sandId]);
 
   if (isError) {
     return <p>{error.message}</p>;
@@ -128,7 +120,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
         ) : (
           <>
             <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-              <JobInfoCard res={res} bgColor={"bg-white"} />
+              <JobInfoCard res={res} bgColor={"bg-white"} noticeId={noticeId} />
             </section>
             <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
               <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
@@ -142,7 +134,6 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
                 error={isError}
                 onPageChange={onHandlePageChange}
                 onModalMessage={onModalMessage}
-                onHandleSandId={onHandleSandId}
               />
             </section>
           </>
@@ -166,7 +157,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
               buttonText: "예",
               onClick: () => {
                 if (approval === "rejected" || approval === "accepted") {
-                  handleSubmit(sandId, approval);
+                  handleApprovalClick(approval, sendId);
                 }
               },
               style: "filled",
