@@ -1,7 +1,7 @@
 import IcSearch from "@/assets/svgs/ic_search.svg";
 import { cn } from "@/utils";
 import { useRouter } from "next/router";
-import { ChangeEvent, forwardRef, useState } from "react";
+import { ChangeEvent, forwardRef, useEffect, useState } from "react";
 
 interface SearchInputProps {
   placeholder?: string;
@@ -26,6 +26,15 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({ placeholde
     const trimmedValue = inputValue.trim();
     router.push(`/joblist?keyword=${trimmedValue}`);
   };
+
+  useEffect(() => {
+    if (router.pathname === "/joblist") {
+      const keyword = router.query.keyword as string;
+      setInputValue(keyword || "");
+    } else {
+      setInputValue("");
+    }
+  }, [router.pathname, router.query.keyword]);
 
   return (
     <div className="order-3 flex w-full items-center gap-8 rounded-10 bg-gray-10 p-8 tablet:order-2 tablet:max-w-450 tablet:gap-10 tablet:p-10">
