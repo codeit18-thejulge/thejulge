@@ -86,8 +86,13 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
       if (writerId !== shopId) {
         router.replace("/joblist");
       }
+      if (jobinfoData.item.closed) {
+        handleOpenModal("confirm", "마감된 공고는 수정할 수 없습니다.", () => {
+          router.push(`/employer/jobinfo/${noticeId}`);
+        });
+      }
     }
-  }, [isGetPending, jobinfoData, router, shopId]);
+  }, [isGetPending, jobinfoData, noticeId, router, shopId]);
 
   if (isGetPending || !jobinfoData) {
     return (
