@@ -5,14 +5,14 @@ import JobInfoTable from "../../_components/JobInfoTable";
 import MessageModal from "@/components/Modal/MessageModal";
 import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopApplicationQuery";
 import { useGetShopApplicationsQuery } from "@/hooks/api/application/useGetShopApplicationsQuery";
+import { useGetShopNoticeDetailQuery, getShopNoticeDetail } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
 import { ResultStatus } from "@/types/global";
 import IcCheck from "@/assets/svgs/ic_check.svg";
-import Image from "next/image";
-import IcNullBody from "@/assets/svgs/ic_exc.png";
 import { GetServerSidePropsContext } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import Layout from "@/components/Layout";
 import { ReactNode } from "react";
+import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
@@ -28,11 +28,17 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
       },
     };
   }
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["getShopNoticeDetail", shopId, noticeId],
+    queryFn: () => getShopNoticeDetail({ shopId, noticeId }),
+  });
 
   return {
     props: {
       shopId,
       noticeId,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };
@@ -46,19 +52,28 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
   const [sendId, setSendId] = useState("");
 
   const [page, setPage] = useState(1); //페이지네이션
-
-  const { data, isLoading, isError, error, refetch } = useGetShopApplicationsQuery({
+  const { data: shopData } = useGetShopNoticeDetailQuery(
+    { shopId, noticeId }
+  );
+  const {
+    data: appData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetShopApplicationsQuery({
     shopId: shopId,
     noticeId: noticeId,
     params: {
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
-    },
+    }
   });
 
-  const res = data?.items ?? [];
-  const totalCount = data?.count ?? 0; // 전체 항목 수
-  const hasNextPage = data?.hasNext ?? false; // 다음 페이지 여부
+  const shopInfo = shopData?.item; //가게 상세
+  const res = appData?.items ?? []; //지원자 목록
+  const totalCount = appData?.count ?? 0; // 전체 항목 수
+  const hasNextPage = appData?.hasNext ?? false; // 다음 페이지 여부
 
   const onHandlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
@@ -86,8 +101,8 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
   const handleApprovalClick = (status: ResultStatus, sendId: string) => {
     mutation.mutate(
       {
-        shopId: data?.items[0].item.shop.item.id || "",
-        noticeId: data?.items[0].item.notice.item.id || "",
+        shopId: appData?.items[0].item.shop.item.id || "",
+        noticeId: appData?.items[0].item.notice.item.id || "",
         applicationId: sendId || "",
         data: { status },
       },
@@ -110,34 +125,25 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
   return (
     <>
       <div className="px-12 tablet:px-32">
-        {!isLoading && res.length === 0 ? (
-          <div className="flex h-screen flex-col items-center justify-center gap-y-20">
-            <div className="w-1/2 max-w-200">
-              <Image src={IcNullBody} alt="" />
-            </div>
-            <p>아직 신청한 알바 직원이 없어요.</p>
-          </div>
-        ) : (
-          <>
-            <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-              <JobInfoCard res={res} bgColor={"bg-white"} noticeId={noticeId} />
-            </section>
-            <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-              <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
-              <JobInfoTable
-                res={res}
-                limit={LIMIT}
-                count={totalCount}
-                hasNext={hasNextPage}
-                activePage={page}
-                isLoading={isLoading}
-                error={isError}
-                onPageChange={onHandlePageChange}
-                onModalMessage={onModalMessage}
-              />
-            </section>
-          </>
-        )}
+        <>
+          <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
+            <JobInfoCard res={shopInfo} bgColor={"bg-white"} noticeId={noticeId} />
+          </section>
+          <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
+            <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
+            <JobInfoTable
+              res={res}
+              limit={LIMIT}
+              count={totalCount}
+              hasNext={hasNextPage}
+              activePage={page}
+              isLoading={isLoading}
+              error={isError}
+              onPageChange={onHandlePageChange}
+              onModalMessage={onModalMessage}
+            />
+          </section>
+        </>
       </div>
 
       {isOpen && (
