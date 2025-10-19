@@ -52,36 +52,27 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
     mutate: postShopApplication,
     isPending: isApplyPending,
     isSuccess: isApplySuccess,
-  } = usePostShopApplicationQuery();
+  } = usePostShopApplicationQuery({
+    onMutate: () => setIsApply(true),
+    onSuccess: (data) => {
+      if (data && data.item.id) {
+        setApplicationId(data.item.id);
+      }
+    },
+    onError: () => setIsApply(false),
+  });
 
   const {
     mutate: putShopApplication,
     isPending: isCancelPending,
     isSuccess: isCancelSuccess,
-  } = usePutShopApplicationQuery();
+  } = usePutShopApplicationQuery({
+    onMutate: () => setIsApply(false),
+    onError: () => setIsApply(true),
+  });
 
   const { data: userData } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
   const { data: applyData } = useGetUserApplicationsQuery({ userId }, { enabled: !!userId });
-
-  useEffect(() => {
-    if (isApplySuccess) {
-      const timer = setTimeout(() => {
-        setIsApply(true);
-      }, 3500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isApplySuccess]);
-
-  useEffect(() => {
-    if (isCancelSuccess) {
-      const timer = setTimeout(() => {
-        setIsApply(false);
-      }, 3500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isCancelSuccess]);
 
   useEffect(() => {
     let appliedStatus = false;
@@ -97,12 +88,11 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   }, [applyData, noticeId]);
 
   useEffect(() => {
-    let profile = false;
-    if (userData?.item?.address) {
-      profile = true;
+    if (!userData) {
+      return;
     }
-    setIsProfile(profile);
-  }, [userId]);
+    setIsProfile(!!userData?.item?.address);
+  }, [userData]);
 
   useEffect(() => {
     if (!jobData) {
@@ -115,22 +105,15 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   }, [jobData]);
 
   const handleCancelClick = () => {
-    putShopApplication(
-      {
-        shopId,
-        noticeId,
-        applicationId,
-        data: {
-          status: "canceled",
-        },
+    setIsOpen(false);
+    putShopApplication({
+      shopId,
+      noticeId,
+      applicationId,
+      data: {
+        status: "canceled",
       },
-      {
-        onSuccess: () => {
-          setIsApply(false);
-          setIsOpen(!isOpen);
-        },
-      },
-    );
+    });
   };
 
   const getFooters = useCallback((): ButtonSetting[] => {
@@ -198,23 +181,10 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
       setIsOpen(!isOpen);
       return;
     }
-    postShopApplication(
-      {
-        shopId,
-        noticeId,
-      },
-      {
-        onSuccess: (data) => {
-          if (data && data.item.id) {
-            setApplicationId(data.item.id);
-          }
-          setIsApply(true);
-        },
-        onError: (err) => {
-          console.error("신청 에러:", err);
-        },
-      },
-    );
+    postShopApplication({
+      shopId,
+      noticeId,
+    });
   };
 
   const footers = getFooters();

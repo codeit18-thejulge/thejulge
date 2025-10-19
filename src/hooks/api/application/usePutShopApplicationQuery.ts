@@ -42,14 +42,21 @@ const putShopApplication = async ({
   return response.data;
 };
 
-export const usePutShopApplicationQuery = () => {
+export const usePutShopApplicationQuery = (options?: {
+  onMutate?: () => void;
+  onSuccess?: (data: PutShopApplicationResponse) => void;
+  onError?: (error: unknown) => void;
+}) => {
   return useMutation({
     mutationFn: putShopApplication,
+    onMutate: options?.onMutate,
     onSuccess: (res) => {
       console.log(res);
+      options?.onSuccess?.(res);
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
+      options?.onError?.(err);
     },
   });
 };
