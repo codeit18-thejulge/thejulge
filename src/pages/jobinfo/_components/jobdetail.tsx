@@ -16,6 +16,7 @@ import {
   GetShopNoticeDetailRequest,
   GetShopNoticeDetailResponse,
 } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
+import SkeletonUI from "@/components/Skeleton";
 
 interface ButtonSetting {
   buttonText: string;
@@ -164,7 +165,21 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   }, [userId, isProfile, applicationId]);
 
   if (!shopId || !noticeId || isPending || !jobData) {
-    return <LoadingSpinner />;
+    return (
+      <div className="py-40 tablet:py-60">
+        <div>
+          <SkeletonUI count={1} boxClassName="w-[calc((100%)/3)] h-66" className="h-66" />
+        </div>
+        <div className="my-12 rounded-12 border border-gray-20 p-20 tablet:p-24 desktop:my-24">
+          <SkeletonUI
+            count={1}
+            boxClassName="w-full tablet:h-645 desktop:h-308"
+            className="tablet:h-645 desktop:h-308"
+          />
+        </div>
+        <SkeletonUI count={1} boxClassName="w-full rounded-12 h-124" className="h-124" />
+      </div>
+    );
   }
 
   const notice = jobData?.item;
