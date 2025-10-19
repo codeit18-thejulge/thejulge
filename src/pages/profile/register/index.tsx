@@ -16,14 +16,31 @@ import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import Layout from "@/components/Layout";
 import { getCookieValue } from "@/utils/getCookie";
 
+type RegisterData = {
+  name: string;
+  phone: string;
+  address: SeoulAddress | undefined;
+  bio?: string;
+};
+
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
   const userId = getCookieValue(cookie, "userId");
+  const userType = getCookieValue(cookie, "userType");
 
   if (!userId) {
     return {
       redirect: {
         destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  if (userType !== "employee") {
+    return {
+      redirect: {
+        destination: `/shopinfo`,
         permanent: false,
       },
     };
@@ -46,20 +63,42 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const router = useRouter();
 
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isSuccess } = usePutMyInfoQuery();
 
-  const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
+  const [profileData, setProfileData] = useState<RegisterData>({
+    name: "",
+    phone: "",
+    address: undefined,
+    bio: "",
+  });
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === "phone") {
+      const hasInvalidChars = /[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/.test(value);
+
+      if (hasInvalidChars) {
+        setPhoneError("숫자(0-9)만 입력 가능합니다.");
+      } else {
+        setPhoneError("");
+      }
+
       const formatted = formatPhoneNumber(value);
       return setProfileData((prev) => ({ ...prev, [name]: formatted }));
     }
     setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhoneBlur = () => {
+    if (profileData.phone.length > 0 && profileData.phone.length < 13) {
+      setPhoneError("연락처를 13자리에 맞게 입력해 주세요.");
+    } else {
+      setPhoneError("");
+    }
   };
 
   const handleAddressChange = (option: Option) => {
@@ -87,26 +126,30 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
       setModalMessage("프로필 등록이 완료되었습니다");
       setIsOpenModal(true);
     }
-
-    if (isError) {
-      setModalMessage("프로필 등록을 실패했습니다");
-      setIsOpenModal(true);
-    }
-  }, [isSuccess, isError]);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (userInfo?.item) {
-      setProfileData(userInfo.item);
+      const { name, phone, address, bio } = userInfo.item;
+      const newProfileData = {
+        name: name ?? "",
+        phone: phone ?? "",
+        address: address,
+        bio: bio ?? "",
+      };
+
+      setProfileData(newProfileData);
     }
   }, [userInfo]);
 
   useEffect(() => {
-    if (profileData?.name && profileData?.phone && profileData?.address) {
+    const { name, phone, address } = profileData;
+    if (name && phone?.length === 13 && address && !phoneError) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
-  }, [profileData]);
+  }, [profileData, phoneError]);
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-32 px-24 py-60">
@@ -123,14 +166,21 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
               <span>이름</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
+            <Input name="name" value={profileData?.name} />
           </div>
           <div>
             <label className="text-16-regular">
               <span>연락처</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="phone" value={profileData?.phone} onChange={handleProfileChange} />
+            <Input
+              name="phone"
+              value={profileData?.phone}
+              onChange={handleProfileChange}
+              onBlur={handlePhoneBlur}
+              errorMsg={phoneError}
+              maxLength={13}
+            />
           </div>
           <div>
             <label className="text-16-regular">
