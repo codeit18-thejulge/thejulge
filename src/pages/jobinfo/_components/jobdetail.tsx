@@ -191,20 +191,28 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   const isPassed = isStartTimePassed(notice.startsAt) || jobData.item.closed;
 
   return (
-    <>
+    <div className="py-40 tablet:py-60">
       <div>
         <p className="text-16 font-bold text-primary">{shop.category}</p>
         <h2 className="text-28 font-bold text-black">{shop.name}</h2>
       </div>
-      <div className="align-center my-12 flex h-480 flex-col justify-center justify-around gap-10 rounded-12 border border-gray-20 p-20 desktop:my-24 desktop:flex-row desktop:justify-between desktop:p-24">
-        <CardImageBox imageUrl={shop.imageUrl} name={shop.name} closed={false} startsAt={notice.startsAt} />
-        <div className="flex w-full flex-col justify-between desktop:w-364">
-          <div className="mb-40 flex flex-col gap-10 desktop:mb-60">
-            <p className="text-16 font-bold text-primary">시급</p>
-            <CardPay hourlyPay={notice.hourlyPay} originalHourlyPay={shop.originalHourlyPay} closed={notice.closed} />
-            <CardTime startsAt={notice.startsAt} workhour={notice.workhour} />
-            <CardAddress address={shop.address1} />
-            <CardDescription description={shop.description} />
+      <div className="my-12 flex flex-col justify-center rounded-12 border border-gray-20 bg-white p-20 tablet:p-24 desktop:my-24 desktop:flex-row desktop:justify-between desktop:gap-x-31">
+        <CardImageBox
+          imageUrl={shop.imageUrl}
+          name={shop.name}
+          closed={false}
+          startsAt={notice.startsAt}
+          className="desktop:h-308"
+        />
+        <div className="flex flex-col justify-between desktop:w-346">
+          <div className="mb-40 desktop:mb-60">
+            <p className="pb-4 pt-16 text-16 font-bold text-primary">시급</p>
+            <div className="flex flex-col gap-y-8 tablet:gap-y-12">
+              <CardPay hourlyPay={notice.hourlyPay} originalHourlyPay={shop.originalHourlyPay} closed={notice.closed} />
+              <CardTime startsAt={notice.startsAt} workhour={notice.workhour} />
+              <CardAddress address={shop.address1} />
+              <CardDescription description={shop.description} />
+            </div>
           </div>
           {userId && isApply ? (
             <Button
@@ -243,7 +251,7 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
       />
       {isApplySuccess && <ToastContainer label="신청이 완료 되었습니다" error={false} />}
       {isCancelSuccess && <ToastContainer label="신청이 취소 되었습니다" error={false} />}
-    </>
+    </div>
   );
 };
 

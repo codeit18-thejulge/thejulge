@@ -31,12 +31,12 @@ const RecentList = () => {
     .slice(0, 6);
 
   return (
-    <div className="pb-80 pt-40 tablet:pt-60">
+    <div className="py-40 tablet:py-60">
       <h2 className="mb-32 text-20 font-bold tablet:text-28">최근에 본 공고</h2>
       {jobs.length === 0 ? (
         <div className="min-h-100 text-center text-20 font-bold">최근 본 공고가 없습니다.</div>
       ) : (
-        <div className="grid grid-cols-2 gap-12 desktop:grid-cols-3">
+        <div className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14">
           {jobs.map((job) => (
             <Link href={`/jobinfo/${job?.shop.item.id}/${job?.id}`} key={job?.id}>
               <Post

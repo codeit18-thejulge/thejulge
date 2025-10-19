@@ -37,8 +37,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 const JobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: jobData, isPending } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   return (
-    <div className="bg-gray-5 pt-40 desktop:pt-60">
-      <div className="mx-auto min-w-375 max-w-1080 px-12 tablet:w-full tablet:px-32 desktop:w-1080">
+    <div className="bg-gray-5">
+      <div className="mx-auto flex max-w-375 flex-col tablet:max-w-680 desktop:max-w-964">
         <JobDetail shopId={shopId} noticeId={noticeId} jobData={jobData} isPending={isPending} />
         <RecentList />
       </div>
