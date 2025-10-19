@@ -7,11 +7,12 @@ import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery
 import { NoticeSort, SeoulAddress } from "@/types/global";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import SelectBar from "./_components/SelectBar";
+import RecommendJobs from "./_components/RecommedJobs";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
@@ -72,19 +73,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     },
   );
 
-  const sortedRecommedData = recommendData?.items.sort((a, b) => {
-    const A = new Date(a.item.startsAt);
-    const B = new Date(b.item.startsAt);
-    return B.getTime() - A.getTime();
-  });
-
   const hasJobData = jobData?.items && jobData.items.length > 0;
-  const hasRecommendData = recommendData?.items && recommendData.items.length > 0;
-  const hasUserAddress = !!userData?.item?.address;
-  const isEmployee = userData?.item?.type === "employee";
-  const isGuest = userData?.item?.type === undefined;
-  const isKeywordEmpty = !keyword || keyword?.trim() === "";
-  const recommendShow = isGuest || (isKeywordEmpty === true && isEmployee) ? true : false;
 
   const handleApplyFilter = (newFilters: getNoticesRequest) => {
     const cleanFilters = Object.fromEntries(
@@ -147,62 +136,28 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
     return <LoadingSpinner />;
   }
   if (isError) {
-    return <div>공고를 불러오는 중에 오류가 발생했습니다.</div>;
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex flex-col items-center text-20 font-bold tablet:text-28">
+          <p>공고를 불러오는 중에 오류가 발생했습니다.</p>
+          <Link href={"/"} className="text-primary">
+            메인페이지로 돌아가기
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
-      {recommendShow ? (
-        <div className="bg-red-10">
-          <div className="mx-auto pl-12 mobile:max-w-350 tablet:max-w-678 tablet:pl-0 desktop:max-w-964">
-            <h1 className="pt-60 text-20 font-bold tablet:text-28">맞춤 공고</h1>
-            {userId ? (
-              isUserDataLoading ? (
-                <div className="flex justify-center pb-100 pt-40">
-                  <LoadingSpinner />
-                </div>
-              ) : hasUserAddress ? (
-                isRecommendDataLoading ? (
-                  <div className="flex justify-center pb-100 pt-40">
-                    <LoadingSpinner />
-                  </div>
-                ) : hasRecommendData ? (
-                  <div className="scrollbar-hide flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
-                    {sortedRecommedData?.map((data) => (
-                      <div key={data.item.id} className="flex-shrink-0">
-                        <Link href={`/jobinfo/${data.item.shop.item.id}/${data.item.id}`}>
-                          <Post
-                            {...data.item}
-                            {...data.item.shop.item}
-                            address={data.item.shop.item.address1 as SeoulAddress}
-                            className="tablet:h-348 tablet:w-312"
-                          />
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex justify-center pb-100 pt-40">
-                    <p className="text-14 font-bold tablet:text-20">
-                      아쉽지만, 고객님 주소 주변에는 알바를 구하는 가게가 없습니다😔
-                    </p>
-                  </div>
-                )
-              ) : (
-                <div className="flex justify-center pb-100 pt-40">
-                  <p className="text-14 font-bold tablet:text-20">프로필 등록을 해서 주소 맞춤 공고를 확인해보세요!</p>
-                </div>
-              )
-            ) : (
-              <div className="flex justify-center pb-100 pt-40">
-                <p className="text-14 font-bold tablet:text-20">
-                  로그인과 프로필 등록을 해서 맞춤 공고를 확인해보세요!
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : null}
+      <RecommendJobs
+        userData={userData}
+        isUserDataLoading={isUserDataLoading}
+        recommendData={recommendData}
+        isRecommendDataLoading={isRecommendDataLoading}
+        keyword={keyword}
+        userId={userId}
+      />
       {hasJobData ? (
         <div className="mx-auto mb-40 mt-60 px-12 mobile:max-w-375 tablet:max-w-678 tablet:px-0 desktop:max-w-964">
           <div className="mb-16 flex flex-col items-start justify-start gap-16 tablet:mb-40 tablet:flex-row tablet:items-center tablet:justify-between">
