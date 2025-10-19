@@ -4,6 +4,7 @@ import { UserItem, UserInfoItem } from "@/types/global";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import Button from "@/components/Button";
+import { ResultStatus } from "@/types/global";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
@@ -25,8 +26,8 @@ interface TableRowProps {
   error?: boolean;
   isState?: string;
   handleApplicationClick?: (jobId: string) => void;
-  handleRejectClick?: (approval: "rejected" | "accepted", sendId: string) => void;
-  handleAcceptClick?: (approval: "rejected" | "accepted", sendId: string) => void;
+  handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
+  handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
   handleVolunteerClick?: (volunteerId: string) => void;
 }
 
@@ -40,9 +41,13 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
   const toggleLine = useRef<HTMLTableRowElement>(null);
 
   const handleLineOpenClick = () => {
-    if (toggleLine.current) {
-      setIsOpen((prev) => !prev);
-    }
+    const line = document.querySelectorAll<HTMLTableRowElement>("tbody tr");
+    setIsOpen((prev) => !prev);
+    line.forEach((item) => {
+      if (!item.classList.contains("false")) {
+        item.classList.remove(tableStyle.open);
+      }
+    });
   };
 
   const jobId = item?.notice.item.id;
@@ -56,21 +61,22 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
     return (
       <tr
         ref={toggleLine}
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
           e.stopPropagation();
           handleLineOpenClick();
         }}
+        className={`${isOpen && tableStyle.open} ${tableStyle.employerOrder}`}
       >
         <td>{user.item.name}</td>
         <td>
-          <p className={`${tableStyle.overText} ${isOpen && tableStyle.open}`}>{user.item.bio || "-"}</p>
+          <p className={tableStyle.overText}>{user.item.bio || "-"}</p>
         </td>
         <td>{formatPhoneNumber(user.item.phone || "-")}</td>
         <td>
           {item.status === "pending" ? (
             <div className={tableStyle.btnGroup}>
               <Button
-                className={cn("border-primary text-primary", BUTTON_STYLE)}
+                className={cn(BUTTON_STYLE)}
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
@@ -105,6 +111,7 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
           e.stopPropagation();
           handleRowClick(jobId);
         }}
+        className={tableStyle.employeeOrder}
       >
         <td>{shop.item.name}</td>
         <td>
