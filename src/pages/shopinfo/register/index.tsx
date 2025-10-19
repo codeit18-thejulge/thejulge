@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "../_components/RegisterForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import ModalWrapper, { ModalProps, ModalType, getModalContent } from "../../../components/ModalWrapper";
 import { usePostShopQuery } from "@/hooks/api/shop/usePostShopQuery";
 import useCheckAuth from "@/hooks/useCheckAuth";
+import { getCookieValue } from "@/utils/getCookie";
 
 const RegisterJobinfo = () => {
   useCheckAuth("employer");
@@ -52,6 +53,13 @@ const RegisterJobinfo = () => {
   const handleCloseClick = () => {
     handleOpenModal("action", "가게 등록을 취소하시겠습니까?", () => router.push(`/shopinfo`));
   };
+
+  useEffect(() => {
+    const shopId = getCookieValue(document.cookie, "shopId");
+    if (shopId) {
+      router.replace(`/shopinfo/${shopId}`);
+    }
+  }, [router]);
 
   return (
     <div className="bg-gray-5">
