@@ -32,6 +32,8 @@ const config: Config = {
         white: "var(--white)",
         black: "var(--black)",
         primary: "var(--primary)",
+        secondary: "var(--secondary)",
+        third: "var(--third)",
         "black-overlay": "rgba(0, 0, 0, 0.7)",
         gray: {
           5: "var(--gray-5)",

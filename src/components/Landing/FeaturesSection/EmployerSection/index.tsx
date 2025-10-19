@@ -29,7 +29,7 @@ const EmployerSection = () => {
 
         <Button
           status="filled"
-          className="mt-24 max-w-300 py-16 text-20-bold transition hover:bg-red-40"
+          className="hover:bg-third mt-24 max-w-300 py-16 text-20-bold transition"
           onClick={handleShopClick}
         >
           등록 하러가기
