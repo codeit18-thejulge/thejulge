@@ -33,14 +33,21 @@ const postShopApplication = async ({
   return response.data;
 };
 
-export const usePostShopApplicationQuery = () => {
+export const usePostShopApplicationQuery = (options?: {
+  onMutate?: () => void;
+  onSuccess?: (data: PostShopApplicationResponse) => void;
+  onError?: (error: unknown) => void;
+}) => {
   return useMutation({
     mutationFn: postShopApplication,
+    onMutate: options?.onMutate,
     onSuccess: (res) => {
       console.log(res);
+      options?.onSuccess?.(res);
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
+      options?.onError?.(err);
     },
   });
 };
