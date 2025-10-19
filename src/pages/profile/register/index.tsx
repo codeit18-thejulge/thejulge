@@ -74,14 +74,32 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === "phone") {
+      const hasInvalidChars = /[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/.test(value);
+
+      if (hasInvalidChars) {
+        setPhoneError("숫자(0-9)만 입력 가능합니다.");
+      } else if (phoneError.includes("13자리")) {
+      } else {
+        setPhoneError("");
+      }
+
       const formatted = formatPhoneNumber(value);
       return setProfileData((prev) => ({ ...prev, [name]: formatted }));
     }
     setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhoneBlur = () => {
+    if (profileData.phone.length > 0 && profileData.phone.length < 13) {
+      setPhoneError("연락처를 13자리(010-1234-5678)에 맞게 입력해 주세요.");
+    } else {
+      setPhoneError("");
+    }
   };
 
   const handleAddressChange = (option: Option) => {
@@ -126,12 +144,13 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   }, [userInfo]);
 
   useEffect(() => {
-    if (profileData?.name && profileData?.phone && profileData?.address) {
+    const { name, phone, address } = profileData;
+    if (name && phone?.length === 13 && address && !phoneError) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
-  }, [profileData]);
+  }, [profileData, phoneError]);
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-32 px-24 py-60">
@@ -148,14 +167,21 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
               <span>이름</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
+            <Input name="name" value={profileData?.name} />
           </div>
           <div>
             <label className="text-16-regular">
               <span>연락처</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="phone" value={profileData?.phone} onChange={handleProfileChange} />
+            <Input
+              name="phone"
+              value={profileData?.phone}
+              onChange={handleProfileChange}
+              onBlur={handlePhoneBlur}
+              errorMsg={phoneError}
+              maxLength={13}
+            />
           </div>
           <div>
             <label className="text-16-regular">
