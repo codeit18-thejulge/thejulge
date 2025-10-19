@@ -9,7 +9,7 @@ interface ButtonSetting {
   className: string;
 }
 
-interface MessageModalProps {
+export interface MessageModalProps {
   isOpen: boolean;
   icon?: React.ReactNode;
   message: string;
