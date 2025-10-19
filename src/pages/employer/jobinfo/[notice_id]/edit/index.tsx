@@ -6,27 +6,22 @@ import { useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalContent";
+import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getCookieValue } from "@/utils/getCookie";
+import { checkAuthSSR } from "@/utils/checkAuth";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { redirect } = checkAuthSSR(context, "employer", true);
+  if (redirect) {
+    return { redirect };
+  }
   const cookie = context.req.headers.cookie;
-  const userId = getCookieValue(cookie, "userId") || "";
   const shopId = getCookieValue(cookie, "shopId") || "";
   const noticeId = context.params?.notice_id as string;
 
-  if (!userId) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
   const queryClient = new QueryClient();
-
   await queryClient.prefetchQuery({
     queryKey: ["getShopNoticeDetail", shopId, noticeId],
     queryFn: () => getShopNoticeDetail({ shopId, noticeId }),
@@ -73,7 +68,9 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
           );
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => router.push(`/employer/jobinfo/${noticeId}`));
+          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => {
+            setIsModalOpen(false);
+          });
         },
       },
     );

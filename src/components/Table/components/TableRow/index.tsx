@@ -51,9 +51,9 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
   };
 
   const jobId = item?.notice.item.id;
-
-  const handleRowClick = (jobId: string) => {
-    handleApplicationClick?.(jobId);
+  const shopId = item?.shop.item.id;
+  const handleRowClick = (shopId: string, jobId: string) => {
+    handleApplicationClick?.(shopId, jobId);
   };
 
   if (userType === "employer") {
@@ -109,7 +109,7 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
       <tr
         onClick={(e) => {
           e.stopPropagation();
-          handleRowClick(jobId);
+          handleRowClick(shopId, jobId);
         }}
         className={tableStyle.employeeOrder}
       >

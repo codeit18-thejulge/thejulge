@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 import * as pxToRemModule from "tailwindcss-preset-px-to-rem";
+import scrollbarHide from "tailwind-scrollbar-hide";
 
 const pxToRem = pxToRemModule.default ?? pxToRemModule;
 
@@ -62,6 +63,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [scrollbarHide],
 };
 export default config;
