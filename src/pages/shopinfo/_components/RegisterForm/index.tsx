@@ -51,8 +51,8 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     const payInput = e.target.value.replace(/,/g, "");
     if (/^\d*$/.test(payInput)) {
       const num = payInput === "" ? 0 : Number(payInput);
-      setFormData((prev) => ({ ...prev, originalHourlyPay: num }));
-      setDisplayPay(payInput);
+      setFormData((prev) => ({ ...prev, hourlyPay: num }));
+      setDisplayPay(num.toLocaleString("ko-KR"));
     }
   };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
