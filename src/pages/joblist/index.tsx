@@ -36,7 +36,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { query } = router;
-  const [openFilter, setOpenFilter] = useState(false);
   const page = Number(query.page) || 1;
   const sort = (query.sort as NoticeSort) || "time";
   const { page: _page, sort: _sort, ...filterConditions } = query;
@@ -83,18 +82,14 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   const hasRecommendData = recommendData?.items && recommendData.items.length > 0;
   const hasUserAddress = !!userData?.item?.address;
   const isEmployee = userData?.item?.type === "employee";
+  const isGuest = userData?.item?.type === undefined;
   const isKeywordEmpty = !keyword || keyword?.trim() === "";
-  const recommendShow = isEmployee && isKeywordEmpty;
-
-  const handleFilterToggle = () => {
-    setOpenFilter((prev) => !prev);
-  };
+  const recommendShow = isGuest || (isKeywordEmpty === true && isEmployee) ? true : false;
 
   const handleApplyFilter = (newFilters: getNoticesRequest) => {
     const cleanFilters = Object.fromEntries(
       Object.entries(newFilters).filter(([_, v]) => v !== null && v !== ""),
     ) as getNoticesRequest;
-    setOpenFilter(false);
     router.push(
       {
         pathname: router.pathname,
@@ -172,7 +167,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
                     <LoadingSpinner />
                   </div>
                 ) : hasRecommendData ? (
-                  <div className="flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
+                  <div className="scrollbar-hide flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
                     {sortedRecommedData?.map((data) => (
                       <div key={data.item.id} className="flex-shrink-0">
                         <Link href={`/jobinfo/${data.item.shop.item.id}/${data.item.id}`}>
@@ -218,14 +213,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
             ) : (
               <h2 className="text-20 font-bold tablet:text-28">전체 공고</h2>
             )}
-            <SelectBar
-              sort={sort}
-              openFilter={openFilter}
-              onCloseFilter={() => setOpenFilter(false)}
-              onSortChange={handleSortChange}
-              onFilterToggle={handleFilterToggle}
-              onApplyFilter={handleApplyFilter}
-            />
+            <SelectBar sort={sort} onSortChange={handleSortChange} onApplyFilter={handleApplyFilter} />
           </div>
           <div className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14">
             {jobData?.items.map((data) => (
@@ -244,14 +232,7 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
         <div className="mx-auto mt-40 pl-12 mobile:max-w-350 tablet:max-w-678 tablet:pl-0 desktop:max-w-964">
           <div className="flex justify-between">
             <h2 className="text-20 font-bold tablet:text-28">전체 공고</h2>
-            <SelectBar
-              sort={sort}
-              openFilter={openFilter}
-              onCloseFilter={() => setOpenFilter(false)}
-              onSortChange={handleSortChange}
-              onFilterToggle={handleFilterToggle}
-              onApplyFilter={handleApplyFilter}
-            />
+            <SelectBar sort={sort} onSortChange={handleSortChange} onApplyFilter={handleApplyFilter} />
           </div>
           <div className="mt-100 flex justify-center">
             <p className="text-14 font-bold tablet:text-20">조건에 맞는 공고가 없습니다.</p>
