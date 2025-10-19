@@ -83,7 +83,6 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
 
       if (hasInvalidChars) {
         setPhoneError("숫자(0-9)만 입력 가능합니다.");
-      } else if (phoneError.includes("13자리")) {
       } else {
         setPhoneError("");
       }
@@ -96,7 +95,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
 
   const handlePhoneBlur = () => {
     if (profileData.phone.length > 0 && profileData.phone.length < 13) {
-      setPhoneError("연락처를 13자리(010-1234-5678)에 맞게 입력해 주세요.");
+      setPhoneError("연락처를 13자리에 맞게 입력해 주세요.");
     } else {
       setPhoneError("");
     }
