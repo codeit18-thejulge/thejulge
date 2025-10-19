@@ -7,7 +7,6 @@ import { SEOUL_ADDRESS_OPTIONS } from "@/constants/SEOUL_ADDRESS";
 import { SHOP_CATEGORY_OPTIONS } from "@/constants/SHOP_CATEGORY";
 import { PostShopRequest } from "@/hooks/api/shop/usePostShopQuery";
 import { Option } from "@/types/global";
-import { cn } from "@/utils";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
 import { usePostPresignedURLQuery } from "@/hooks/api/image/usePostPresignedURLQuery";
@@ -18,8 +17,8 @@ const DEFAULT_IMAGE_PATH = "/images/img_shopdefault.jpg";
 
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
+const inputStyle = "rounded-md bg-white";
 
-// FormData의 category, address1은 초기값 때문에 옵셔널로 지정
 export type FormData = Omit<PostShopRequest, "category" | "address1"> & {
   category?: PostShopRequest["category"];
   address1?: PostShopRequest["address1"];
@@ -105,7 +104,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
         const blob = await response.blob();
         const file = new File([blob], "default_shop.jpg", { type: blob.type });
 
-        // uploadImageS3
+        // upload Image to S3
         const { item } = await postPresignedURL({ name: file.name });
         await putImage({ presignedURL: item.url, file });
         const cleanUrl = item.url.split("?")[0];
@@ -125,8 +124,8 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     <>
       <form className="flex flex-col gap-32" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-x-20 gap-y-24 tablet:[grid-template-columns:repeat(auto-fit,minmax(330px,1fr))]">
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>가게 이름</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>가게 이름</span>
             <Input
               name="name"
               type="text"
@@ -136,27 +135,27 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
               onBlur={handleNameBlur}
               errorMsg={errMSg.name}
               required
-              className="rounded-md bg-white"
+              className={inputStyle}
             />
           </label>
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>분류</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>분류</span>
             <SelectBox
               options={SHOP_CATEGORY_OPTIONS}
               onChange={handleSelectChange("category")}
               placeholder={formData.category ?? "선택"}
             />
           </label>
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>주소</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>주소</span>
             <SelectBox
               options={SEOUL_ADDRESS_OPTIONS}
               onChange={handleSelectChange("address1")}
               placeholder={formData.address1 ?? "선택"}
             />
           </label>
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>상세 주소</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>상세 주소</span>
             <Input
               name="address2"
               type="text"
@@ -166,11 +165,11 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
               onBlur={handleAddress2Blur}
               errorMsg={errMSg.address2}
               required
-              className="rounded-md bg-white"
+              className={inputStyle}
             />
           </label>
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>기본 시급</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>기본 시급</span>
             <Input
               name="originalHourlyPay"
               type="text"
@@ -180,11 +179,11 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
               errorMsg={errMSg.originalHourlyPay}
               isUnit="원"
               required
-              className="rounded-md bg-white"
+              className={inputStyle}
             />
           </label>
         </div>
-        <div className={cn(labelStyle)}>
+        <div className={labelStyle}>
           <span>가게 이미지</span>
           <div className="relative w-full tablet:w-fit">
             <RegisterImage initialUrl={formData.imageUrl} onUploaded={handleImageChange} />
@@ -200,7 +199,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             )}
           </div>
         </div>
-        <label className={cn(labelStyle)}>
+        <label className={labelStyle}>
           <span>공고 설명</span>
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
         </label>
