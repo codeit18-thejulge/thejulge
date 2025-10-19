@@ -1,26 +1,22 @@
 import SelectBox from "@/components/SelectBox";
 import { SORT_OPTIONS } from "@/constants/SORT_OPTIONS";
-import React from "react";
+import React, { useState } from "react";
 import Filter from "../Filter";
 import { getNoticesRequest } from "@/hooks/api/notice/useGetNoticesQuery";
 
 type SelectBarProps = {
   sort: string;
-  openFilter: boolean;
-  onCloseFilter: () => void;
   onSortChange: (option: { value: string; label: string }) => void;
-  onFilterToggle: () => void;
   onApplyFilter: (filters: getNoticesRequest) => void;
 };
 
-const SelectBar = ({
-  sort,
-  openFilter,
-  onCloseFilter,
-  onSortChange,
-  onFilterToggle,
-  onApplyFilter,
-}: SelectBarProps) => {
+const SelectBar = ({ sort, onSortChange, onApplyFilter }: SelectBarProps) => {
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const handleFilterToggle = () => {
+    setOpenFilter((prev) => !prev);
+  };
+
   return (
     <div className="relative flex gap-10">
       <SelectBox
@@ -31,8 +27,9 @@ const SelectBar = ({
         onChange={onSortChange}
       />
       <button
+        type="button"
         className="h-40 flex-shrink-0 rounded-5 bg-red-30 px-12 py-6 text-16 font-bold text-white"
-        onClick={onFilterToggle}
+        onClick={handleFilterToggle}
       >
         상세 필터
       </button>
@@ -40,7 +37,7 @@ const SelectBar = ({
         <div className="absolute right--1 top-50 z-50 tablet:right-0">
           <Filter
             isOpen={openFilter}
-            onClose={onCloseFilter}
+            onClose={handleFilterToggle}
             closeOnEsc={true}
             className={"bg-white"}
             onApply={onApplyFilter}

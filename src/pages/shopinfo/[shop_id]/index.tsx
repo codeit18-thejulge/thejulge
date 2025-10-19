@@ -100,7 +100,7 @@ const ShopInfoDetail = ({ shopId }: InferGetServerSidePropsType<typeof getServer
   return (
     <div>
       <div className="mx-auto my-40 flex max-w-351 flex-col gap-16 tablet:my-60 tablet:max-w-680 tablet:gap-24 desktop:max-w-964">
-        <h1 className="text-20 font-bold tablet:text-28">내가게</h1>
+        <h1 className="text-20 font-bold tablet:text-28">내 가게</h1>
         <div className="flex flex-col rounded-12 bg-red-10 p-20 tablet:p-24 desktop:flex-row desktop:gap-31">
           <CardImageBox
             imageUrl={shopInfo?.item.imageUrl ?? ""}
