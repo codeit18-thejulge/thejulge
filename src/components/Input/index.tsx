@@ -8,7 +8,7 @@ interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
 }
 
 const inputStyle = {
-  basic: "w-full border-solid border rounded-md h-58 border-gray-30",
+  basic: "w-full border-solid border rounded-md h-58 border-gray-30 bg-white",
   error: "border-red-40",
   pay: "flex justify-between",
 };
