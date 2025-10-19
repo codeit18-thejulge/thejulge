@@ -16,6 +16,13 @@ import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import Layout from "@/components/Layout";
 import { getCookieValue } from "@/utils/getCookie";
 
+type RegisterData = {
+  name: string;
+  phone: string;
+  address: SeoulAddress | undefined;
+  bio?: string;
+};
+
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
   const userId = getCookieValue(cookie, "userId");
@@ -56,9 +63,14 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const router = useRouter();
 
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo, isError, isSuccess } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isSuccess } = usePutMyInfoQuery();
 
-  const [profileData, setProfileData] = useState<Partial<UserInfoItem> | undefined>({});
+  const [profileData, setProfileData] = useState<RegisterData>({
+    name: "",
+    phone: "",
+    address: undefined,
+    bio: "",
+  });
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -97,16 +109,19 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
       setModalMessage("프로필 등록이 완료되었습니다");
       setIsOpenModal(true);
     }
-
-    if (isError) {
-      setModalMessage("프로필 등록을 실패했습니다");
-      setIsOpenModal(true);
-    }
-  }, [isSuccess, isError]);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (userInfo?.item) {
-      setProfileData(userInfo.item);
+      const { name, phone, address, bio } = userInfo.item;
+      const newProfileData = {
+        name: name ?? "",
+        phone: phone ?? "",
+        address: address,
+        bio: bio ?? "",
+      };
+
+      setProfileData(newProfileData);
     }
   }, [userInfo]);
 
