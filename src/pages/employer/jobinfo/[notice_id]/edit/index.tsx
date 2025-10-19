@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "@/pages/employer/jobinfo/_components/RegisterForm";
 import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
 import { getShopNoticeDetail, useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -38,7 +38,7 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 
 const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-  const { data: jobinfoData, isPending: isGetLoading } = useGetShopNoticeDetailQuery({ shopId, noticeId });
+  const { data: jobinfoData, isPending: isGetPending } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   const { mutate: putShopNotice, isPending: isPutPending } = usePutShopNoticeDetailQuery();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,7 +80,16 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
     handleOpenModal("action", "수정을 취소하시겠습니까?", () => router.push(`/employer/jobinfo/${noticeId}`));
   };
 
-  if (isGetLoading || !jobinfoData) {
+  useEffect(() => {
+    if (!isGetPending && jobinfoData) {
+      const writerId = jobinfoData.item.shop.item.id;
+      if (writerId !== shopId) {
+        router.replace("/joblist");
+      }
+    }
+  }, [isGetPending, jobinfoData, router, shopId]);
+
+  if (isGetPending || !jobinfoData) {
     return (
       <div className="flex h-[100dvh] items-center justify-center">
         <LoadingSpinner />
