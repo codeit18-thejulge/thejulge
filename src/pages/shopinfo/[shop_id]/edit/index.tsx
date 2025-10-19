@@ -3,14 +3,14 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getShopInfo, useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInfoQuery";
 import { usePutShopInfoQuery } from "@/hooks/api/shop/usePutShopInfoQuery";
 import RegisterForm, { FormData } from "@/pages/shopinfo/_components/RegisterForm";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { useRouter } from "next/router";
 import { getCookieValue } from "@/utils/getCookie";
 import { checkAuthSSR } from "@/utils/checkAuth";
+import { useModal } from "@/hooks/useModal";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const { redirect } = checkAuthSSR(context, "employer", true);
@@ -36,14 +36,7 @@ const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof get
   const { data: shopData, isPending: isGetPending } = useGetShopInfoQuery(shopId);
   const { mutate: updateShop, isPending: isPutPending } = usePutShopInfoQuery();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<ModalProps>({ message: "", buttons: [] });
-
-  const handleOpenModal = (type: ModalType, message: string, onConfirm: () => void) => {
-    const content = getModalContent({ type, message, onConfirm, onClose: () => setIsModalOpen(false) });
-    setModalData(content);
-    setIsModalOpen(true);
-  };
+  const { openModal, closeModal } = useModal();
 
   const handleSubmit = (data: FormData) => {
     if (!data.category || !data.address1) {
@@ -53,17 +46,20 @@ const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof get
       { shopId, data: { ...data, id: shopId, category: data.category, address1: data.address1 } },
       {
         onSuccess: () => {
-          handleOpenModal("confirm", "가게 정보 수정이 완료되었습니다.", () => router.replace(`/shopinfo/${shopId}`));
+          openModal("confirm", "가게 정보 수정이 완료되었습니다.", () => router.replace(`/shopinfo/${shopId}`), {
+            closeOnOverlayClick: false,
+            closeOnEsc: false,
+          });
         },
         onError: () => {
-          handleOpenModal("confirm", "가게 정보 수정에 실패했습니다.", () => router.push(`/shopinfo/${shopId}`));
+          openModal("confirm", "가게 정보 수정에 실패했습니다.", closeModal);
         },
       },
     );
   };
 
   const handleCloseClick = () => {
-    handleOpenModal("action", "가게 정보 수정을 취소하시겠습니까?", () => router.push(`/shopinfo/${shopId}`));
+    openModal("action", "가게 정보 수정을 취소하시겠습니까?", () => router.push(`/shopinfo/${shopId}`));
   };
 
   useEffect(() => {
@@ -103,12 +99,6 @@ const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof get
           onSubmit={handleSubmit}
           isPending={isPutPending}
           submitLabel="수정"
-        />
-        <ModalWrapper
-          isOpen={isModalOpen}
-          message={modalData.message}
-          onClose={() => setIsModalOpen(false)}
-          buttons={modalData.buttons}
         />
       </div>
     </div>
