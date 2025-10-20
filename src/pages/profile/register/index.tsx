@@ -75,6 +75,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [isOpenSelectBox, setIsOpenSelectBox] = useState(false);
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -188,6 +189,8 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
               <span className="text-red-30">*</span>
             </label>
             <SelectBox
+              isOpen={isOpenSelectBox}
+              setIsOpen={setIsOpenSelectBox}
               onChange={handleAddressChange}
               options={SEOUL_ADDRESS_OPTIONS}
               placeholder={profileData?.address}
