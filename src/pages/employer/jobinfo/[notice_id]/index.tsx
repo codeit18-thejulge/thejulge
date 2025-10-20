@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
 import type { InferGetServerSidePropsType } from "next";
+import { useState } from "react";
 import JobInfoCard from "../../_components/JobInfoCard";
 import JobInfoTable from "../../_components/JobInfoTable";
 import MessageModal from "@/components/Modal/MessageModal";
 import { usePutShopApplicationQuery } from "@/hooks/api/application/usePutShopApplicationQuery";
 import { useGetShopApplicationsQuery } from "@/hooks/api/application/useGetShopApplicationsQuery";
+import { useGetShopNoticeDetailQuery, getShopNoticeDetail } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
+import { ResultStatus } from "@/types/global";
 import IcCheck from "@/assets/svgs/ic_check.svg";
-import Image from "next/image";
-import IcNullBody from "@/assets/svgs/ic_exc.png";
 import { GetServerSidePropsContext } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import Layout from "@/components/Layout";
 import { ReactNode } from "react";
+import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
@@ -27,11 +28,17 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
       },
     };
   }
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["getShopNoticeDetail", shopId, noticeId],
+    queryFn: () => getShopNoticeDetail({ shopId, noticeId }),
+  });
 
   return {
     props: {
       shopId,
       noticeId,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };
@@ -39,39 +46,48 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 const LIMIT = 5;
 
 const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const NOTICE_ID = noticeId;
-  const SHOP_ID = shopId as string;
-
   const [modalMessage, setModalMessage] = useState("");
-  const [approval, setApproval] = useState<"rejected" | "accepted" | undefined>(undefined);
+  const [approval, setApproval] = useState<ResultStatus | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false);
-  const [sandId, setSandId] = useState("");
+  const [sendId, setSendId] = useState("");
 
   const [page, setPage] = useState(1); //페이지네이션
-
-  const { data, isLoading, isError, error, refetch } = useGetShopApplicationsQuery({
-    shopId: SHOP_ID,
-    noticeId: NOTICE_ID,
+  const { data: shopData } = useGetShopNoticeDetailQuery(
+    { shopId, noticeId }
+  );
+  const {
+    data: appData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetShopApplicationsQuery({
+    shopId: shopId,
+    noticeId: noticeId,
     params: {
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
-    },
+    }
   });
 
-  const res = data?.items ?? [];
-  const totalCount = data?.count ?? 0; // 전체 항목 수
-  const hasNextPage = data?.hasNext ?? false; // 다음 페이지 여부
+  const shopInfo = shopData?.item; //가게 상세
+  const res = appData?.items ?? []; //지원자 목록
+  const totalCount = appData?.count ?? 0; // 전체 항목 수
+  const hasNextPage = appData?.hasNext ?? false; // 다음 페이지 여부
 
   const onHandlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
 
+  //모달 닫기
   const handleClose = () => {
     setIsOpen(!isOpen);
   };
 
-  const onModalMessage = (approval: "rejected" | "accepted") => {
+  // 승인 거절 받아서 모달 메세지 생성
+  const onModalMessage = (approval: ResultStatus, sendId: string) => {
     setApproval(approval);
+    setSendId(sendId);
     setIsOpen(true);
     if (approval === "rejected") {
       setModalMessage("신청을 거절하시겠어요?");
@@ -82,12 +98,12 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
 
   //===승인 거절
   const mutation = usePutShopApplicationQuery();
-  const handleSubmit = (sandId: string, status: "accepted" | "rejected") => {
+  const handleApprovalClick = (status: ResultStatus, sendId: string) => {
     mutation.mutate(
       {
-        shopId: data?.items[0].item.shop.item.id || "",
-        noticeId: data?.items[0].item.notice.item.id || "",
-        applicationId: sandId || "",
+        shopId: appData?.items[0].item.shop.item.id || "",
+        noticeId: appData?.items[0].item.notice.item.id || "",
+        applicationId: sendId || "",
         data: { status },
       },
       {
@@ -102,15 +118,6 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
     setIsOpen(false);
   };
 
-  const onHandleSandId = (sandId: string) => {
-    setSandId(sandId);
-  };
-
-  //승인 요청 보낼 아이디
-  useEffect(() => {
-    setSandId(sandId);
-  }, [sandId]);
-
   if (isError) {
     return <p>{error.message}</p>;
   }
@@ -118,35 +125,25 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
   return (
     <>
       <div className="px-12 tablet:px-32">
-        {!isLoading && res.length === 0 ? (
-          <div className="flex h-screen flex-col items-center justify-center gap-y-20">
-            <div className="w-1/2 max-w-200">
-              <Image src={IcNullBody} alt="" />
-            </div>
-            <p>아직 신청한 알바 직원이 없어요.</p>
-          </div>
-        ) : (
-          <>
-            <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-              <JobInfoCard res={res} bgColor={"bg-white"} />
-            </section>
-            <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-              <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
-              <JobInfoTable
-                res={res}
-                limit={LIMIT}
-                count={totalCount}
-                hasNext={hasNextPage}
-                activePage={page}
-                isLoading={isLoading}
-                error={isError}
-                onPageChange={onHandlePageChange}
-                onModalMessage={onModalMessage}
-                onHandleSandId={onHandleSandId}
-              />
-            </section>
-          </>
-        )}
+        <>
+          <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
+            <JobInfoCard res={shopInfo} bgColor={"bg-white"} noticeId={noticeId} />
+          </section>
+          <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
+            <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
+            <JobInfoTable
+              res={res}
+              limit={LIMIT}
+              count={totalCount}
+              hasNext={hasNextPage}
+              activePage={page}
+              isLoading={isLoading}
+              error={isError}
+              onPageChange={onHandlePageChange}
+              onModalMessage={onModalMessage}
+            />
+          </section>
+        </>
       </div>
 
       {isOpen && (
@@ -166,7 +163,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
               buttonText: "예",
               onClick: () => {
                 if (approval === "rejected" || approval === "accepted") {
-                  handleSubmit(sandId, approval);
+                  handleApprovalClick(approval, sendId);
                 }
               },
               style: "filled",

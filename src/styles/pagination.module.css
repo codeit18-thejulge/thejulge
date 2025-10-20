@@ -9,8 +9,9 @@
   justify-content: center;
   align-items: center;
   margin: 0 2px;
-  height: 2.5rem;
-  min-width: 2.5rem;
+  height: 2rem;
+  min-width: 2rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: background-color 0.3s;
   border-radius: 0.3125rem;
@@ -30,15 +31,28 @@
   border-color: #007bff;
 }
 
-.customBtn {
-  height: 2.25rem;
-  font-size: 2rem;
-}
-
 .hidden {
   display: none !important;
 }
 
 .disabled {
   color: var(--gray-30);
+}
+
+.customBtn {
+  height: 2rem;
+  font-size: 2rem;
+}
+
+@media all and (min-width: 744px) {
+  .pageItem {
+    height: 2.5rem;
+    min-width: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .customBtn {
+    height: 2.25rem;
+    font-size: 2rem;
+  }
 }
