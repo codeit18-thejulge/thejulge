@@ -49,5 +49,6 @@ export const useGetShopApplicationsQuery = ({ shopId, noticeId, params }: GetSho
   return useQuery({
     queryKey: ["getShopApplications", shopId, noticeId, params],
     queryFn: () => getShopApplications({ shopId, noticeId, params }),
+    refetchInterval: 30000,
   });
 };

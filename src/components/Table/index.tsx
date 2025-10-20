@@ -1,9 +1,12 @@
 import TableHeader from "./components/TableHeader";
 import TableRow from "./components/TableRow";
+import { ResultStatus } from "@/types/global";
 import { useState, useEffect } from "react";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import tableStyle from "@/styles/table.module.css";
+import Image from "next/image";
+import IcNullBody from "@/assets/svgs/ic_exc.png";
 
 const TABLE_HEADER = {
   employer: [
@@ -26,19 +29,12 @@ interface TableProps {
   isLoading?: boolean;
   error?: boolean;
   handleApplicationClick?: (shopId: string, jobId: string) => void;
-  onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
-  onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
-  onHandleSandId?: (sandId: string) => void;
+  handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
+  handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
+  handleVolunteerClick?: (volunteerId: string) => void;
 }
 
-const Table = ({
-  userType,
-  res,
-  onHandleRejectClick,
-  onHandleAcceptClick,
-  handleApplicationClick,
-  onHandleSandId,
-}: TableProps) => {
+const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleApplicationClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
   const [tableData, setTableData] = useState<
     GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
@@ -48,30 +44,44 @@ const Table = ({
     setTableData(res);
   }, [res]);
   return (
-    <div className="tableOver">
+    <div className="tableOver min-h-300 tablet:min-h-420">
       <table className={tableStyle.table}>
-        <colgroup>
+        <colgroup className={tableStyle.colgroup}>
           <col className="w-228" />
           <col className="w-300" />
           <col className="w-200" />
           <col className="w-162 tablet:w-220 desktop:w-236" />
         </colgroup>
-        <thead className={tableStyle.theadColor}>
+        <thead className={tableStyle.thead}>
           <TableHeader colTitle={headerTitles} />
         </thead>
-        <tbody>
-          {tableData?.map((item) => (
-            <TableRow
-              key={item.item.id}
-              item={item.item}
-              userType={userType}
-              handleApplicationClick={handleApplicationClick}
-              onHandleRejectClick={onHandleRejectClick}
-              onHandleAcceptClick={onHandleAcceptClick}
-              onHandleSandId={onHandleSandId}
-            />
-          ))}
-        </tbody>
+        {tableData.length === 0 ? (
+          <>
+            <tbody>
+              <tr className={tableStyle.nullLine}>
+                <td colSpan={4}>
+                  <div className={tableStyle.null}>
+                    <Image className="w-[15%] min-w-150" src={IcNullBody} alt="" />
+                    <p className="text-center">아직 신청한 알바 지원자가 없어요.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </>
+        ) : (
+          <tbody>
+            {tableData?.map((item) => (
+              <TableRow
+                key={item.item.id}
+                item={item.item}
+                userType={userType}
+                handleApplicationClick={handleApplicationClick}
+                handleRejectClick={handleRejectClick}
+                handleAcceptClick={handleAcceptClick}
+              />
+            ))}
+          </tbody>
+        )}
       </table>
     </div>
   );
