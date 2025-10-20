@@ -13,7 +13,7 @@ interface Props {
 }
 
 const icStyles = {
-  basic: "text-red-30 w-20 h-20",
+  basic: "text-primary w-20 h-20",
   closed: "text-gray-30",
 };
 
