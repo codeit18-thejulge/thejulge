@@ -19,7 +19,6 @@ const ApplicationLogSection = ({ userId }: Props) => {
 
   const { data, isLoading, isError, error } = useGetUserApplicationsQuery({ userId, params: { offset, limit: LIMIT } });
 
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   const handlePageChange = (pageNumber: number) => {
@@ -29,12 +28,6 @@ const ApplicationLogSection = ({ userId }: Props) => {
   const handleApplicationClick = (shopId: string, jobId: string) => {
     router.push(`/jobinfo/${shopId}/${jobId}`);
   };
-
-  useEffect(() => {
-    queryClient.invalidateQueries({
-      queryKey: ["getUserApplications", userId, { offset, limit: LIMIT }],
-    });
-  }, [userId, queryClient, offset]);
 
   if (isLoading) {
     return <LoadingSpinner />;
