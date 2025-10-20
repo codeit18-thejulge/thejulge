@@ -43,6 +43,7 @@ const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleAppl
   useEffect(() => {
     setTableData(res);
   }, [res]);
+
   return (
     <div className="tableOver min-h-300 tablet:min-h-420">
       <table className={tableStyle.table}>
@@ -56,18 +57,18 @@ const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleAppl
           <TableHeader colTitle={headerTitles} />
         </thead>
         {tableData.length === 0 ? (
-          <>
-            <tbody>
-              <tr className={tableStyle.nullLine}>
-                <td colSpan={4}>
-                  <div className={tableStyle.null}>
-                    <Image className="w-[15%] min-w-150" src={IcNullBody} alt="" />
-                    <p className="text-center">아직 신청한 알바 지원자가 없어요.</p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </>
+          <tbody>
+            <tr className={tableStyle.nullLine}>
+              <td colSpan={4}>
+                <div className={tableStyle.null}>
+                  <Image className="w-[15%] min-w-150" src={IcNullBody} alt="" />
+                  <p className="text-center">
+                    {userType === "employer" ? "아직 신청한 알바 지원자가 없어요." : "지원한 공고가 없어요"}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         ) : (
           <tbody>
             {tableData?.map((item) => (
