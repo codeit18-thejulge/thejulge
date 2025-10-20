@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApplicationItem, Link, NoticeItem, ShopItem, UserInfoItem, UserItem } from "@/types/global";
 import axios from "axios";
 
@@ -47,11 +47,12 @@ export const usePutShopApplicationQuery = (options?: {
   onSuccess?: (data: PutShopApplicationResponse) => void;
   onError?: (error: unknown) => void;
 }) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: putShopApplication,
     onMutate: options?.onMutate,
     onSuccess: (res) => {
-      console.log(res);
+      queryClient.invalidateQueries({ queryKey: ["getUserApplications"] });
       options?.onSuccess?.(res);
     },
     onError: (err) => {
