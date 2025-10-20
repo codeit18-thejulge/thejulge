@@ -9,12 +9,9 @@ import { PostShopRequest } from "@/hooks/api/shop/usePostShopQuery";
 import { Option } from "@/types/global";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
-import { usePostPresignedURLQuery } from "@/hooks/api/image/usePostPresignedURLQuery";
-import { usePutPresignedURLQuery } from "@/hooks/api/image/usePutPresignedURLQuery";
 import { cn } from "@/utils";
 
 const MINIMUM_WAGE = 10030;
-const DEFAULT_IMAGE_PATH = "/images/img_shopdefault.jpg";
 
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
@@ -51,9 +48,6 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     originalHourlyPay: "",
     imageUrl: "",
   });
-
-  const { mutateAsync: postPresignedURL } = usePostPresignedURLQuery();
-  const { mutateAsync: putImage } = usePutPresignedURLQuery();
 
   const handlePayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const payInput = e.target.value.replace(/,/g, "");
