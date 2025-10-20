@@ -31,7 +31,10 @@ const config: Config = {
       colors: {
         white: "var(--white)",
         black: "var(--black)",
-        primary: "var(--primary)",
+        error: "var(--red)",
+        primary: "var(--green-50)",
+        secondary: "var(--green-10)",
+        third: "var(--green-20)",
         "black-overlay": "rgba(0, 0, 0, 0.7)",
         gray: {
           5: "var(--gray-5)",
@@ -54,6 +57,10 @@ const config: Config = {
         green: {
           10: "var(--green-10)",
           20: "var(--green-20)",
+          30: "var(--green-30)",
+          40: "var(--green-40)",
+          50: "var(--green-50)",
+          60: "var(--green-60)",
         },
       },
       keyframes: {

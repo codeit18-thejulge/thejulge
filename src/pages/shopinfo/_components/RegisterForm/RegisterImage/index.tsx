@@ -3,13 +3,15 @@ import IcCamera from "@/assets/svgs/ic_camera.svg";
 import { usePostPresignedURLQuery } from "@/hooks/api/image/usePostPresignedURLQuery";
 import { usePutPresignedURLQuery } from "@/hooks/api/image/usePutPresignedURLQuery";
 import Image from "next/image";
+import { cn } from "@/utils";
 
 interface RegisterImageProps {
   onUploaded: (url: string) => void;
   initialUrl: string;
+  className?: string;
 }
 
-const RegisterImage = ({ onUploaded, initialUrl }: RegisterImageProps) => {
+const RegisterImage = ({ onUploaded, initialUrl, className }: RegisterImageProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState(initialUrl);
 
@@ -45,7 +47,10 @@ const RegisterImage = ({ onUploaded, initialUrl }: RegisterImageProps) => {
   return (
     <div
       onClick={handleClick}
-      className="relative flex h-276 w-full cursor-pointer items-center justify-center rounded-6 border border-gray-30 bg-gray-10 hover:bg-gray-20 active:border-gray-50 tablet:w-480"
+      className={cn(
+        "relative flex h-276 w-full cursor-pointer items-center justify-center rounded-6 border border-gray-30 bg-gray-10 hover:bg-gray-20 active:border-gray-50 tablet:w-480",
+        className,
+      )}
     >
       {previewUrl && (
         <Image src={previewUrl} alt="image preview" className="rounded-6 object-cover" sizes="100vw" fill />

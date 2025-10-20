@@ -2,8 +2,8 @@ import Button from "@/components/Button";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import imgPost1 from "@/assets/svgs/img_post1.png";
-import imgPost2 from "@/assets/svgs/img_post2.png";
+import imgPost1 from "/public/images/img_post1.png";
+import imgPost2 from "/public/images/img_post2.png";
 
 const EmployeeSection = () => {
   const router = useRouter();
@@ -12,7 +12,7 @@ const EmployeeSection = () => {
     router.push("/joblist");
   };
   return (
-    <section className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-24 px-16 py-80 tablet:flex-row">
+    <section className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-24 overflow-x-hidden px-16 py-80 tablet:flex-row">
       <div className="flex flex-col items-center justify-center gap-12 tablet:items-start">
         <h2 className="text-32 font-bold">이런 알바는 어때요?</h2>
         <p className="text-24">
@@ -21,7 +21,7 @@ const EmployeeSection = () => {
 
         <Button
           status="filled"
-          className="mt-24 max-w-300 py-16 text-20-bold transition hover:bg-red-40"
+          className="hover:bg-green-40 mt-24 max-w-300 py-16 text-20-bold transition"
           onClick={handleJobClick}
         >
           공고 보러가기
