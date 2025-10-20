@@ -50,7 +50,7 @@ const PayBadge = ({
         )}
         {...props}
       >
-        <div className={cn(payDifference > 1 ? "visible" : "invisible")}>
+        <div className={cn(payDifference > 0 ? "visible" : "invisible")}>
           <div
             className={cn(
               "absolute h-full w-full rounded-20",
