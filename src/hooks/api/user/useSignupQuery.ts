@@ -23,10 +23,7 @@ export const useSignupQuery = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: postSignup,
-    onSuccess: () => {
-      alert("가입이 완료되었습니다.");
-      router.replace("/signin");
-    },
+    onSuccess: () => {},
     onError: () => {},
   });
 };
