@@ -30,7 +30,7 @@ const RecommendJobs = ({
   const isKeywordEmpty = !keyword || keyword?.trim() === "";
   const recommendShow = isGuest || (isKeywordEmpty === true && isEmployee) ? true : false;
 
-  const sortedRecommedData = recommendData?.items.sort((a, b) => {
+  const sortedRecommendData = recommendData?.items.sort((a, b) => {
     const A = new Date(a.item.startsAt);
     const B = new Date(b.item.startsAt);
     return B.getTime() - A.getTime();
@@ -38,7 +38,7 @@ const RecommendJobs = ({
   return (
     <>
       {recommendShow ? (
-        <div className="bg-red-10">
+        <div className="h-541 bg-green-20">
           <div className="mx-auto pl-12 mobile:max-w-350 tablet:max-w-678 tablet:pl-0 desktop:max-w-964">
             <h1 className="pt-60 text-20 font-bold tablet:text-28">맞춤 공고</h1>
             {userId ? (
@@ -52,8 +52,8 @@ const RecommendJobs = ({
                     <LoadingSpinner />
                   </div>
                 ) : hasRecommendData ? (
-                  <div className="scrollbar-hide flex gap-4 overflow-x-scroll pb-60 pt-31 tablet:gap-10">
-                    {sortedRecommedData?.map((data) => (
+                  <div className="flex gap-4 overflow-x-scroll pb-60 pt-31 scrollbar-hide tablet:gap-10">
+                    {sortedRecommendData?.map((data) => (
                       <div key={data.item.id} className="flex-shrink-0">
                         <Link href={`/jobinfo/${data.item.shop.item.id}/${data.item.id}`}>
                           <Post
@@ -67,20 +67,20 @@ const RecommendJobs = ({
                     ))}
                   </div>
                 ) : (
-                  <div className="flex justify-center pb-100 pt-40">
-                    <p className="text-14 font-bold tablet:text-20">
+                  <div className="flex justify-center pt-125">
+                    <p className="text-18 font-bold tablet:text-26">
                       아쉽지만, 고객님 주소 주변에는 알바를 구하는 가게가 없습니다😔
                     </p>
                   </div>
                 )
               ) : (
-                <div className="flex justify-center pb-100 pt-40">
-                  <p className="text-14 font-bold tablet:text-20">프로필 등록을 해서 주소 맞춤 공고를 확인해보세요!</p>
+                <div className="flex justify-center pt-125">
+                  <p className="text-18 font-bold tablet:text-26">프로필 등록을 해서 주소 맞춤 공고를 확인해보세요!</p>
                 </div>
               )
             ) : (
-              <div className="flex justify-center pb-100 pt-40">
-                <p className="text-14 font-bold tablet:text-20">
+              <div className="flex justify-center pt-125">
+                <p className="text-18 font-bold tablet:text-26">
                   로그인과 프로필 등록을 해서 맞춤 공고를 확인해보세요!
                 </p>
               </div>
