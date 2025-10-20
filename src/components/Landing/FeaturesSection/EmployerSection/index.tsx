@@ -1,13 +1,13 @@
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import ImgJob from "@/assets/svgs/img_job.png";
+import ImgJob from "/public/images/img_job.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
 const EmployerSection = () => {
   const router = useRouter();
   const handleShopClick = () => {
-    router.push("/shopinfo/register"); // 해당페이지에서 로그인검사 -> 로그인페이지로 리다이렉트
+    router.push("/shopinfo/register");
   };
 
   return (

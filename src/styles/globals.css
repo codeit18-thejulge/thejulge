@@ -25,9 +25,12 @@
   --blue-10: #cce6ff;
   --blue-20: #0080ff;
 
-  --primary: #20a81e;
-  --secondary: #d4f7d4;
-  --third: #4eca41;
+  --green-10: #e4f6f4;
+  --green-20: #daefeb;
+  --green-30: #bce4de;
+  --green-40: #94d2c9;
+  --green-50: #5caba6;
+  --green-60: #20706d;
 }
 
 @layer utilities {
