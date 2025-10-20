@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { dehydrate, QueryClient, useQueryClient } from "@tanstack/react-query";
 import { getShopInfo, useGetShopInfoQuery } from "@/hooks/api/shop/useGetShopInfoQuery";
 import { usePutShopInfoQuery } from "@/hooks/api/shop/usePutShopInfoQuery";
 import RegisterForm, { FormData } from "@/pages/shopinfo/_components/RegisterForm";
@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
 const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: shopData, isPending: isGetPending } = useGetShopInfoQuery(shopId);
   const { mutate: updateShop, isPending: isPutPending } = usePutShopInfoQuery();
@@ -46,6 +47,7 @@ const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof get
       { shopId, data: { ...data, id: shopId, category: data.category, address1: data.address1 } },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getShopInfo", shopId] });
           openModal("confirm", "가게 정보 수정이 완료되었습니다.", () => router.replace(`/shopinfo/${shopId}`), {
             closeOnOverlayClick: false,
             closeOnEsc: false,
