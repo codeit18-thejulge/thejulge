@@ -41,16 +41,16 @@ const PayBadge = ({
 
   return (
     <>
-      {payDifference > 0 && (
-        <div
-          className={cn(
-            "relative flex max-w-fit items-center text-12-regular leading-none tablet:text-14-bold",
-            post && closed ? "text-gray-10" : "text-red-40 tablet:text-white",
-            !post && !closed && "text-white tablet:text-white",
-            !post && closed && "hidden",
-          )}
-          {...props}
-        >
+      <div
+        className={cn(
+          "relative flex max-w-fit items-center text-12-regular leading-none tablet:text-14-bold",
+          post && closed ? "text-gray-10" : "text-red-40 tablet:text-white",
+          !post && !closed && "text-white tablet:text-white",
+          !post && closed && "hidden",
+        )}
+        {...props}
+      >
+        <div className={cn(payDifference > 1 ? "visible" : "invisible")}>
           <div
             className={cn(
               "absolute h-full w-full rounded-20",
@@ -73,7 +73,7 @@ const PayBadge = ({
             <div className="w-12 tablet:w-14">{icon}</div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
