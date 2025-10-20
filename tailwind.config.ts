@@ -31,6 +31,7 @@ const config: Config = {
       colors: {
         white: "var(--white)",
         black: "var(--black)",
+        error: "var(--red)",
         primary: "var(--green-50)",
         secondary: "var(--green-10)",
         third: "var(--green-40)",
