@@ -2,7 +2,7 @@ import { STEPS } from "@/constants/LANDING_VARIABLES";
 
 const HowWorks = () => {
   return (
-    <section className="px-16 py-96">
+    <section id="howworks" className="px-16 py-96">
       <div className="mx-auto max-w-6xl px-4 px-6 tablet:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-32 font-bold">이용 방법</h2>
