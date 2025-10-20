@@ -2,29 +2,14 @@ import { useRouter } from "next/router";
 import IcPhone from "@/assets/svgs/ic_phone.svg";
 import IcAddress from "@/assets/svgs/ic_address.svg";
 import Button from "@/components/Button";
-import { useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { GetMyInfoResponse } from "@/hooks/api/user/useGetMyInfoQuery";
 
 interface Props {
-  userId: string;
+  item: GetMyInfoResponse["item"];
 }
 
-const ProfileSection = ({ userId }: Props) => {
+const ProfileSection = ({ item }: Props) => {
   const router = useRouter();
-  const { data, isLoading, isError, error } = useGetMyInfoQuery(userId);
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (isError) {
-    return <p>{error.message}</p>;
-  }
-
-  if (!data) {
-    return null;
-  }
-  const { item } = data;
 
   const handleEditClick = () => {
     router.push("/profile/register");
