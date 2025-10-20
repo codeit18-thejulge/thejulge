@@ -128,13 +128,14 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
       return () => clearTimeout(timeOut);
     }
   }, [isLoading, router]);
-
   if (isLoading) {
     return (
       <div>
-        <div>
-          <SkeletonUI count={1} boxClassName="h-541" />
-        </div>
+        {userData?.item.type !== "employee" || keyword.trim() !== "" ? null : (
+          <div>
+            <SkeletonUI count={1} boxClassName="h-541" />
+          </div>
+        )}
         <div className="mb-40 mt-60">
           <SkeletonUI
             count={2}
@@ -142,13 +143,15 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
             className="mx-auto flex justify-start mobile:max-w-375 tablet:max-w-678 tablet:justify-between desktop:max-w-964"
           />
         </div>
-        <div className="mx-auto mb-40 mt-60 px-12 mobile:max-w-375 tablet:max-w-678 tablet:px-0 desktop:max-w-964">
+        <div className="mx-auto mb-40 mt-42 px-12 mobile:max-w-375 tablet:max-w-678 tablet:px-0 desktop:max-w-964">
           <SkeletonUI
             count={6}
             className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14"
             boxClassName="h-261 w-171 flex-col rounded-xl border border-gray-20 bg-white p-12 tablet:h-361 tablet:w-332 tablet:p-16 desktop:h-348 desktop:w-312"
           />
+          <SkeletonUI count={1} boxClassName="mx-auto h-40 w-400 mb-80 tablet:mb-60" />
         </div>
+        <div></div>
       </div>
     );
   }
