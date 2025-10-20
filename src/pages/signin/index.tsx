@@ -78,7 +78,7 @@ const Signin = () => {
   return (
     <div className="mx-auto mt-[15%] w-350">
       <Link href="/">
-        <Logo className="mx-auto mb-40 w-248" />
+        <Logo className="text-green-60 mx-auto mb-40 w-248" />
       </Link>
       <form method="post" onSubmit={handleSigninSubmit}>
         <div className="mb-28">
