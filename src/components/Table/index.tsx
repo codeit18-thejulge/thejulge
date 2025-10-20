@@ -49,7 +49,7 @@ const Table = ({ userType, res = [], handleRejectClick, handleAcceptClick, handl
         <thead className={tableStyle.thead}>
           <TableHeader colTitle={headerTitles} />
         </thead>
-        {res.length == 0 ? (
+        {res.length === 0 ? (
           <tbody>
             <tr className={tableStyle.nullLine}>
               <td colSpan={4}>
