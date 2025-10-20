@@ -51,7 +51,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     const payInput = e.target.value.replace(/,/g, "");
     if (/^\d*$/.test(payInput)) {
       const num = payInput === "" ? 0 : Number(payInput);
-      setFormData((prev) => ({ ...prev, hourlyPay: num }));
+      setFormData((prev) => ({ ...prev, originalHourlyPay: num }));
       setDisplayPay(num.toLocaleString("ko-KR"));
     }
   };
@@ -82,11 +82,9 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     setErrMsg((prev) => ({ ...prev, address2: trimmedValue ? "" : "상세 주소는 필수 입력 값입니다." }));
   };
   const handleHourlyPayBlur = () => {
-    setDisplayPay(formData.originalHourlyPay.toLocaleString("ko-KR"));
-
     let message = "";
     if (!formData.originalHourlyPay) {
-      message = "기본 시급은 필수 입력 값입니다.";
+      message = "시급은 필수 입력 값입니다.";
     } else if (formData.originalHourlyPay < MINIMUM_WAGE) {
       message = `시급은 최소 ${MINIMUM_WAGE.toLocaleString()}원 이상이어야 합니다.`;
     }
