@@ -1,8 +1,10 @@
 import { useGetNoticesQuery } from "@/hooks/api/notice/useGetNoticesQuery";
+import Link from "next/link";
+import CountUp from "react-countup";
 
 const HeroSection = () => {
   const { data } = useGetNoticesQuery();
-
+  const targetCount = data?.count || 0;
   return (
     <section className="bg-secondary mt-54 px-16 py-64">
       <div className="mx-auto max-w-3xl">
@@ -24,7 +26,13 @@ const HeroSection = () => {
           <div className="text-center">
             <div className="text-20-bold">지금까지 더줄게를 통해 올라온 공고</div>
             <div className="text-28-bold">
-              총 <span className="text-38 text-primary">{data?.count.toLocaleString("ko-KR")}</span>개
+              총{" "}
+              <Link href="/joblist">
+                <span className="text-38 text-primary">
+                  <CountUp start={0} end={targetCount} duration={1.5} separator="," />
+                </span>
+              </Link>
+              개
             </div>
           </div>
         </div>
