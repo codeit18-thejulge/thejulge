@@ -31,11 +31,11 @@ const PayBadge = ({
   //시급 차이에 따른 opacity
   const opacityLevel = () => {
     if (payDifference > 50) {
-      return "#FF4040";
+      return "#20706d";
     } else if (payDifference < 50 && payDifference > 29) {
-      return "#ff8d72";
+      return "#5caba6";
     } else if (payDifference < 30 && payDifference > 0) {
-      return "#FFAF9B";
+      return "#94d2c9";
     }
   };
 
