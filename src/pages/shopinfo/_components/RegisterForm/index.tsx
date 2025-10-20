@@ -200,7 +200,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           <p className="mt-8 text-12 text-red-40">{errMSg.imageUrl}</p>
         </div>
         <label className={labelStyle}>
-          <span>공고 설명</span>
+          <span>가게 설명</span>
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
         </label>
         <Button
