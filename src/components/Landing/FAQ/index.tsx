@@ -10,7 +10,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="bg-white py-96">
+    <section id="faq" className="bg-white py-96">
       <div className="mx-auto max-w-6xl px-18">
         <div className="mb-16 text-center">
           <h2 className="mb-12 text-32 font-bold">자주 묻는 질문</h2>

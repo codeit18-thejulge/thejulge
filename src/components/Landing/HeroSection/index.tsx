@@ -6,7 +6,7 @@ const HeroSection = () => {
   const { data } = useGetNoticesQuery();
   const targetCount = data?.count || 0;
   return (
-    <section className="bg-secondary mt-54 px-16 py-64">
+    <section id="hero-section" className="bg-secondary mt-54 px-16 py-64">
       <div className="mx-auto max-w-3xl">
         <div className="flex flex-col items-center gap-16">
           <h1 className="text-center text-48 font-bold">
