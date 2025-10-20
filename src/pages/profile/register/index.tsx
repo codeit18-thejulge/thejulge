@@ -166,7 +166,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
               <span>이름</span>
               <span className="text-red-30">*</span>
             </label>
-            <Input name="name" value={profileData?.name} />
+            <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
           </div>
           <div>
             <label className="text-16-regular">
