@@ -27,13 +27,14 @@ interface TableProps {
   res: GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"];
   isLoading?: boolean;
   error?: boolean;
+
   handleApplicationClick?: (shopId: string, jobId: string) => void;
   handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
   handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
   handleVolunteerClick?: (volunteerId: string) => void;
 }
 
-const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleApplicationClick }: TableProps) => {
+const Table = ({ userType, res = [], handleRejectClick, handleAcceptClick, handleApplicationClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
 
   return (
@@ -48,7 +49,7 @@ const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleAppl
         <thead className={tableStyle.thead}>
           <TableHeader colTitle={headerTitles} />
         </thead>
-        {res.length === 0 ? (
+        {res.length == 0 ? (
           <tbody>
             <tr className={tableStyle.nullLine}>
               <td colSpan={4}>
