@@ -6,11 +6,11 @@ import RegisterForm, { FormData } from "@/pages/shopinfo/_components/RegisterFor
 import { useEffect } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/router";
 import { getCookieValue } from "@/utils/getCookie";
 import { checkAuthSSR } from "@/utils/checkAuth";
 import { useModal } from "@/hooks/useModal";
+import SkeletonUI from "@/components/Skeleton";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const { redirect } = checkAuthSSR(context, "employer", true);
@@ -75,8 +75,17 @@ const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof get
 
   if (isGetPending || !shopData) {
     return (
-      <div className="flex h-[100dvh] items-center justify-center">
-        <LoadingSpinner />
+      <div className="bg-gray-5">
+        <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
+          <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">가게 수정</h1>
+          <div className="mt-64 grid grid-cols-1 gap-x-20 gap-y-40 tablet:[grid-template-columns:repeat(auto-fit,minmax(330px,1fr))]">
+            <SkeletonUI count={1} boxClassName="h-60 w-full mb-16 rounded-md" />
+            <SkeletonUI count={1} boxClassName="h-60 w-full mb-16 rounded-md" />
+            <SkeletonUI count={1} boxClassName="h-60 w-full mb-16 rounded-md" />
+            <SkeletonUI count={1} boxClassName="h-60 w-full mb-16 rounded-md" />
+            <SkeletonUI count={1} boxClassName="h-60 w-full mb-16 rounded-md" />
+          </div>
+        </div>
       </div>
     );
   }
