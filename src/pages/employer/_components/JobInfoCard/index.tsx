@@ -11,9 +11,10 @@ interface ArticleProps {
   error?: boolean;
   bgColor: string;
   noticeId: string;
+  closed:boolean;
 }
 
-const JobInfoCard = ({ res, bgColor, noticeId, isLoading, ...props }: ArticleProps) => {
+const JobInfoCard = ({ res, bgColor, noticeId, isLoading, closed, ...props }: ArticleProps) => {
   //페이지 링크
 
   const router = useRouter();
@@ -60,7 +61,7 @@ const JobInfoCard = ({ res, bgColor, noticeId, isLoading, ...props }: ArticlePro
               imageUrl={res.shop.item.imageUrl}
               startsAt={res.startsAt}
               name={res.shop.item.name}
-              closed={res.closed}
+              closed={closed}
               {...props}
             />
             <div className="flex flex-1 flex-col">

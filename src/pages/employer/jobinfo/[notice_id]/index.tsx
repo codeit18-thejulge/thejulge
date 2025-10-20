@@ -125,7 +125,13 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
       <div className="px-12 tablet:px-32">
         <>
           <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-            <JobInfoCard res={shopInfo} bgColor={"bg-white"} noticeId={noticeId} isLoading={isLoading} />
+            <JobInfoCard
+              res={shopInfo}
+              bgColor={"bg-white"}
+              noticeId={noticeId}
+              isLoading={isLoading}
+              closed={res[0]?.item.notice.item.closed}
+            />
           </section>
           <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
             <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
