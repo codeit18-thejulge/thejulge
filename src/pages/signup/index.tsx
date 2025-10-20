@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Input from "@/components/Input";
@@ -10,6 +11,7 @@ import Logo from "@/assets/svgs/logo-md.svg";
 import IcCheck from "@/assets/svgs/ic_check.svg";
 import IcCircleGray from "@/assets/svgs/ic_circle-gray.svg";
 import { cn } from "@/utils";
+import { useModal } from "@/hooks/useModal";
 
 const inputClass = "h-58 w-full";
 const buttonClass = "h-48 w-full";
@@ -22,11 +24,14 @@ const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-
 const pwdRegEx = /^.{8,20}$/;
 
 const Signup = () => {
+  const router = useRouter();
   const [signupData, setSignupData] = useState<SignupRequest>({ email: "", password: "", type: PART });
   const [errorMsg, setErrorMsg] = useState({ email: "", password: "", pwdcheck: "" });
-  const { mutate: postSignup, isError, isPending, error } = useSignupQuery();
+  const { mutate: postSignup, isPending } = useSignupQuery();
   const [modalMessage, setModalMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const { openModal, closeModal } = useModal();
 
   const handleClose = () => {
     setIsOpen(!isOpen);
@@ -88,21 +93,25 @@ const Signup = () => {
       return;
     }
 
-    postSignup(signupData);
+    postSignup(signupData, {
+      onSuccess: () => {
+        openModal("confirm", "가입이 완료되었습니다", () => router.replace(`/signin`), {
+          closeOnOverlayClick: false,
+          closeOnEsc: false,
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+        let errMsg = "회원가입에 실패했습니다";
+        if (axios.isAxiosError(error)) {
+          errMsg = error.response?.data?.message;
+        } else {
+          errMsg = error?.message as string;
+        }
+        openModal("confirm", errMsg, closeModal);
+      },
+    });
   };
-
-  useEffect(() => {
-    let errMsg = "회원가입에 실패했습니다.";
-    if (isError) {
-      if (axios.isAxiosError(error)) {
-        errMsg = error.response?.data?.message;
-      } else {
-        errMsg = error?.message as string;
-      }
-      setModalMessage(errMsg);
-      setIsOpen(true);
-    }
-  }, [isError]);
 
   return (
     <div className="mx-auto my-[15%] w-350">
