@@ -13,15 +13,26 @@ const style: STYLES = {
 };
 
 interface SelectProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   options: Option[];
   placeholder?: string;
   className?: string;
   onChange?: (option: Option) => void;
   dropdownClassname?: string;
+  onClick?: () => void;
 }
 
-const SelectBox = ({ options, placeholder = "선택", className, onChange, dropdownClassname }: SelectProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const SelectBox = ({
+  isOpen,
+  setIsOpen,
+  options,
+  placeholder = "선택",
+  className,
+  onChange,
+  dropdownClassname,
+  onClick,
+}: SelectProps) => {
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
 
   useEffect(() => {
@@ -31,7 +42,6 @@ const SelectBox = ({ options, placeholder = "선택", className, onChange, dropd
   }, [placeholder]);
 
   const handleSelect = useSelectHandler({ setSelectedLabel, setIsOpen, onChange });
-
   return (
     <div className={cn("relative w-full")}>
       <div
@@ -41,7 +51,10 @@ const SelectBox = ({ options, placeholder = "선택", className, onChange, dropd
           style.fontSelect,
           className,
         )}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          onClick?.();
+          setIsOpen(!isOpen);
+        }}
         aria-label="셀렉트 박스"
       >
         <span className={cn(placeholder === "선택" ? "text-gray-40" : "text-black")}>{selectedLabel}</span>
