@@ -220,7 +220,7 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
           className="desktop:h-308"
         />
         <div className="flex flex-col justify-between desktop:w-346">
-          <div className="mb-40 desktop:mb-60">
+          <div>
             <p className="text-green-60 pb-4 pt-16 text-16 font-bold">시급</p>
             <div className="flex flex-col gap-y-8 tablet:gap-y-12">
               <CardPay hourlyPay={notice.hourlyPay} originalHourlyPay={shop.originalHourlyPay} closed={notice.closed} />
@@ -237,7 +237,7 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
                 setModalMessage("신청을 취소하시겠어요?");
                 setIsOpen(!isOpen);
               }}
-              disabled={isCancelPending}
+              disabled={isCancelPending || jobData.item.closed}
             >
               취소하기
             </Button>

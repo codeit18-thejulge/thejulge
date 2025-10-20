@@ -47,7 +47,7 @@ interface CardCategory {
 }
 
 const CardCategory = ({ category = "" }: CardCategory) => {
-  return <div className="text-green-40 pb-4 pt-16 text-14-bold tablet:text-16-bold">{category}</div>;
+  return <div className="pb-4 pt-16 text-14-bold text-primary tablet:text-16-bold">{category}</div>;
 };
 
 //가게 이름
@@ -70,7 +70,7 @@ interface CardAddress {
 const CardAddress = ({ address = "" }: CardAddress) => {
   return (
     <p className={cn("flex items-center gap-6 text-gray-50", RESPONSE_TEXT)}>
-      <IcAddress className={"text-green-30 h-16 w-13 tablet:h-20 tablet:w-16"} />
+      <IcAddress className={"h-16 w-13 text-primary tablet:h-20 tablet:w-16"} />
       <span className={"mt-2"}>{address}</span>
     </p>
   );
@@ -87,7 +87,7 @@ const CardTime = ({ startsAt = "2025-10-11T21:00:00Z", workhour: workHour = 3 }:
 
   return (
     <p className="leading-0 flex items-center gap-8 text-gray-50">
-      <IcClock className={"text-green-30 h-16 w-16 tablet:h-20 tablet:w-20"} />
+      <IcClock className={"h-16 w-16 text-primary tablet:h-20 tablet:w-20"} />
       <span>
         {formatNoticeTime(startsAt, workHour)} ({workHour}시간)
       </span>
