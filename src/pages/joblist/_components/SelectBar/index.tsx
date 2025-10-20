@@ -42,7 +42,7 @@ const SelectBar = ({ sort, onSortChange, onApplyFilter }: SelectBarProps) => {
       />
       <button
         type="button"
-        className="h-40 flex-shrink-0 rounded-5 bg-red-30 px-12 py-6 text-16 font-bold text-white"
+        className="h-40 flex-shrink-0 rounded-5 bg-green-50 px-12 py-6 text-16 font-bold text-white"
         onClick={handleFilterToggle}
       >
         상세 필터
