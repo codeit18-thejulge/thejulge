@@ -18,14 +18,23 @@ interface GetModalContentProps {
   message: string;
   onConfirm: () => void;
   onClose: () => void;
+  btnText?: {
+    cancel?: string;
+    confirm?: string;
+  };
 }
 
-export const getModalContent = ({ type, message, onConfirm, onClose }: GetModalContentProps): ModalProps => {
+export const getModalContent = ({ type, message, onConfirm, onClose, btnText }: GetModalContentProps): ModalProps => {
   const footers: ModalButton[] = [];
   if (type === "action") {
-    footers.push({ buttonText: "취소", style: "lined", onClick: onClose, className: "w-120 h-48" });
+    footers.push({ buttonText: btnText?.cancel ?? "취소", style: "lined", onClick: onClose, className: "w-120 h-48" });
   }
-  footers.push({ buttonText: "확인", style: "filled", onClick: onConfirm, className: "w-120 h-48" });
+  footers.push({
+    buttonText: btnText?.confirm ?? "확인",
+    style: "filled",
+    onClick: onConfirm,
+    className: "w-120 h-48",
+  });
   return { message, footers };
 };
 
