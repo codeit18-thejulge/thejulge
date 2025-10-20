@@ -65,7 +65,7 @@ const JobInfoCard = ({ res, bgColor, noticeId, isLoading, closed, ...props }: Ar
               {...props}
             />
             <div className="flex flex-1 flex-col">
-              <div className="pb-4 pt-16 text-14-bold text-red-40 tablet:text-16-bold">시급</div>
+              <div className="pb-4 pt-16 text-14-bold text-green-40 tablet:text-16-bold">시급</div>
               <div className={"flex flex-col gap-y-8 tablet:gap-y-12"}>
                 <CardPay
                   hourlyPay={res.hourlyPay}
