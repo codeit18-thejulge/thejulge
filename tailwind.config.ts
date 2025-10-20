@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 import * as pxToRemModule from "tailwindcss-preset-px-to-rem";
+import scrollbarHide from "tailwind-scrollbar-hide";
 
 const pxToRem = pxToRemModule.default ?? pxToRemModule;
 
@@ -55,6 +56,16 @@ const config: Config = {
           20: "var(--green-20)",
         },
       },
+      keyframes: {
+        "skeleton-shimmer": {
+          "0%": { backgroundPosition: "-400% 0" },
+          "100%": { backgroundPosition: "400% 0" },
+        },
+      },
+      animation: {
+        "skeleton-shimmer": "skeleton-shimmer 15s linear infinite",
+        "loading-spinner": "loading-spinner 3s linear infinite alternate",
+      },
       screens: {
         mobile: "375px",
         tablet: "744px",
@@ -62,6 +73,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [scrollbarHide],
 };
 export default config;

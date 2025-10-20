@@ -9,7 +9,7 @@ interface ButtonSetting {
   className: string;
 }
 
-interface MessageModalProps {
+export interface MessageModalProps {
   isOpen: boolean;
   icon?: React.ReactNode;
   message: string;
@@ -34,7 +34,7 @@ const MessageModal = ({
         {icon && <div className="mt-4">{icon}</div>}
         <p className="text-black">{message}</p>
         <div className="flex gap-8">
-          {footers.map((footer) => (
+          {footers?.map((footer) => (
             <Button key={footer.buttonText} status={footer.style} onClick={footer.onClick} className={footer.className}>
               {footer.buttonText}
             </Button>

@@ -1,19 +1,13 @@
-import { NoticeItem, SeoulAddress } from "@/types/global";
-
 const STORAGE_KEY = "recentViewedJobs";
 const MAX_ITEMS = 6;
 
-export interface RecentJob extends Omit<NoticeItem, "description"> {
-  name: string;
-  imageUrl: string;
-  address: SeoulAddress;
-  originalHourlyPay: number;
-  className?: string;
+export interface RecentJobId {
+  noticeId: string;
+  shopId: string;
   viewedAt?: Date;
-  shopId?: string;
 }
 
-export function getRecentViewedJobs(): RecentJob[] {
+export function getRecentViewedJobs(): RecentJobId[] {
   if (typeof window === "undefined") {
     return [];
   }
@@ -21,13 +15,13 @@ export function getRecentViewedJobs(): RecentJob[] {
   return data ? JSON.parse(data) : [];
 }
 
-export function addRecentViewedJob(job: Omit<RecentJob, "viewedAt">) {
+export function addRecentViewedJob(job: Omit<RecentJobId, "viewedAt">) {
   if (typeof window === "undefined") {
     return;
   }
 
   const existing = getRecentViewedJobs();
-  const filtered = existing.filter((p) => p.id !== job.id);
+  const filtered = existing.filter((j) => j.noticeId !== job.noticeId);
   const updated = [{ ...job, viewedAt: Date.now() }, ...filtered].slice(0, MAX_ITEMS);
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));

@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { SeoulAddress } from "@/types/global";
 import IcCheck from "@/assets/svgs/ic_check.svg";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Button from "@/components/Button";
@@ -17,6 +16,7 @@ import {
   GetShopNoticeDetailRequest,
   GetShopNoticeDetailResponse,
 } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
+import SkeletonUI from "@/components/Skeleton";
 
 interface ButtonSetting {
   buttonText: string;
@@ -53,37 +53,27 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
     mutate: postShopApplication,
     isPending: isApplyPending,
     isSuccess: isApplySuccess,
-  } = usePostShopApplicationQuery();
+  } = usePostShopApplicationQuery({
+    onMutate: () => setIsApply(true),
+    onSuccess: (data) => {
+      if (data && data.item.id) {
+        setApplicationId(data.item.id);
+      }
+    },
+    onError: () => setIsApply(false),
+  });
 
   const {
     mutate: putShopApplication,
     isPending: isCancelPending,
     isSuccess: isCancelSuccess,
-  } = usePutShopApplicationQuery();
+  } = usePutShopApplicationQuery({
+    onMutate: () => setIsApply(false),
+    onError: () => setIsApply(true),
+  });
 
-  const { data: userData } = useGetMyInfoQuery(userId);
-
-  const { data: applyData } = useGetUserApplicationsQuery({ userId });
-
-  useEffect(() => {
-    if (isApplySuccess) {
-      const timer = setTimeout(() => {
-        setIsApply(true);
-      }, 3500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isApplySuccess]);
-
-  useEffect(() => {
-    if (isCancelSuccess) {
-      const timer = setTimeout(() => {
-        setIsApply(false);
-      }, 3500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isCancelSuccess]);
+  const { data: userData } = useGetMyInfoQuery(userId ?? "", { enabled: !!userId });
+  const { data: applyData } = useGetUserApplicationsQuery({ userId }, { enabled: !!userId });
 
   useEffect(() => {
     let appliedStatus = false;
@@ -99,30 +89,33 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   }, [applyData, noticeId]);
 
   useEffect(() => {
-    let profile = false;
-    if (userData?.item?.address) {
-      profile = true;
+    if (!userData) {
+      return;
     }
-    setIsProfile(profile);
-  }, [userId]);
+    setIsProfile(!!userData?.item?.address);
+  }, [userData]);
 
   useEffect(() => {
     if (!jobData) {
       return;
     }
     addRecentViewedJob({
-      id: noticeId,
-      hourlyPay: jobData?.item.hourlyPay as number,
-      startsAt: jobData?.item.startsAt as string,
-      workhour: jobData?.item.workhour as number,
-      closed: jobData?.item.closed as boolean,
-      name: jobData?.item.shop.item.name as string,
-      imageUrl: jobData?.item.shop.item.imageUrl as string,
-      address: jobData?.item.shop.item.address1 as SeoulAddress,
-      originalHourlyPay: jobData?.item.shop.item.originalHourlyPay as number,
+      noticeId,
       shopId,
     });
   }, [jobData]);
+
+  const handleCancelClick = () => {
+    setIsOpen(false);
+    putShopApplication({
+      shopId,
+      noticeId,
+      applicationId,
+      data: {
+        status: "canceled",
+      },
+    });
+  };
 
   const getFooters = useCallback((): ButtonSetting[] => {
     if (!isProfile && userId) {
@@ -172,7 +165,21 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   }, [userId, isProfile, applicationId]);
 
   if (!shopId || !noticeId || isPending || !jobData) {
-    return <LoadingSpinner />;
+    return (
+      <div className="py-40 tablet:py-60">
+        <div>
+          <SkeletonUI count={1} boxClassName="w-[calc((100%)/3)] h-66" className="h-66" />
+        </div>
+        <div className="my-12 rounded-12 border border-gray-20 p-20 tablet:p-24 desktop:my-24">
+          <SkeletonUI
+            count={1}
+            boxClassName="w-full tablet:h-645 desktop:h-308"
+            className="tablet:h-645 desktop:h-308"
+          />
+        </div>
+        <SkeletonUI count={1} boxClassName="w-full rounded-12 h-124" className="h-124" />
+      </div>
+    );
   }
 
   const notice = jobData?.item;
@@ -189,62 +196,38 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
       setIsOpen(!isOpen);
       return;
     }
-    postShopApplication(
-      {
-        shopId,
-        noticeId,
-      },
-      {
-        onSuccess: (data) => {
-          if (data && data.item.id) {
-            setApplicationId(data.item.id);
-          }
-          setIsApply(true);
-        },
-        onError: (err) => {
-          console.error("신청 에러:", err);
-        },
-      },
-    );
-  };
-
-  const handleCancelClick = () => {
-    putShopApplication(
-      {
-        shopId,
-        noticeId,
-        applicationId,
-        data: {
-          status: "canceled",
-        },
-      },
-      {
-        onSuccess: () => {
-          setIsApply(false);
-          setIsOpen(!isOpen);
-        },
-      },
-    );
+    postShopApplication({
+      shopId,
+      noticeId,
+    });
   };
 
   const footers = getFooters();
   const isPassed = isStartTimePassed(notice.startsAt) || jobData.item.closed;
 
   return (
-    <>
+    <div className="py-40 tablet:py-60">
       <div>
         <p className="text-16 font-bold text-primary">{shop.category}</p>
         <h2 className="text-28 font-bold text-black">{shop.name}</h2>
       </div>
-      <div className="align-center my-12 flex h-480 flex-col justify-center justify-around gap-10 rounded-12 border border-gray-20 p-20 desktop:my-24 desktop:flex-row desktop:justify-between desktop:p-24">
-        <CardImageBox imageUrl={shop.imageUrl} name={shop.name} closed={false} startsAt={notice.startsAt} />
-        <div className="flex w-full flex-col justify-between desktop:w-364">
-          <div className="mb-40 flex flex-col gap-10 desktop:mb-60">
-            <p className="text-16 font-bold text-primary">시급</p>
-            <CardPay hourlyPay={notice.hourlyPay} originalHourlyPay={shop.originalHourlyPay} closed={notice.closed} />
-            <CardTime startsAt={notice.startsAt} workhour={notice.workhour} />
-            <CardAddress address={shop.address1} />
-            <CardDescription description={shop.description} />
+      <div className="my-12 flex flex-col justify-center rounded-12 border border-gray-20 bg-white p-20 tablet:p-24 desktop:my-24 desktop:flex-row desktop:justify-between desktop:gap-x-31">
+        <CardImageBox
+          imageUrl={shop.imageUrl}
+          name={shop.name}
+          closed={false}
+          startsAt={notice.startsAt}
+          className="desktop:h-308"
+        />
+        <div className="flex flex-col justify-between desktop:w-346">
+          <div className="mb-40 desktop:mb-60">
+            <p className="pb-4 pt-16 text-16 font-bold text-primary">시급</p>
+            <div className="flex flex-col gap-y-8 tablet:gap-y-12">
+              <CardPay hourlyPay={notice.hourlyPay} originalHourlyPay={shop.originalHourlyPay} closed={notice.closed} />
+              <CardTime startsAt={notice.startsAt} workhour={notice.workhour} />
+              <CardAddress address={shop.address1} />
+              <CardDescription description={shop.description} />
+            </div>
           </div>
           {userId && isApply ? (
             <Button
@@ -283,7 +266,7 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
       />
       {isApplySuccess && <ToastContainer label="신청이 완료 되었습니다" error={false} />}
       {isCancelSuccess && <ToastContainer label="신청이 취소 되었습니다" error={false} />}
-    </>
+    </div>
   );
 };
 

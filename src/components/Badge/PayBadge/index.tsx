@@ -29,7 +29,15 @@ const PayBadge = ({
   //시급 차이 계산
   const payDifference = getHourlyPay(hourlyPay, originalHourlyPay);
   //시급 차이에 따른 opacity
-  const opacityLevel = String((payDifference / 100).toFixed(2));
+  const opacityLevel = () => {
+    if (payDifference > 50) {
+      return "#FF4040";
+    } else if (payDifference < 50 && payDifference > 29) {
+      return "#ff8d72";
+    } else if (payDifference < 30 && payDifference > 0) {
+      return "#FFAF9B";
+    }
+  };
 
   return (
     <div
@@ -48,9 +56,16 @@ const PayBadge = ({
           post && closed && "bg-white tablet:bg-gray-20",
           !post && !closed && "bg-red-40",
         )}
-        style={{ opacity: `${opacityLevel}` }}
+        style={{ backgroundColor: opacityLevel() }}
       ></div>
-      <div className={cn("relative z-10 flex max-w-fit gap-x-4", post ? "px-0 py-0 tablet:px-12 tablet:py-10" : "px-12 py-10",  !post && closed && "hidden", post && closed && "tablet:text-white")}>
+      <div
+        className={cn(
+          "relative z-10 flex max-w-fit gap-x-4",
+          post ? "px-0 py-0 tablet:px-12 tablet:py-10" : "px-12 py-10",
+          !post && closed && "hidden",
+          post && closed && "tablet:text-white",
+        )}
+      >
         <span className={"inline-block"}>{label}</span>
         <span className="text-12-regular after:content-['%'] tablet:text-14-bold">{payDifference.toFixed(0)}</span>
         <div className="w-12 tablet:w-14">{icon}</div>

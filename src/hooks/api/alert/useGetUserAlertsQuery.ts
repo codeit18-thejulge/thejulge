@@ -8,6 +8,9 @@ export interface GetUserAlertsRequest {
     offset?: number;
     limit?: number;
   };
+  options?: {
+    enabled?: boolean;
+  };
 }
 
 export interface GetUserAlertsResponse {
@@ -31,8 +34,8 @@ export interface GetUserAlertsResponse {
       };
       links: Link[];
     };
-    links: Link[];
   }>;
+  links: Link[];
 }
 
 const getUserAlerts = async ({ userId, params }: GetUserAlertsRequest): Promise<GetUserAlertsResponse> => {
@@ -40,9 +43,10 @@ const getUserAlerts = async ({ userId, params }: GetUserAlertsRequest): Promise<
   return response.data;
 };
 
-export const useGetUserAlertsQuery = ({ userId, params }: GetUserAlertsRequest) => {
+export const useGetUserAlertsQuery = ({ userId, params, options }: GetUserAlertsRequest) => {
   return useQuery({
     queryKey: ["getUserAlerts", userId, params],
     queryFn: () => getUserAlerts({ userId, params }),
+    enabled: options?.enabled ?? true,
   });
 };
