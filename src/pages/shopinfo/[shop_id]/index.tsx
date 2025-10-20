@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { getCookieValue } from "@/utils/getCookie";
+import SkeletonUI from "@/components/Skeleton";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookie = context.req.headers.cookie;
@@ -92,7 +93,14 @@ const ShopInfoDetail = ({ shopId }: InferGetServerSidePropsType<typeof getServer
   if (shopInfoLoading) {
     return (
       <div>
-        <LoadingSpinner />
+        <div className="mx-auto max-w-351 tablet:my-60 tablet:max-w-680 desktop:max-w-964">
+          <SkeletonUI count={1} boxClassName="w-100 h-30 tablet:h-40 mb-16 tablet:mb-24 justify-start" />
+          <SkeletonUI
+            count={1}
+            boxClassName="mx-auto h-424 w-351 tablet:h-680 tablet:w-646 desktop:h-356 desktop:w-964"
+          />
+        </div>
+        <SkeletonUI count={1} boxClassName="h-435" />
       </div>
     );
   }
