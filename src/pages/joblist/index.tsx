@@ -39,10 +39,11 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   const { query } = router;
   const page = Number(query.page) || 1;
   const sort = (query.sort as NoticeSort) || "time";
-  const { page: _page, sort: _sort, ...filterConditions } = query;
   const limit = 6;
   const offset = (page - 1) * limit;
   const activePage = page;
+  const { page: _page, sort: _sort, ...filterConditions } = query;
+
   const keyword = Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword || "";
   const jobDataApiParams: getNoticesRequest = { offset, limit, sort, ...filterConditions };
 
@@ -128,17 +129,21 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
       return () => clearTimeout(timeOut);
     }
   }, [isLoading, router]);
-  if (isLoading) {
+
+  if (isLoading || isUserDataLoading || isRecommendDataLoading) {
     return (
       <div>
-        {userData?.item.type !== "employee" || keyword.trim() !== "" ? null : (
+        {(keyword.trim() === "" && userId === null) ||
+        (keyword.trim() === "" && userData?.item.type === "employee") ||
+        (keyword.trim() === "" && !!userData?.item?.address) ||
+        (keyword.trim() === "" && recommendData?.items && recommendData.items.length > 0) ? (
           <div>
             <SkeletonUI count={1} boxClassName="h-541" />
           </div>
-        )}
+        ) : null}
         <div className="mb-40 mt-60">
           <SkeletonUI
-            count={2}
+            count={1}
             boxClassName="h-30 gap-0 w-50 tablet:gap-4 tablet:h-40 tablet:w-150"
             className="mx-auto flex justify-start mobile:max-w-375 tablet:max-w-678 tablet:justify-between desktop:max-w-964"
           />
