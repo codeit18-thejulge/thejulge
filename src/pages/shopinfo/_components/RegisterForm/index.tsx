@@ -13,7 +13,8 @@ import { cn } from "@/utils";
 
 const MINIMUM_WAGE = 10030;
 
-const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
+const labelStyle = "flex flex-col flex-1 text-16-regular text-black h-100";
+const labelNormalStyle = "mb-8";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
 const inputStyle = "rounded-md bg-white";
 
@@ -114,7 +115,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
       <form className="flex flex-col gap-32" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-x-20 gap-y-24 tablet:[grid-template-columns:repeat(auto-fit,minmax(330px,1fr))]">
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>가게 이름</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>가게 이름</span>
             <Input
               name="name"
               type="text"
@@ -128,7 +129,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>분류</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>분류</span>
             <SelectBox
               options={SHOP_CATEGORY_OPTIONS}
               onChange={handleSelectChange("category")}
@@ -136,7 +137,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>주소</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>주소</span>
             <SelectBox
               options={SEOUL_ADDRESS_OPTIONS}
               onChange={handleSelectChange("address1")}
@@ -144,7 +145,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>상세 주소</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>상세 주소</span>
             <Input
               name="address2"
               type="text"
@@ -158,7 +159,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>기본 시급</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>기본 시급</span>
             <Input
               name="originalHourlyPay"
               type="text"
@@ -173,7 +174,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           </label>
         </div>
         <div className={labelStyle}>
-          <span className={labelRequiredStyle}>가게 이미지</span>
+          <span className={cn(labelNormalStyle, labelRequiredStyle)}>가게 이미지</span>
           <div className="relative w-full tablet:w-fit">
             <RegisterImage
               initialUrl={formData.imageUrl}
@@ -194,7 +195,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           <p className="mt-8 text-12 text-red-40">{errMSg.imageUrl}</p>
         </div>
         <label className={labelStyle}>
-          <span>가게 설명</span>
+          <span className={labelNormalStyle}>가게 설명</span>
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
         </label>
         <Button

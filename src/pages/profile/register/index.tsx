@@ -162,14 +162,14 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
         </h2>
         <section className="flex flex-col gap-20">
           <div className="grid gap-20 mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3">
-            <div>
+            <div className="h-100">
               <label className="text-16-regular">
                 <span>이름</span>
                 <span className="text-red-30">*</span>
               </label>
               <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
             </div>
-            <div>
+            <div className="h-100">
               <label className="text-16-regular">
                 <span>연락처</span>
                 <span className="text-red-30">*</span>
@@ -183,7 +183,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
                 maxLength={13}
               />
             </div>
-            <div>
+            <div className="h-100">
               <label className="text-16-regular">
                 <span>선호지역</span>
                 <span className="text-red-30">*</span>
