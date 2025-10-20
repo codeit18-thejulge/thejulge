@@ -122,7 +122,7 @@ const UserHeader = () => {
         </li>
         <li className="tablet:relative">
           <button ref={btnRef} aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
-            <IcNoti className={cn("w-20 tablet:w-24", hasUnread ? "text-primary" : "text-black")} />
+            <IcNoti className={cn("w-20 tablet:w-24", hasUnread ? "text-[#00aaaa]" : "text-black")} />
           </button>
           {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} btnRef={btnRef} />}
         </li>
