@@ -12,7 +12,7 @@ const NotFound = () => {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-32 p-24">
-      <h1 className="bg-gradient-to-br from-[#ff4040] to-[#ff9500] bg-clip-text text-[100px] font-extrabold leading-none text-transparent tablet:text-[150px] desktop:text-[200px]">
+      <h1 className="from-green-40 to-green-60 bg-gradient-to-br bg-clip-text text-[100px] font-extrabold leading-none text-transparent tablet:text-[150px] desktop:text-[200px]">
         404
       </h1>
       <div className="text-center">

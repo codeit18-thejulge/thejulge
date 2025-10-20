@@ -15,7 +15,7 @@ const MINIMUM_WAGE = 10030;
 
 const labelStyle = "flex flex-col flex-1 text-16-regular text-black h-100";
 const labelNormalStyle = "mb-8";
-const labelRequiredStyle = "after:content-['*'] after:text-primary";
+const labelRequiredStyle = "after:content-['*'] after:text-error";
 const inputStyle = "rounded-md bg-white";
 
 export type FormData = Omit<PostShopRequest, "category" | "address1"> & {
@@ -49,6 +49,9 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     originalHourlyPay: "",
     imageUrl: "",
   });
+
+  const [isOpenCtgSelectbox, setIsOpenCtgSelectbox] = useState(false);
+  const [isOpenAddrSelectbox, setIsOpenAddrSelectbox] = useState(false);
 
   const handlePayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const payInput = e.target.value.replace(/,/g, "");
@@ -131,6 +134,8 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           <label className={labelStyle}>
             <span className={cn(labelNormalStyle, labelRequiredStyle)}>분류</span>
             <SelectBox
+              isOpen={isOpenCtgSelectbox}
+              setIsOpen={setIsOpenCtgSelectbox}
               options={SHOP_CATEGORY_OPTIONS}
               onChange={handleSelectChange("category")}
               placeholder={formData.category ?? "선택"}
@@ -139,6 +144,8 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           <label className={labelStyle}>
             <span className={cn(labelNormalStyle, labelRequiredStyle)}>주소</span>
             <SelectBox
+              isOpen={isOpenAddrSelectbox}
+              setIsOpen={setIsOpenAddrSelectbox}
               options={SEOUL_ADDRESS_OPTIONS}
               onChange={handleSelectChange("address1")}
               placeholder={formData.address1 ?? "선택"}

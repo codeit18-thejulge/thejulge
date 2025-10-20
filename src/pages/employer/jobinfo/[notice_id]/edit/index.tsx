@@ -5,12 +5,12 @@ import { getShopNoticeDetail, useGetShopNoticeDetailQuery } from "@/hooks/api/no
 import { useEffect } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { QueryClient, dehydrate, useQueryClient } from "@tanstack/react-query";
 import { getCookieValue } from "@/utils/getCookie";
 import { checkAuthSSR } from "@/utils/checkAuth";
 import { useModal } from "@/hooks/useModal";
+import SkeletonUI from "@/components/Skeleton";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const { redirect } = checkAuthSSR(context, "employer", true);
@@ -38,6 +38,8 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 
 const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { data: jobinfoData, isPending: isGetPending } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   const { mutate: putShopNotice, isPending: isPutPending } = usePutShopNoticeDetailQuery();
 
@@ -48,6 +50,7 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
       { shopId, noticeId, data: formData },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getShopNoticeDetail", shopId, noticeId] });
           openModal("confirm", "공고 수정이 완료되었습니다.", () => router.replace(`/employer/jobinfo/${noticeId}`), {
             closeOnOverlayClick: false,
             closeOnEsc: false,
@@ -82,8 +85,16 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
 
   if (isGetPending || !jobinfoData) {
     return (
-      <div className="flex h-[100dvh] items-center justify-center">
-        <LoadingSpinner />
+      <div className="bg-gray-5">
+        <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
+          <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 수정</h1>
+          <div className="mt-64 grid grid-cols-1 gap-20 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+            <SkeletonUI count={1} boxClassName="h-56" />
+            <SkeletonUI count={1} boxClassName="h-56" />
+            <SkeletonUI count={1} boxClassName="h-56" />
+          </div>
+          <SkeletonUI count={1} className="mt-64" boxClassName="h-153" />
+        </div>
       </div>
     );
   }
