@@ -4,11 +4,12 @@ import { UserItem, UserInfoItem } from "@/types/global";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import Button from "@/components/Button";
-import { useState, useEffect } from "react";
+import { ResultStatus } from "@/types/global";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
+import { useRef, useState } from "react";
 
 interface user {
   user: {
@@ -25,25 +26,29 @@ interface TableRowProps {
   error?: boolean;
   isState?: string;
   handleApplicationClick?: (shopId: string, jobId: string) => void;
-  onHandleRejectClick?: (approval: "rejected" | "accepted") => void;
-  onHandleAcceptClick?: (approval: "rejected" | "accepted") => void;
-  onHandleSandId?: (sandId: string) => void;
+  handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
+  handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
+  handleVolunteerClick?: (volunteerId: string) => void;
 }
 
 const BUTTON_STYLE = "rounded-5 border px-10 py-2 text-12-regular tablet:py-5 tablet:text-14-regular hover:drop-shadow";
 
-const TableRow = ({
-  item,
-  userType,
-  onHandleSandId,
-  onHandleRejectClick,
-  onHandleAcceptClick,
-  handleApplicationClick,
-}: TableRowProps) => {
+const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handleApplicationClick }: TableRowProps) => {
   const { shop, notice } = item;
   const { user } = item as user;
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [isState, setIsState] = useState<"pending" | "accepted" | "rejected" | "canceled">(item.status);
+  const toggleLine = useRef<HTMLTableRowElement>(null);
+
+  const handleLineOpenClick = () => {
+    const line = document.querySelectorAll<HTMLTableRowElement>("tbody tr");
+    setIsOpen((prev) => !prev);
+    line.forEach((item) => {
+      if (!item.classList.contains("false")) {
+        item.classList.remove(tableStyle.open);
+      }
+    });
+  };
 
   const jobId = item?.notice.item.id;
   const shopId = item?.shop.item.id;
@@ -51,34 +56,31 @@ const TableRow = ({
     handleApplicationClick?.(shopId, jobId);
   };
 
-  useEffect(() => {
-    setIsState(item.status);
-  }, [item.status]);
-
   if (userType === "employer") {
     // 신청자 목록 - 사장
-    const phoneNumber = user.item.phone || "-";
     return (
       <tr
-        onClick={(e) => {
+        ref={toggleLine}
+        onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
           e.stopPropagation();
+          handleLineOpenClick();
         }}
+        className={`${isOpen && tableStyle.open} ${tableStyle.employerOrder}`}
       >
         <td>{user.item.name}</td>
         <td>
           <p className={tableStyle.overText}>{user.item.bio || "-"}</p>
         </td>
-        <td>{formatPhoneNumber(phoneNumber)}</td>
+        <td>{formatPhoneNumber(user.item.phone || "-")}</td>
         <td>
-          {isState === "pending" ? (
+          {item.status === "pending" ? (
             <div className={tableStyle.btnGroup}>
               <Button
-                className={cn("border-primary text-primary", BUTTON_STYLE)}
+                className={cn(BUTTON_STYLE)}
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
-                  onHandleRejectClick?.("rejected");
-                  onHandleSandId?.(item.id);
+                  handleRejectClick?.("rejected", item.id);
                 }}
               >
                 거절하기
@@ -88,15 +90,14 @@ const TableRow = ({
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
-                  onHandleAcceptClick?.("accepted");
-                  onHandleSandId?.(item.id);
+                  handleAcceptClick?.("accepted", item.id);
                 }}
               >
                 승인하기
               </Button>
             </div>
           ) : (
-            <NormalBadge status={isState} />
+            <NormalBadge status={item.status} />
           )}
         </td>
       </tr>
@@ -110,6 +111,7 @@ const TableRow = ({
           e.stopPropagation();
           handleRowClick(shopId, jobId);
         }}
+        className={tableStyle.employeeOrder}
       >
         <td>{shop.item.name}</td>
         <td>
@@ -117,7 +119,7 @@ const TableRow = ({
         </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
-          <NormalBadge status={isState} />
+          <NormalBadge status={item.status} />
         </td>
       </tr>
     );
