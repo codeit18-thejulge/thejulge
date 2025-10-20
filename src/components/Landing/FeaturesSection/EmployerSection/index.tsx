@@ -11,7 +11,7 @@ const EmployerSection = () => {
   };
 
   return (
-    <section className="mx-auto flex min-h-500 max-w-6xl flex-col-reverse items-center justify-between gap-24 px-16 py-80 tablet:flex-row">
+    <section className="mx-auto flex min-h-500 max-w-6xl flex-col-reverse items-center justify-between gap-24 overflow-x-hidden px-16 py-80 tablet:flex-row">
       <motion.div
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}

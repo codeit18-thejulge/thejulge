@@ -12,7 +12,7 @@ const EmployeeSection = () => {
     router.push("/joblist");
   };
   return (
-    <section className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-24 px-16 py-80 tablet:flex-row">
+    <section className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-24 overflow-x-hidden px-16 py-80 tablet:flex-row">
       <div className="flex flex-col items-center justify-center gap-12 tablet:items-start">
         <h2 className="text-32 font-bold">이런 알바는 어때요?</h2>
         <p className="text-24">
