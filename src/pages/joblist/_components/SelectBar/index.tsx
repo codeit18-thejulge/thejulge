@@ -11,20 +11,34 @@ type SelectBarProps = {
 };
 
 const SelectBar = ({ sort, onSortChange, onApplyFilter }: SelectBarProps) => {
-  const [openFilter, setOpenFilter] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const [isOpenSelectBox, setIsOpenSelectBox] = useState(false);
 
   const handleFilterToggle = () => {
-    setOpenFilter((prev) => !prev);
+    setIsOpenFilter((prev) => !prev);
+    if (isOpenSelectBox === true) {
+      setIsOpenSelectBox(false);
+    }
+  };
+
+  const handleSelectBoxToggle = () => {
+    setIsOpenSelectBox((prev) => !prev);
+    if (isOpenFilter === true) {
+      setIsOpenFilter(false);
+    }
   };
 
   return (
     <div className="relative flex gap-10">
       <SelectBox
+        isOpen={isOpenSelectBox}
+        setIsOpen={setIsOpenSelectBox}
         options={SORT_OPTIONS}
         placeholder={SORT_OPTIONS.find((option) => option.value === sort)?.label}
         className="min-w-114 border-none bg-gray-10 px-12 py-8 text-14 font-bold"
         dropdownClassname="border-gray-10"
         onChange={onSortChange}
+        onClick={handleSelectBoxToggle}
       />
       <button
         type="button"
@@ -33,10 +47,10 @@ const SelectBar = ({ sort, onSortChange, onApplyFilter }: SelectBarProps) => {
       >
         상세 필터
       </button>
-      {openFilter && (
+      {isOpenFilter && (
         <div className="absolute right--1 top-50 z-50 tablet:right-0">
           <Filter
-            isOpen={openFilter}
+            isOpen={isOpenFilter}
             onClose={handleFilterToggle}
             closeOnEsc={true}
             className={"bg-white"}

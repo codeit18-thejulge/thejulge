@@ -1,6 +1,6 @@
 import Ic_X from "@/assets/svgs/ic_x.svg";
 import { SEOUL_ADDRESS } from "@/constants/SEOUL_ADDRESS";
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import ClosedBadge from "../../../../components/Badge/ClosedBadge";
 import { cn } from "@/utils";
 import { useEscClose } from "@/hooks/useEscClose";
@@ -24,9 +24,10 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
   const [startsAt, setStartsAt] = useState("");
   const [pay, setPay] = useState("");
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
+  const [payError, setPayError] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
-  const isPayValid = !isNaN(Number(pay)) && pay.trim() !== "";
+  const isPayValid = pay.trim() !== "";
 
   const handleAddressClick = (address: string) => {
     const isSelected = selectedAddresses.includes(address);
@@ -41,6 +42,22 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
       return window.alert(`최대 ${MAX_SELECTION}개까지만 선택 가능합니다.`);
     }
     setSelectedAddresses((selectedAddresses) => [...selectedAddresses, address]);
+  };
+
+  const handlePayInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const payInput = e.target.value;
+    const numberOnly = payInput.replace(/,/g, "");
+    if (numberOnly === "" || /^\d+$/.test(numberOnly)) {
+      const number = Number(numberOnly);
+      const formatted = number.toLocaleString("ko-KR");
+      setPay(formatted);
+      setPayError("");
+      if (formatted === "0") {
+        setPay("");
+      }
+    } else {
+      setPayError("금액에는 숫자만 입력 가능합니다.");
+    }
   };
 
   const handleDelete = (address: string) => {
@@ -64,8 +81,9 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
       filters.startsAtGte = `${startsAt}T00:00:00Z`;
     }
 
-    if (pay && !isNaN(Number(pay))) {
-      filters.hourlyPayGte = Number(pay);
+    if (pay) {
+      const payNumber = pay.replaceAll(",", "");
+      filters.hourlyPayGte = Number(payNumber);
     }
     onApply(filters);
     onClose();
@@ -85,7 +103,7 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
       </div>
       <div className="flex flex-col gap-12">
         <p className="font-sans text-16 text-black">위치</p>
-        <div className="h-258 w-350 overflow-x-scroll rounded-6 border border-gray-20">
+        <div className="h-258 w-350 overflow-y-scroll rounded-6 border border-gray-20">
           <div className="grid grid-cols-2 gap-18 px-25 py-15">
             {SEOUL_ADDRESS.map((address) => {
               const chosen = selectedAddresses.includes(address);
@@ -131,16 +149,17 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
           금액<span className="text-red-30">*</span>
         </label>
         <div className="flex items-center gap-12">
-          <div className="w-full max-w-170">
+          <div className="h-70 w-full max-w-170">
             <Input
               value={pay}
               id="payId"
               isUnit="원"
               className="bg-transparent"
-              onChange={(e) => setPay(e.target.value)}
+              onChange={handlePayInputChange}
+              errorMsg={payError}
             />
           </div>
-          <span>이상부터</span>
+          <span className="pb-10">이상부터</span>
         </div>
       </div>
       <div className="flex h-48 gap-8">
