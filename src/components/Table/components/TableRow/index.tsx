@@ -25,7 +25,7 @@ interface TableRowProps {
   isLoading?: boolean;
   error?: boolean;
   isState?: string;
-  handleApplicationClick?: (jobId: string) => void;
+  handleApplicationClick?: (shopId: string, jobId: string,) => void;
   handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
   handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
   handleVolunteerClick?: (volunteerId: string) => void;
