@@ -1,10 +1,10 @@
 import { DetailedHTMLProps, ButtonHTMLAttributes } from "react";
 import { cn } from "@/utils";
 
-const disabledStyle = "disabled:bg-gray-40 disabled:text-white";
+const disabledStyle = "disabled:bg-gray-40 disabled:text-white border-gray";
 const BtnStyle = {
-  filled: `bg-primary text-white ${disabledStyle}`,
-  lined: `bg-white border-primary border-solid text-primary border ${disabledStyle}`,
+  filled: `bg-green-60 text-white ${disabledStyle}`,
+  lined: `bg-white border-green-60 border-solid text-green-60 border ${disabledStyle}`,
 };
 
 type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;

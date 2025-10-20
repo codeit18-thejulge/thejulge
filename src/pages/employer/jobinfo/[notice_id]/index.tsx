@@ -52,9 +52,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
   const [sendId, setSendId] = useState("");
 
   const [page, setPage] = useState(1); //페이지네이션
-  const { data: shopData } = useGetShopNoticeDetailQuery(
-    { shopId, noticeId }
-  );
+  const { data: shopData } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   const {
     data: appData,
     isLoading,
@@ -67,7 +65,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
     params: {
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
-    }
+    },
   });
 
   const shopInfo = shopData?.item; //가게 상세
@@ -123,11 +121,17 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
   }
 
   return (
-    <>
+    <div className="bg-gray-5">
       <div className="px-12 tablet:px-32">
         <>
           <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
-            <JobInfoCard res={shopInfo} bgColor={"bg-white"} noticeId={noticeId} />
+            <JobInfoCard
+              res={shopInfo}
+              bgColor={"bg-white"}
+              noticeId={noticeId}
+              isLoading={isLoading}
+              closed={res[0]?.item.notice.item.closed}
+            />
           </section>
           <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">
             <h2 className="mb-32 text-20-bold tablet:text-28-bold">신청자 목록</h2>
@@ -172,7 +176,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
           ]}
         ></MessageModal>
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 import Layout from "@/components/Layout";
 import ListPagination from "@/components/ListPagination";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import Post from "@/components/Post";
 import { getNoticesRequest, useGetNoticesQuery } from "@/hooks/api/notice/useGetNoticesQuery";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
@@ -12,7 +11,8 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import SelectBar from "./_components/SelectBar";
-import RecommendJobs from "./_components/RecommedJobs";
+import RecommendJobs from "./_components/RecommendJobs";
+import SkeletonUI from "@/components/Skeleton";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;
@@ -40,13 +40,10 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   const page = Number(query.page) || 1;
   const sort = (query.sort as NoticeSort) || "time";
   const { page: _page, sort: _sort, ...filterConditions } = query;
-
   const limit = 6;
   const offset = (page - 1) * limit;
   const activePage = page;
-
   const keyword = Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword || "";
-
   const jobDataApiParams: getNoticesRequest = { offset, limit, sort, ...filterConditions };
 
   if (sort === "time") {
@@ -133,7 +130,27 @@ const JobList = ({ userId }: InferGetServerSidePropsType<typeof getServerSidePro
   }, [isLoading, router]);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div>
+        <div>
+          <SkeletonUI count={1} boxClassName="h-541" />
+        </div>
+        <div className="mb-40 mt-60">
+          <SkeletonUI
+            count={2}
+            boxClassName="h-30 gap-0 w-50 tablet:gap-4 tablet:h-40 tablet:w-150"
+            className="mx-auto flex justify-start mobile:max-w-375 tablet:max-w-678 tablet:justify-between desktop:max-w-964"
+          />
+        </div>
+        <div className="mx-auto mb-40 mt-60 px-12 mobile:max-w-375 tablet:max-w-678 tablet:px-0 desktop:max-w-964">
+          <SkeletonUI
+            count={6}
+            className="grid grid-cols-2 gap-8 desktop:grid-cols-3 desktop:gap-14"
+            boxClassName="h-261 w-171 flex-col rounded-xl border border-gray-20 bg-white p-12 tablet:h-361 tablet:w-332 tablet:p-16 desktop:h-348 desktop:w-312"
+          />
+        </div>
+      </div>
+    );
   }
   if (isError) {
     return (

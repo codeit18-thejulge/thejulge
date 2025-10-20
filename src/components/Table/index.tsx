@@ -1,7 +1,6 @@
 import TableHeader from "./components/TableHeader";
 import TableRow from "./components/TableRow";
 import { ResultStatus } from "@/types/global";
-import { useState, useEffect } from "react";
 import { GetUserApplicationsResponse } from "@/hooks/api/application/useGetUserApplicationsQuery";
 import { GetShopApplicationsResponse } from "@/hooks/api/application/useGetShopApplicationsQuery";
 import tableStyle from "@/styles/table.module.css";
@@ -36,13 +35,7 @@ interface TableProps {
 
 const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleApplicationClick }: TableProps) => {
   const headerTitles = TABLE_HEADER[userType];
-  const [tableData, setTableData] = useState<
-    GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"]
-  >([]);
 
-  useEffect(() => {
-    setTableData(res);
-  }, [res]);
   return (
     <div className="tableOver min-h-300 tablet:min-h-420">
       <table className={tableStyle.table}>
@@ -55,22 +48,22 @@ const Table = ({ userType, res, handleRejectClick, handleAcceptClick, handleAppl
         <thead className={tableStyle.thead}>
           <TableHeader colTitle={headerTitles} />
         </thead>
-        {tableData.length === 0 ? (
-          <>
-            <tbody>
-              <tr className={tableStyle.nullLine}>
-                <td colSpan={4}>
-                  <div className={tableStyle.null}>
-                    <Image className="w-[15%] min-w-150" src={IcNullBody} alt="" />
-                    <p className="text-center">아직 신청한 알바 지원자가 없어요.</p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </>
+        {res.length === 0 ? (
+          <tbody>
+            <tr className={tableStyle.nullLine}>
+              <td colSpan={4}>
+                <div className={tableStyle.null}>
+                  <Image className="w-[15%] min-w-150" src={IcNullBody} alt="" />
+                  <p className="text-center">
+                    {userType === "employer" ? "아직 신청한 알바 지원자가 없어요." : "지원한 공고가 없어요"}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         ) : (
           <tbody>
-            {tableData?.map((item) => (
+            {res?.map((item) => (
               <TableRow
                 key={item.item.id}
                 item={item.item}

@@ -43,7 +43,9 @@
   }
 
   .tableWrap {
+    overflow: hidden;
     width: 100%;
+    background-color: var(--white);
     border: 1px solid var(--gray-10);
     border-radius: 0.625rem;
     -webkit-border-radius: 0.625rem;
@@ -72,4 +74,8 @@
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }

@@ -1,8 +1,3 @@
-.tableWrap {
-  position: relative;
-  overflow-x: auto;
-}
-
 .table {
   width: 100%;
   height: inherit;
@@ -10,10 +5,11 @@
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
+  background-color: var(--white);
 }
 
 .thead th {
-  background-color: var(--red-10);
+  background-color: var(--green-10);
 }
 
 .table th:last-child,
@@ -25,7 +21,7 @@
 }
 
 .table th:last-child {
-  background-color: var(--red-10);
+  background-color: var(--green-10);
 }
 
 .table td:last-child {
@@ -64,6 +60,10 @@
   -moz-transition: background-color 0.5s;
   -ms-transition: background-color 0.5s;
   -o-transition: background-color 0.5s;
+}
+.table tbody tr:only-child td {
+  background-color: unset;
+  cursor: default;
 }
 
 .overText {
