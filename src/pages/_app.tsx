@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider, HydrationBoundary } from "@tanstack/r
 import { useState } from "react";
 import { NextPage } from "next";
 import { ReactNode } from "react";
+import { ModalProvider } from "@/hooks/useModal";
 
 type NextPageWithLayout = NextPage & {
   getLayout: (page: ReactNode) => ReactNode;
@@ -23,7 +24,11 @@ export default function App({ Component, pageProps }: AppProps & { Component: Ne
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={pageProps.dehydratedState}>{getLayout(<Component {...pageProps} />)}</HydrationBoundary>
+      <ModalProvider>
+        <HydrationBoundary state={pageProps.dehydratedState}>
+          {getLayout(<Component {...pageProps} />)}
+        </HydrationBoundary>
+      </ModalProvider>
     </QueryClientProvider>
   );
 }

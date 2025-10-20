@@ -9,6 +9,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 const MINIMUM_WAGE = 10030;
 const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
+const inputStyle = "rounded-md bg-white";
 
 export interface FormData {
   hourlyPay: number;
@@ -27,7 +28,7 @@ interface RegisterFormProps {
 const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: RegisterFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     hourlyPay: defaultValues?.hourlyPay ?? MINIMUM_WAGE,
-    startsAt: defaultValues?.startsAt ?? dayjs().format("YYYY-MM-DDTHH:mm"),
+    startsAt: dayjs(defaultValues?.startsAt).format("YYYY-MM-DDTHH:mm") ?? dayjs().format("YYYY-MM-DDTHH:mm"),
     workhour: defaultValues?.workhour ?? 1,
     description: defaultValues?.description ?? "",
   });
@@ -40,7 +41,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     if (/^\d*$/.test(payInput)) {
       const num = payInput === "" ? 0 : Number(payInput);
       setFormData((prev) => ({ ...prev, hourlyPay: num }));
-      setDisplayPay(payInput);
+      setDisplayPay(num.toLocaleString("ko-KR"));
     }
   };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -48,24 +49,27 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     setFormData((prev) => ({ ...prev, [name]: type === "number" ? Number(value) : value }));
   };
 
-  const handleBlur = (input: string) => {
+  const handleHourlyPayBlur = () => {
     let message = "";
-    if (input === "hourlyPay" && formData.hourlyPay < MINIMUM_WAGE) {
+    if (!formData.hourlyPay) {
+      message = "시급은 필수 입력 값입니다.";
+    } else if (formData.hourlyPay < MINIMUM_WAGE) {
       message = `시급은 최소 ${MINIMUM_WAGE.toLocaleString()}원 이상이어야 합니다.`;
-    } else if (input === "startsAt" && dayjs(formData.startsAt).isBefore(dayjs())) {
-      message = "시작 일시는 현재 시각 이후여야 합니다.";
-    } else if (input === "workhour" && (formData.workhour < 1 || formData.workhour > 24)) {
-      message = "업무 시간은 1~24시간 사이여야 합니다.";
     }
-    setErrMsg((prev) => ({ ...prev, [input]: message }));
-
-    if (input === "hourlyPay") {
-      setDisplayPay(formData.hourlyPay.toLocaleString("ko-KR"));
-    }
+    setErrMsg((prev) => ({ ...prev, hourlyPay: message }));
+  };
+  const handleStartsAtBlur = () => {
+    const isBefore = dayjs(formData.startsAt).isBefore(dayjs());
+    setErrMsg((prev) => ({ ...prev, startsAt: isBefore ? "시작 일시는 현재 시각 이후여야 합니다." : "" }));
+  };
+  const handleWorkhourBlur = () => {
+    const isUnder24 = formData.workhour < 1 || formData.workhour > 24;
+    setErrMsg((prev) => ({ ...prev, workhour: isUnder24 ? "업무 시간은 1~24시간 사이여야 합니다." : "" }));
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    handleStartsAtBlur();
     onSubmit({ ...formData, startsAt: dayjs(formData.startsAt).toISOString() });
   };
 
@@ -75,34 +79,36 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     <>
       <form className="flex flex-col gap-32" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-20 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>시급</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>시급</span>
             <Input
               name="hourlyPay"
               type="text"
               value={displayPay}
               onChange={handlePayChange}
-              onBlur={() => handleBlur("hourlyPay")}
+              onBlur={handleHourlyPayBlur}
               errorMsg={errMSg.hourlyPay}
               isUnit="원"
               required
+              className={inputStyle}
             />
           </label>
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>시작 일시</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>시작 일시</span>
             <Input
               name="startsAt"
               type="datetime-local"
-              min={formData.startsAt}
+              min={dayjs().format("YYYY-MM-DDTHH:mm")}
               value={formData.startsAt}
               onChange={handleInputChange}
-              onBlur={() => handleBlur("startsAt")}
+              onBlur={handleStartsAtBlur}
               errorMsg={errMSg.startsAt}
               required
+              className={cn(inputStyle, "h-[100%]")}
             />
           </label>
-          <label className={cn(labelStyle)}>
-            <span className={cn(labelRequiredStyle)}>업무 시간</span>
+          <label className={labelStyle}>
+            <span className={labelRequiredStyle}>업무 시간</span>
             <Input
               name="workhour"
               type="number"
@@ -110,14 +116,15 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
               max={24}
               value={formData.workhour}
               onChange={handleInputChange}
-              onBlur={() => handleBlur("workhour")}
+              onBlur={handleWorkhourBlur}
               errorMsg={errMSg.workhour}
               isUnit="시간"
               required
+              className={inputStyle}
             />
           </label>
         </div>
-        <label className={cn(labelStyle)}>
+        <label className={labelStyle}>
           <span>공고 설명</span>
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
         </label>
