@@ -8,7 +8,7 @@ import SelectOptions from "./SelectOptions";
 type STYLES = { boxSelect: string; fontSelect: string };
 
 const style: STYLES = {
-  boxSelect: "bg-white rounded-md cursor-pointer border border-gray-40",
+  boxSelect: "bg-white rounded-md cursor-pointer border border-gray-30",
   fontSelect: "font-normal text-base text-gray-40",
 };
 
