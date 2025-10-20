@@ -6,7 +6,11 @@ interface ModalContextType {
     type: ModalType,
     message: string,
     onConfirm: () => void,
-    options?: { closeOnOverlayClick?: boolean; closeOnEsc?: boolean },
+    options?: {
+      closeOnOverlayClick?: boolean;
+      closeOnEsc?: boolean;
+      btnText?: { cancel?: string; confirm?: string };
+    },
   ) => void;
   closeModal: () => void;
 }
@@ -26,7 +30,11 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
       type: ModalType,
       message: string,
       onConfirm: () => void,
-      options?: { closeOnOverlayClick?: boolean; closeOnEsc?: boolean },
+      options?: {
+        closeOnOverlayClick?: boolean;
+        closeOnEsc?: boolean;
+        btnText?: { cancel?: string; confirm?: string };
+      },
     ) => {
       const handleConfirm = () => {
         onConfirm?.();
@@ -37,6 +45,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         message,
         onConfirm: handleConfirm,
         onClose: () => setIsModalOpen(false),
+        btnText: options?.btnText,
       });
       setModalData(content);
       setCloseOnOverlayClick(options?.closeOnOverlayClick ?? true);

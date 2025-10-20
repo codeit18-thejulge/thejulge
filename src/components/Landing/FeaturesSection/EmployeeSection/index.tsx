@@ -21,7 +21,7 @@ const EmployeeSection = () => {
 
         <Button
           status="filled"
-          className="hover:bg-third mt-24 max-w-300 py-16 text-20-bold transition"
+          className="hover:bg-green-40 mt-24 max-w-300 py-16 text-20-bold transition"
           onClick={handleJobClick}
         >
           공고 보러가기

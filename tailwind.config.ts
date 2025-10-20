@@ -34,7 +34,7 @@ const config: Config = {
         error: "var(--red)",
         primary: "var(--green-50)",
         secondary: "var(--green-10)",
-        third: "var(--green-40)",
+        third: "var(--green-20)",
         "black-overlay": "rgba(0, 0, 0, 0.7)",
         gray: {
           5: "var(--gray-5)",
