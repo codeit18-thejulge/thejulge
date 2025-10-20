@@ -10,6 +10,7 @@ import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
 import { useRef, useState } from "react";
+import { isStartTimePassed } from "@/utils/formatTime";
 
 interface user {
   user: {
@@ -56,6 +57,12 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
     handleApplicationClick?.(shopId, jobId);
   };
 
+
+
+console.log(isStartTimePassed(item.notice.item.startsAt))
+
+
+
   if (userType === "employer") {
     // 신청자 목록 - 사장
     return (
@@ -73,7 +80,7 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
         </td>
         <td>{formatPhoneNumber(user.item.phone || "-")}</td>
         <td>
-          {item.notice.item.closed ? (
+          {item.notice.item.closed || isStartTimePassed(item.notice.item.startsAt)===true ? (
             item.status === "pending" ? (
               <div className="flex max-w-fit items-center overflow-hidden rounded-20 bg-gray-5 px-10 py-7 text-12-regular leading-none text-gray-30 tablet:py-8 tablet:text-14-bold">
                 마감
@@ -127,7 +134,13 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
         </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
-          <NormalBadge status={item.status} />
+          {notice.item.closed || isStartTimePassed(item.notice.item.startsAt)===true ? (
+            <div className="flex max-w-fit items-center overflow-hidden rounded-20 bg-gray-5 px-10 py-7 text-12-regular leading-none text-gray-30 tablet:py-8 tablet:text-14-bold">
+              마감
+            </div>
+          ) : (
+            <NormalBadge status={item.status} />
+          )}
         </td>
       </tr>
     );
