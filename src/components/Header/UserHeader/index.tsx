@@ -61,7 +61,7 @@ const UserHeader = () => {
   const [shopId, setShopId] = useState("");
   const [isNotiOpen, setIsNotiOpen] = useState(false);
 
-  // 알림 위치 때문에 버튼 ref로 DOM 좌표 가져옴
+  // 알림 위치 때문에 버튼 ref로 DOM 좌표 사용
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const { data: alertData } = useGetUserAlertsQuery({ userId, options: { enabled: !!userId } });
@@ -120,12 +120,14 @@ const UserHeader = () => {
             로그아웃
           </button>
         </li>
-        <li className="tablet:relative">
-          <button ref={btnRef} aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
-            <IcNoti className={cn("w-20 tablet:w-24", hasUnread ? "text-[#00aaaa]" : "text-black")} />
-          </button>
-          {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} btnRef={btnRef} />}
-        </li>
+        {!shopId && (
+          <li className="tablet:relative">
+            <button ref={btnRef} aria-label="알림 열기" className="flex" onClick={handleNotiToggle}>
+              <IcNoti className={cn("w-20 tablet:w-24", hasUnread ? "text-[#00aaaa]" : "text-black")} />
+            </button>
+            {isNotiOpen && <NotificationWrapper onClose={handleNotiClose} btnRef={btnRef} />}
+          </li>
+        )}
       </ul>
     </nav>
   );
