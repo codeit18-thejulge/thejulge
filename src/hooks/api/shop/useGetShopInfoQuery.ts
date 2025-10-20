@@ -19,7 +19,7 @@ export const getShopInfo = async (shopId: string): Promise<GetShopInfoResponse> 
 
 export const useGetShopInfoQuery = (shopId: string) => {
   return useQuery({
-    queryKey: ["getShopInfo"],
+    queryKey: ["getShopInfo", shopId],
     queryFn: () => getShopInfo(shopId),
   });
 };

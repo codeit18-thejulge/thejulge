@@ -7,7 +7,8 @@ import dayjs from "dayjs";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 const MINIMUM_WAGE = 10030;
-const labelStyle = "flex flex-col gap-8 flex-1 text-16-regular text-black";
+const labelStyle = "flex flex-col flex-1 text-16-regular text-black h-100";
+const labelNormalStyle = "mb-8";
 const labelRequiredStyle = "after:content-['*'] after:text-primary";
 const inputStyle = "rounded-md bg-white";
 
@@ -80,7 +81,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
       <form className="flex flex-col gap-32" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-20 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>시급</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>시급</span>
             <Input
               name="hourlyPay"
               type="text"
@@ -94,7 +95,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>시작 일시</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>시작 일시</span>
             <Input
               name="startsAt"
               type="datetime-local"
@@ -108,7 +109,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
             />
           </label>
           <label className={labelStyle}>
-            <span className={labelRequiredStyle}>업무 시간</span>
+            <span className={cn(labelNormalStyle, labelRequiredStyle)}>업무 시간</span>
             <Input
               name="workhour"
               type="number"
@@ -125,7 +126,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           </label>
         </div>
         <label className={labelStyle}>
-          <span>공고 설명</span>
+          <span className={labelNormalStyle}>공고 설명</span>
           <Textarea name="description" value={formData.description} maxLength={500} onChange={handleInputChange} />
         </label>
         <Button type="submit" disabled={isPending || hasError} status="filled" className="m-auto h-48 tablet:w-312">
