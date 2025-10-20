@@ -2,15 +2,15 @@ import { useRouter } from "next/router";
 import RegisterForm, { FormData } from "@/pages/employer/jobinfo/_components/RegisterForm";
 import { usePutShopNoticeDetailQuery } from "@/hooks/api/notice/usePutShopNoticeDetail";
 import { getShopNoticeDetail, useGetShopNoticeDetailQuery } from "@/hooks/api/notice/useGetShopNoticeDetailQuery";
-import { useState } from "react";
+import { useEffect } from "react";
 import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalWrapper, { ModalProps, ModalType, getModalContent } from "@/components/ModalWrapper";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getCookieValue } from "@/utils/getCookie";
 import { checkAuthSSR } from "@/utils/checkAuth";
+import { useModal } from "@/hooks/useModal";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const { redirect } = checkAuthSSR(context, "employer", true);
@@ -38,49 +38,49 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 
 const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-  const { data: jobinfoData, isPending: isGetLoading } = useGetShopNoticeDetailQuery({ shopId, noticeId });
+  const { data: jobinfoData, isPending: isGetPending } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   const { mutate: putShopNotice, isPending: isPutPending } = usePutShopNoticeDetailQuery();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<ModalProps>({
-    message: "",
-    buttons: [{ buttonText: "", style: "filled", onClick: () => {}, className: "" }],
-  });
-
-  const handleOpenModal = (type: ModalType, message: string, onConfirm: () => void) => {
-    const content = getModalContent({
-      type,
-      message,
-      onConfirm,
-      onClose: () => setIsModalOpen(false),
-    });
-    setModalData(content);
-    setIsModalOpen(true);
-  };
+  const { openModal, closeModal } = useModal();
 
   const handleSubmit = (formData: FormData) => {
     putShopNotice(
       { shopId, noticeId, data: formData },
       {
         onSuccess: () => {
-          handleOpenModal("confirm", "공고 수정이 완료되었습니다.", () =>
-            router.replace(`/employer/jobinfo/${noticeId}`),
-          );
+          openModal("confirm", "공고 수정이 완료되었습니다.", () => router.replace(`/employer/jobinfo/${noticeId}`), {
+            closeOnOverlayClick: false,
+            closeOnEsc: false,
+          });
         },
         onError: () => {
-          handleOpenModal("confirm", "공고 수정에 실패했습니다.", () => {
-            setIsModalOpen(false);
-          });
+          openModal("confirm", "공고 수정에 실패했습니다.", closeModal);
         },
       },
     );
   };
 
   const handleCloseClick = () => {
-    handleOpenModal("action", "수정을 취소하시겠습니까?", () => router.push(`/employer/jobinfo/${noticeId}`));
+    openModal("action", "수정을 취소하시겠습니까?", () => router.push(`/employer/jobinfo/${noticeId}`));
   };
 
-  if (isGetLoading || !jobinfoData) {
+  useEffect(() => {
+    if (!isGetPending && jobinfoData) {
+      const writerId = jobinfoData.item.shop.item.id;
+      if (writerId !== shopId) {
+        router.replace("/joblist");
+      }
+
+      if (jobinfoData.item.closed) {
+        openModal("confirm", "마감된 공고는 수정할 수 없습니다.", () => router.push(`/employer/jobinfo/${noticeId}`), {
+          closeOnOverlayClick: false,
+          closeOnEsc: false,
+        });
+      }
+    }
+  }, [isGetPending, jobinfoData, noticeId, openModal, router, shopId]);
+
+  if (isGetPending || !jobinfoData) {
     return (
       <div className="flex h-[100dvh] items-center justify-center">
         <LoadingSpinner />
@@ -96,22 +96,21 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
   };
 
   return (
-    <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
-      <div className="relative">
-        <IcClose onClick={handleCloseClick} className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32" />
-        <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 수정</h1>
-        <RegisterForm
-          defaultValues={defaultValues}
-          onSubmit={handleSubmit}
-          isPending={isPutPending}
-          submitLabel="수정"
-        />
-        <ModalWrapper
-          isOpen={isModalOpen}
-          message={modalData.message}
-          onClose={() => setIsModalOpen(false)}
-          buttons={modalData.buttons}
-        />
+    <div className="bg-gray-5">
+      <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
+        <div className="relative">
+          <IcClose
+            onClick={handleCloseClick}
+            className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32"
+          />
+          <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">공고 수정</h1>
+          <RegisterForm
+            defaultValues={defaultValues}
+            onSubmit={handleSubmit}
+            isPending={isPutPending}
+            submitLabel="수정"
+          />
+        </div>
       </div>
     </div>
   );
@@ -120,4 +119,6 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
 export { getServerSideProps };
 export default EditJobInfo;
 
-EditJobInfo.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
+EditJobInfo.getLayout = (page: React.ReactNode) => {
+  return <Layout>{page}</Layout>;
+};
