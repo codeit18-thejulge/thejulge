@@ -2,7 +2,7 @@ import { REASONS } from "@/constants/LANDING_VARIABLES";
 
 const ReasonToUse = () => {
   return (
-    <section className="bg-gray-5 py-96">
+    <section id="reason" className="bg-gray-5 py-96">
       <div className="mx-auto flex max-w-6xl flex-col gap-24 px-4 tablet:px-6 desktop:px-8">
         <div className="flex flex-col gap-12 text-center">
           <h2 className="text-32 font-bold">
