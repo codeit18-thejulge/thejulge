@@ -73,7 +73,7 @@ const Signup = () => {
 
   const renderIcon = (type: UserType) => {
     if (signupData.type === type) {
-      return <IcCheck className="inline-block" />;
+      return <IcCheck className="text-green-60 inline-block" />;
     } else {
       return <IcCircleGray className="inline-block" />;
     }
@@ -107,7 +107,7 @@ const Signup = () => {
   return (
     <div className="mx-auto my-[15%] w-350">
       <Link href="/">
-        <Logo className="mx-auto mb-40 w-248" />
+        <Logo className="text-green-60 mx-auto mb-40 w-248" />
       </Link>
       <form method="post" onSubmit={handleSignupSubmit}>
         <div className="mb-28">
