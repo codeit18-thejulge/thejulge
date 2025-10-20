@@ -26,7 +26,7 @@
 }
 
 .activePage {
-  background-color: var(--red-30);
+  background-color: var(--green-30);
   color: white;
   border-color: #007bff;
 }

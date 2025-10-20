@@ -43,6 +43,7 @@
   }
 
   .tableWrap {
+    overflow: hidden;
     width: 100%;
     border: 1px solid var(--gray-10);
     border-radius: 0.625rem;
