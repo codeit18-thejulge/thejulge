@@ -28,7 +28,7 @@ interface TableProps {
   res: GetShopApplicationsResponse["items"] | GetUserApplicationsResponse["items"];
   isLoading?: boolean;
   error?: boolean;
-  handleApplicationClick?: (jobId: string) => void;
+  handleApplicationClick?: (shopId: string, jobId: string) => void;
   handleRejectClick?: (approval: ResultStatus, sendId: string) => void;
   handleAcceptClick?: (approval: ResultStatus, sendId: string) => void;
   handleVolunteerClick?: (volunteerId: string) => void;
