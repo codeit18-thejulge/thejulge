@@ -57,12 +57,6 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
     handleApplicationClick?.(shopId, jobId);
   };
 
-
-
-console.log(isStartTimePassed(item.notice.item.startsAt))
-
-
-
   if (userType === "employer") {
     // 신청자 목록 - 사장
     return (
@@ -80,7 +74,7 @@ console.log(isStartTimePassed(item.notice.item.startsAt))
         </td>
         <td>{formatPhoneNumber(user.item.phone || "-")}</td>
         <td>
-          {item.notice.item.closed || isStartTimePassed(item.notice.item.startsAt)===true ? (
+          {item.notice.item.closed || isStartTimePassed(item.notice.item.startsAt) === true ? (
             item.status === "pending" ? (
               <div className="flex max-w-fit items-center overflow-hidden rounded-20 bg-gray-5 px-10 py-7 text-12-regular leading-none text-gray-30 tablet:py-8 tablet:text-14-bold">
                 마감
@@ -91,7 +85,7 @@ console.log(isStartTimePassed(item.notice.item.startsAt))
           ) : !item.notice.item.closed && item.status === "pending" ? (
             <div className={tableStyle.btnGroup}>
               <Button
-                className={cn(BUTTON_STYLE)}
+                className={cn("border-red-30 text-red-40",BUTTON_STYLE)}
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
@@ -134,7 +128,7 @@ console.log(isStartTimePassed(item.notice.item.startsAt))
         </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
-          {notice.item.closed || isStartTimePassed(item.notice.item.startsAt)===true ? (
+          {notice.item.closed || isStartTimePassed(item.notice.item.startsAt) === true ? (
             <div className="flex max-w-fit items-center overflow-hidden rounded-20 bg-gray-5 px-10 py-7 text-12-regular leading-none text-gray-30 tablet:py-8 tablet:text-14-bold">
               마감
             </div>

@@ -10,7 +10,7 @@ interface LabelProps {
 }
 
 const styleClass =
-  "fixed z-50 transition-all inset-x-1/2 inset-y-2/4 -translate-y-2/4 -translate-x-2/4 min-h-fit min-w-fit whitespace-nowrap rounded-5 bg-red-30 px-17 py-11 text-16-regular text-white opacity-0 -translate-y-1/4";
+  "fixed z-50 transition-all inset-x-1/2 inset-y-2/4 -translate-y-2/4 -translate-x-2/4 min-h-fit min-w-fit whitespace-nowrap rounded-5 bg-green-30 px-17 py-11 text-16-regular text-white opacity-0 -translate-y-1/4";
 const show = "opacity-1 -translate-y-2/4";
 
 // 컨테이너 렌더링
