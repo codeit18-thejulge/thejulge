@@ -11,6 +11,7 @@ import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import RegisterImage from "./RegisterImage";
 import { usePostPresignedURLQuery } from "@/hooks/api/image/usePostPresignedURLQuery";
 import { usePutPresignedURLQuery } from "@/hooks/api/image/usePutPresignedURLQuery";
+import { cn } from "@/utils";
 
 const MINIMUM_WAGE = 10030;
 const DEFAULT_IMAGE_PATH = "/images/img_shopdefault.jpg";
@@ -42,7 +43,14 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
     originalHourlyPay: defaultValues?.originalHourlyPay ?? MINIMUM_WAGE,
   });
   const [displayPay, setDisplayPay] = useState(formData.originalHourlyPay.toLocaleString());
-  const [errMSg, setErrMsg] = useState({ name: "", category: "", address1: "", address2: "", originalHourlyPay: "" });
+  const [errMSg, setErrMsg] = useState({
+    name: "",
+    category: "",
+    address1: "",
+    address2: "",
+    originalHourlyPay: "",
+    imageUrl: "",
+  });
 
   const { mutateAsync: postPresignedURL } = usePostPresignedURLQuery();
   const { mutateAsync: putImage } = usePutPresignedURLQuery();
@@ -64,11 +72,13 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
   };
   const handleImageChange = (url: string) => {
     setFormData((prev) => ({ ...prev, imageUrl: url }));
+    setErrMsg((prev) => ({ ...prev, imageUrl: "" }));
   };
 
   const handleImageDelete = (e: MouseEvent) => {
     e.stopPropagation();
     setFormData((prev) => ({ ...prev, imageUrl: "" }));
+    setErrMsg((prev) => ({ ...prev, imageUrl: "가게 이미지는 필수 입력 값입니다." }));
   };
 
   const handleNameBlur = () => {
@@ -94,28 +104,15 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // defualt image 업로드
-    if (!formData.imageUrl && DEFAULT_IMAGE_PATH) {
-      try {
-        // file 형태로 이미지 가져오기
-        const response = await fetch(DEFAULT_IMAGE_PATH);
-        const blob = await response.blob();
-        const file = new File([blob], "default_shop.jpg", { type: blob.type });
-
-        // upload Image to S3
-        const { item } = await postPresignedURL({ name: file.name });
-        await putImage({ presignedURL: item.url, file });
-        const cleanUrl = item.url.split("?")[0];
-        formData.imageUrl = cleanUrl;
-      } catch (err) {
-        console.error("기본 이미지 업로드 실패", err);
-      }
+    if (!formData.imageUrl) {
+      setErrMsg((prev) => ({ ...prev, imageUrl: "가게 이미지는 필수 입력 값입니다." }));
+      return;
     }
     onSubmit(formData);
   };
 
   const requiredInputs: (keyof FormData)[] = ["name", "category", "address1", "address2", "originalHourlyPay"];
-  const isRequiredInputEmpty = requiredInputs.some((key) => !formData[key]);
+  const isRequiredInputEmpty = requiredInputs.some((key) => !formData[key]) || !formData.imageUrl;
   const hasError = Object.values(errMSg).some((msg) => msg);
 
   return (
@@ -182,9 +179,13 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
           </label>
         </div>
         <div className={labelStyle}>
-          <span>가게 이미지</span>
+          <span className={labelRequiredStyle}>가게 이미지</span>
           <div className="relative w-full tablet:w-fit">
-            <RegisterImage initialUrl={formData.imageUrl} onUploaded={handleImageChange} />
+            <RegisterImage
+              initialUrl={formData.imageUrl}
+              onUploaded={handleImageChange}
+              className={cn(errMSg.imageUrl && "border-red-40")}
+            />
             {formData.imageUrl && (
               <button
                 type="button"
@@ -196,6 +197,7 @@ const RegisterForm = ({ defaultValues, onSubmit, isPending, submitLabel }: Regis
               </button>
             )}
           </div>
+          <p className="mt-8 text-12 text-red-40">{errMSg.imageUrl}</p>
         </div>
         <label className={labelStyle}>
           <span>공고 설명</span>
