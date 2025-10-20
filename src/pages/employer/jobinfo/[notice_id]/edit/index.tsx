@@ -7,7 +7,7 @@ import IcClose from "@/assets/svgs/ic_close.svg";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { QueryClient, dehydrate, useQueryClient } from "@tanstack/react-query";
 import { getCookieValue } from "@/utils/getCookie";
 import { checkAuthSSR } from "@/utils/checkAuth";
 import { useModal } from "@/hooks/useModal";
@@ -38,6 +38,8 @@ const getServerSideProps = async (context: GetServerSidePropsContext) => {
 
 const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { data: jobinfoData, isPending: isGetPending } = useGetShopNoticeDetailQuery({ shopId, noticeId });
   const { mutate: putShopNotice, isPending: isPutPending } = usePutShopNoticeDetailQuery();
 
@@ -48,6 +50,7 @@ const EditJobInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof ge
       { shopId, noticeId, data: formData },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getShopNoticeDetail", shopId, noticeId] });
           openModal("confirm", "공고 수정이 완료되었습니다.", () => router.replace(`/employer/jobinfo/${noticeId}`), {
             closeOnOverlayClick: false,
             closeOnEsc: false,
