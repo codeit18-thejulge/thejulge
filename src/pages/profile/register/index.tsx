@@ -63,7 +63,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const router = useRouter();
 
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo, isSuccess } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isSuccess, isPending } = usePutMyInfoQuery();
 
   const [profileData, setProfileData] = useState<RegisterData>({
     name: "",
@@ -76,6 +76,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const [modalMessage, setModalMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isOpenSelectBox, setIsOpenSelectBox] = useState(false);
+  const [buttonMessage, setButtonMessage] = useState("등록하기");
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -152,6 +153,16 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
     }
   }, [profileData, phoneError]);
 
+  useEffect(() => {
+    if (isPending) {
+      setIsDisabled(true);
+      setButtonMessage("등록중...");
+    } else {
+      setIsDisabled(false);
+      setButtonMessage("등록하기");
+    }
+  }, [isPending]);
+
   return (
     <div className="bg-gray-5">
       <div className="mx-auto flex max-w-5xl flex-col gap-32 px-24 py-60">
@@ -210,7 +221,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
           onClick={handleRegisterClick}
           disabled={isDisabled}
         >
-          등록하기
+          {buttonMessage}
         </Button>
 
         <MessageModal
