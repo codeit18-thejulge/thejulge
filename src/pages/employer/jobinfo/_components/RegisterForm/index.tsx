@@ -9,7 +9,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 const MINIMUM_WAGE = 10030;
 const labelStyle = "flex flex-col flex-1 text-16-regular text-black h-100";
 const labelNormalStyle = "mb-8";
-const labelRequiredStyle = "after:content-['*'] after:text-primary";
+const labelRequiredStyle = "after:content-['*'] after:text-error";
 const inputStyle = "rounded-md bg-white";
 
 export interface FormData {

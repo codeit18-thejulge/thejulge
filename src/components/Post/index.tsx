@@ -24,7 +24,6 @@ const postStyles = {
 
 const Post = ({
   name,
-  id,
   hourlyPay,
   startsAt,
   workhour,
@@ -34,8 +33,6 @@ const Post = ({
   originalHourlyPay,
   className,
 }: Props) => {
-  const router = useRouter();
-
   const isPassed = isStartTimePassed(startsAt);
   return (
     <section className={cn(postStyles.basic, (closed || isPassed) && postStyles.closed, className)}>

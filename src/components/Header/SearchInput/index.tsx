@@ -3,13 +3,9 @@ import { cn } from "@/utils";
 import { useRouter } from "next/router";
 import { ChangeEvent, forwardRef, useEffect, useState } from "react";
 
-interface SearchInputProps {
-  placeholder?: string;
-}
-
 const SEARCH_PLACEHOLDER = "가게 이름으로 찾아보세요";
 
-const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({ placeholder, ...props }, ref) => {
+const SearchInput = forwardRef<HTMLInputElement>(({ ...props }, ref) => {
   const [inputValue, setInputValue] = useState("");
 
   const router = useRouter();
@@ -46,10 +42,10 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({ placeholde
         ref={ref}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder={placeholder || SEARCH_PLACEHOLDER}
+        placeholder={SEARCH_PLACEHOLDER}
         className={cn(
           "h-20 w-full bg-inherit text-12-regular text-black outline-none tablet:text-14-regular",
-          placeholder === "" ? "placeholder-gray-40" : "placeholder-black",
+          "placeholder-gray-40",
         )}
         {...props}
       />
