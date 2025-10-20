@@ -6,6 +6,7 @@ import { cn } from "@/utils";
 import { GetUserAlertsResponse, useGetUserAlertsQuery } from "@/hooks/api/alert/useGetUserAlertsQuery";
 import { usePutUserAlertsQuery } from "@/hooks/api/alert/usePutUserAlertsQuery";
 import { getCookieValue } from "@/utils/getCookie";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type UserAlertItem = GetUserAlertsResponse["items"][number]["item"];
 
@@ -14,6 +15,8 @@ interface NotificationProps {
   className?: string;
 }
 const Notification = ({ onClose, className }: NotificationProps) => {
+  const queryClient = useQueryClient();
+
   const [userId, setUserId] = useState("");
   const [alerts, setAlerts] = useState<UserAlertItem[]>([]);
 
@@ -29,12 +32,20 @@ const Notification = ({ onClose, className }: NotificationProps) => {
   }, [alertData]);
 
   const handleAlertRead = async (alertId: string) => {
-    try {
-      await putUserAlerts({ userId, alertId });
-      refetch();
-    } catch (err) {
-      console.error(err);
-    }
+    const prevAlerts = [...alerts];
+    setAlerts((prev) => prev.filter((alert) => alert.id !== alertId));
+
+    putUserAlerts(
+      { userId, alertId },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getUserAlerts", userId] });
+        },
+        onError: () => {
+          setAlerts(prevAlerts);
+        },
+      },
+    );
   };
   useEffect(() => {
     const userCookieId = getCookieValue(document.cookie, "userId") || "";
@@ -43,9 +54,9 @@ const Notification = ({ onClose, className }: NotificationProps) => {
 
   useEffect(() => {
     if (userId) {
-      getAlerts();
+      refetch().then(getAlerts);
     }
-  }, [userId, getAlerts]);
+  }, [userId, getAlerts, refetch]);
 
   return (
     <section
