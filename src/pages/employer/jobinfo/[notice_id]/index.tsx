@@ -130,7 +130,7 @@ const JopInfo = ({ shopId, noticeId }: InferGetServerSidePropsType<typeof getSer
               bgColor={"bg-white"}
               noticeId={noticeId}
               isLoading={isLoading}
-              closed={res[0]?.item.notice.item.closed}
+              closed={res[0]?.item?.notice.item.closed}
             />
           </section>
           <section className="mx-auto py-40 tablet:py-60 desktop:max-w-964">

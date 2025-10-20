@@ -18,7 +18,7 @@ interface TableProps {
 }
 
 const JobInfoTable = ({
-  res,
+  res=[],
   limit,
   count,
   hasNext,
