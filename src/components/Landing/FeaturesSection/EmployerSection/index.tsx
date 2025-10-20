@@ -1,17 +1,17 @@
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import ImgJob from "@/assets/svgs/img_job.png";
+import ImgJob from "/public/images/img_job.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
 const EmployerSection = () => {
   const router = useRouter();
   const handleShopClick = () => {
-    router.push("/shopinfo/register"); // 해당페이지에서 로그인검사 -> 로그인페이지로 리다이렉트
+    router.push("/shopinfo/register");
   };
 
   return (
-    <section className="mx-auto flex min-h-500 max-w-6xl flex-col-reverse items-center justify-between gap-24 px-16 py-80 tablet:flex-row">
+    <section className="mx-auto flex min-h-500 max-w-6xl flex-col-reverse items-center justify-between gap-24 overflow-x-hidden px-16 py-80 tablet:flex-row">
       <motion.div
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -29,7 +29,7 @@ const EmployerSection = () => {
 
         <Button
           status="filled"
-          className="mt-24 max-w-300 py-16 text-20-bold transition hover:bg-red-40"
+          className="hover:bg-third mt-24 max-w-300 py-16 text-20-bold transition"
           onClick={handleShopClick}
         >
           등록 하러가기

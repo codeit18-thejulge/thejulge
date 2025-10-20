@@ -4,7 +4,7 @@ const HeroSection = () => {
   const { data } = useGetNoticesQuery();
 
   return (
-    <section className="mt-54 bg-red-10 px-16 py-64">
+    <section className="bg-secondary mt-54 px-16 py-64">
       <div className="mx-auto max-w-3xl">
         <div className="flex flex-col items-center gap-16">
           <h1 className="text-center text-48 font-bold">

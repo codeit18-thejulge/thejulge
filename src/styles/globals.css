@@ -9,7 +9,7 @@
 :root {
   --white: #ffffff;
   --black: #111322;
-  --primary: #ea3c12;
+  --red: #ea3c12;
 
   --gray-5: #fafafa;
   --gray-10: #f2f2f3;
@@ -26,8 +26,12 @@
   --blue-10: #cce6ff;
   --blue-20: #0080ff;
 
-  --green-10: #d4f7d4;
-  --green-20: #20a81e;
+  --green-10: #e4f6f4;
+  --green-20: #daefeb;
+  --green-30: #bce4de;
+  --green-40: #94d2c9;
+  --green-50: #5caba6;
+  --green-60: #20706d;
 }
 
 @layer utilities {
