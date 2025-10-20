@@ -39,7 +39,7 @@
     width: 2px;
   }
   .textOverScroll::-webkit-scrollbar-thumb {
-    background-color: var(--red-20);
+    background-color: var(--green-40);
   }
 
   .tableWrap {
