@@ -2,8 +2,9 @@ import ListPagination from "@/components/ListPagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Table from "@/components/Table";
 import { useGetUserApplicationsQuery } from "@/hooks/api/application/useGetUserApplicationsQuery";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   userId: string;
@@ -18,6 +19,7 @@ const ApplicationLogSection = ({ userId }: Props) => {
 
   const { data, isLoading, isError, error } = useGetUserApplicationsQuery({ userId, params: { offset, limit: LIMIT } });
 
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const handlePageChange = (pageNumber: number) => {
@@ -27,6 +29,12 @@ const ApplicationLogSection = ({ userId }: Props) => {
   const handleApplicationClick = (shopId: string, jobId: string) => {
     router.push(`/jobinfo/${shopId}/${jobId}`);
   };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["getUserApplications", userId, { offset, limit: LIMIT }],
+    });
+  }, [userId, queryClient, offset]);
 
   if (isLoading) {
     return <LoadingSpinner />;
