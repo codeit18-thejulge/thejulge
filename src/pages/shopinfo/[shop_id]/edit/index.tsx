@@ -92,16 +92,21 @@ const EditShopPage = ({ userId, shopId }: InferGetServerSidePropsType<typeof get
   };
 
   return (
-    <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
-      <div className="relative">
-        <IcClose onClick={handleCloseClick} className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32" />
-        <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">가게 수정</h1>
-        <RegisterForm
-          defaultValues={defaultValues}
-          onSubmit={handleSubmit}
-          isPending={isPutPending}
-          submitLabel="수정"
-        />
+    <div className="bg-gray-5">
+      <div className="m-auto max-w-1028 px-12 py-40 tablet:px-32 tablet:py-60">
+        <div className="relative">
+          <IcClose
+            onClick={handleCloseClick}
+            className="absolute right-0 top-0 w-24 hover:cursor-pointer tablet:w-32"
+          />
+          <h1 className="mb-32 text-20-bold text-black tablet:text-28-bold">가게 수정</h1>
+          <RegisterForm
+            defaultValues={defaultValues}
+            onSubmit={handleSubmit}
+            isPending={isPutPending}
+            submitLabel="수정"
+          />
+        </div>
       </div>
     </div>
   );
