@@ -7,6 +7,8 @@ import { useEscClose } from "@/hooks/useEscClose";
 import Input from "../../../../components/Input";
 import Button from "../../../../components/Button";
 import { getNoticesRequest } from "@/hooks/api/notice/useGetNoticesQuery";
+import { useModal } from "@/hooks/useModal";
+
 interface FilterProps {
   onClose: () => void;
   isOpen: boolean;
@@ -26,6 +28,8 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
   const [payError, setPayError] = useState("");
 
+  const { openModal, closeModal } = useModal();
+
   const today = new Date().toISOString().split("T")[0];
   const isPayValid = pay.trim() !== "";
 
@@ -39,7 +43,8 @@ const Filter = ({ onClose, isOpen, closeOnEsc = true, onApply, className }: Filt
     }
 
     if (selectedAddresses.length >= MAX_SELECTION) {
-      return window.alert(`최대 ${MAX_SELECTION}개까지만 선택 가능합니다.`);
+      return openModal("confirm", `최대 ${MAX_SELECTION}개까지만 선택 가능합니다.`, closeModal);
+      //return window.alert(`최대 ${MAX_SELECTION}개까지만 선택 가능합니다.`);
     }
     setSelectedAddresses((selectedAddresses) => [...selectedAddresses, address]);
   };

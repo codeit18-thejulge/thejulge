@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className={cn("flex w-full justify-center bg-gray-20 text-gray-50")}>
       <div className={cn("w-full max-w-1028 px-20 py-32 tablet:px-3")}>
         <div className="mb-32 text-center tablet:text-left">
-          <p className="text-12-regular text-gray-50 tablet:text-14-regular">©codeit - 2023</p>
+          <p className="text-12-regular text-gray-50 tablet:text-14-regular">©codeit - 2025</p>
         </div>
 
         <div className="mb-32 h-1 bg-gray-30"></div>
