@@ -29,14 +29,14 @@
 
 ## 팀원 구성
 
-<img alt="Image" src="https://github.com/user-attachments/assets/8ea756ce-cb72-4e2b-ba31-8d314ed0ad57" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/8ea756ce-cb72-4e2b-ba31-8d314ed0ad57" />
 
 
 <br><br>
 
 ## 1.개발환경
 
-<img alt="Image" src="https://github.com/user-attachments/assets/9fdde1e8-fd2b-4f82-9208-e14f98df0bec" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/9fdde1e8-fd2b-4f82-9208-e14f98df0bec" />
 <br><br>
 
 ## 2. 도입 기술
@@ -100,7 +100,7 @@
 
 ## 3.프로젝트 구조
 
-<img alt="Image" src="https://github.com/user-attachments/assets/ad9f0b45-006d-432b-8d6b-790fda54d561" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/ad9f0b45-006d-432b-8d6b-790fda54d561" />
 <br><br>
 
 ## 4.역할 분담
@@ -134,7 +134,7 @@
 
 <br><br>
 
-## 6.작업와 브랜치 전략
+## 6.작업과 브랜치 전략
 
 ### 작업관리
 
@@ -158,10 +158,18 @@
         <li>새로운 라이브러리 설치가 되면, npm install 하기</li>
       </ol>
     </details> 
+    <details>
+    <summary>네이밍 컨벤션</summary>
+       <img width="600" alt="Image" src="https://github.com/user-attachments/assets/74f9c19b-bd83-42c7-b636-7dfcc767a1c7" />
+    </details>
   <br>
 
 - zap에 모여서 코어타임 진행
 - Notion, Figma 활용
+- Github Issue 활용 : PR과 Issue 연결 Project 칸반보드 활용
+
+  <img width="600" alt="Image" src="https://github.com/user-attachments/assets/fd09c517-2e72-4b4c-a10e-c7292114676e" />
+
 - 폴더 관리
 
   <img alt="Image" src="https://github.com/user-attachments/assets/136e9438-8e14-4dc8-a244-9685e84e636c" />
@@ -236,7 +244,7 @@
 
   ![Image](https://github.com/user-attachments/assets/6b05471c-2178-4e40-a810-192847d33c27)
 
-  <img alt="Image" src="https://github.com/user-attachments/assets/87f53db8-dd55-462f-8bbe-5570657c5fac" />  
+  <img width="600" alt="Image" src="https://github.com/user-attachments/assets/87f53db8-dd55-462f-8bbe-5570657c5fac" />  
   <br><br>
 
 - 내 프로필이 등록 되어 있으면 현재 지원한 공고에 대한 결과를 확인 하고, 선택하여 지원을 취소 할 수 있습니다.  
@@ -245,7 +253,7 @@
   <br><br>
 - 내 프로필을 편집하여 선호 지역을 변경 하여 맞춤 정보로 활용할 수 있습니다.
 
-  <img alt="Image" src="https://github.com/user-attachments/assets/9afaf7ef-0380-451a-b93b-f855a05a41e2" />
+  <img width="600" alt="Image" src="https://github.com/user-attachments/assets/9afaf7ef-0380-451a-b93b-f855a05a41e2" />
 
 <br>
 
@@ -253,13 +261,13 @@
 
 - 사장님으로 로그인시에는 맞춤공고 제공이 되지 않습니다.
 
-  <img alt="Image" src="https://github.com/user-attachments/assets/08314f57-62fa-46f0-b99f-37955eb81ff9" />
+  <img width="600" width="600" alt="Image" src="https://github.com/user-attachments/assets/08314f57-62fa-46f0-b99f-37955eb81ff9" />
 
 <br><br>
 
 - 사장님으로 로그인시에는 공고 지원을 제공하지 않습니다
 
-  <img alt="Image" src="https://github.com/user-attachments/assets/6e0becc6-735a-41a1-8df7-1d8bb02259b8" />
+  <img width="600" width="600" alt="Image" src="https://github.com/user-attachments/assets/6e0becc6-735a-41a1-8df7-1d8bb02259b8" />
 
 <br><br>
 
@@ -278,4 +286,4 @@
 
 ## 10.Trouble Shooting
 
-<img alt="Image" src="https://github.com/user-attachments/assets/7fdde88b-5fe6-4150-a393-d4eabe914a27" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/7fdde88b-5fe6-4150-a393-d4eabe914a27" />
