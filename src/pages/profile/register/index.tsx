@@ -2,9 +2,9 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
 import { usePutMyInfoQuery } from "@/hooks/api/user/usePutMyInfoQuery";
-import { Option, SeoulAddress, UserInfoItem } from "@/types/global";
+import { Option, SeoulAddress } from "@/types/global";
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
-import IcXButton from "@/assets/svgs/ic_x.svg";
+import IcXButton from "@/assets/svgs/ic_close.svg";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { getMyInfo, useGetMyInfoQuery } from "@/hooks/api/user/useGetMyInfoQuery";
@@ -63,7 +63,7 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const router = useRouter();
 
   const { data: userInfo } = useGetMyInfoQuery(userId);
-  const { mutate: putMyInfo, isSuccess } = usePutMyInfoQuery();
+  const { mutate: putMyInfo, isSuccess, isPending } = usePutMyInfoQuery();
 
   const [profileData, setProfileData] = useState<RegisterData>({
     name: "",
@@ -75,6 +75,8 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [isOpenSelectBox, setIsOpenSelectBox] = useState(false);
+  const [buttonMessage, setButtonMessage] = useState("등록하기");
 
   const handleProfileChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -151,65 +153,84 @@ const ProfileRegister = ({ userId }: InferGetServerSidePropsType<typeof getServe
     }
   }, [profileData, phoneError]);
 
+  useEffect(() => {
+    if (isPending) {
+      setIsDisabled(true);
+      setButtonMessage("등록중...");
+    } else {
+      setIsDisabled(false);
+      setButtonMessage("등록하기");
+    }
+  }, [isPending]);
+
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-32 px-24 py-60">
-      <h2 className="flex items-center justify-between">
-        <span className="text-20-bold tablet:text-28-bold">내 프로필</span>
-        <button onClick={handleCancelClick}>
-          <IcXButton className="h-24 w-24 tablet:h-32 tablet:w-32" />
-        </button>
-      </h2>
-      <section className="flex flex-col gap-20">
-        <div className="grid gap-20 mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3">
-          <div>
-            <label className="text-16-regular">
-              <span>이름</span>
-              <span className="text-red-30">*</span>
-            </label>
-            <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
+    <div className="bg-gray-5">
+      <div className="mx-auto flex max-w-5xl flex-col gap-32 px-24 py-60">
+        <h2 className="flex items-center justify-between">
+          <span className="text-20-bold tablet:text-28-bold">내 프로필</span>
+          <button onClick={handleCancelClick}>
+            <IcXButton className="h-24 w-24 tablet:h-32 tablet:w-32" />
+          </button>
+        </h2>
+        <section className="flex flex-col gap-20">
+          <div className="grid gap-20 mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3">
+            <div className="h-100">
+              <label className="text-16-regular">
+                <span>이름</span>
+                <span className="text-red-30">*</span>
+              </label>
+              <Input name="name" value={profileData?.name} onChange={handleProfileChange} />
+            </div>
+            <div className="h-100">
+              <label className="text-16-regular">
+                <span>연락처</span>
+                <span className="text-red-30">*</span>
+              </label>
+              <Input
+                name="phone"
+                value={profileData?.phone}
+                onChange={handleProfileChange}
+                onBlur={handlePhoneBlur}
+                errorMsg={phoneError}
+                maxLength={13}
+              />
+            </div>
+            <div className="h-100">
+              <label className="text-16-regular">
+                <span>선호지역</span>
+                <span className="text-red-30">*</span>
+              </label>
+              <SelectBox
+                isOpen={isOpenSelectBox}
+                setIsOpen={setIsOpenSelectBox}
+                onChange={handleAddressChange}
+                options={SEOUL_ADDRESS_OPTIONS}
+                placeholder={profileData?.address}
+              />
+            </div>
           </div>
-          <div>
-            <label className="text-16-regular">
-              <span>연락처</span>
-              <span className="text-red-30">*</span>
-            </label>
-            <Input
-              name="phone"
-              value={profileData?.phone}
-              onChange={handleProfileChange}
-              onBlur={handlePhoneBlur}
-              errorMsg={phoneError}
-              maxLength={13}
-            />
-          </div>
-          <div>
-            <label className="text-16-regular">
-              <span>선호지역</span>
-              <span className="text-red-30">*</span>
-            </label>
-            <SelectBox
-              onChange={handleAddressChange}
-              options={SEOUL_ADDRESS_OPTIONS}
-              placeholder={profileData?.address}
-            />
-          </div>
-        </div>
 
-        <div>
-          <label className="text-16-regular">소개</label>
-          <Textarea name="bio" value={profileData?.bio} onChange={handleProfileChange} />
-        </div>
-      </section>
-      <Button status="filled" className="self-center px-136 py-14" onClick={handleRegisterClick} disabled={isDisabled}>
-        등록하기
-      </Button>
+          <div>
+            <label className="text-16-regular">소개</label>
+            <Textarea name="bio" value={profileData?.bio} onChange={handleProfileChange} />
+          </div>
+        </section>
+        <Button
+          status="filled"
+          className="m-auto h-48 tablet:w-312"
+          onClick={handleRegisterClick}
+          disabled={isDisabled}
+        >
+          {buttonMessage}
+        </Button>
 
-      <MessageModal
-        isOpen={isOpenModal}
-        onClose={() => setIsOpenModal(false)}
-        message={modalMessage}
-        footers={[{ buttonText: "확인", style: "filled", onClick: handleConfirmClick, className: "py-8 px-32" }]}
-      />
+        <MessageModal
+          isOpen={isOpenModal}
+          onClose={() => setIsOpenModal(false)}
+          message={modalMessage}
+          footers={[{ buttonText: "확인", style: "filled", onClick: handleConfirmClick, className: "py-8 px-32" }]}
+        />
+      </div>
     </div>
   );
 };

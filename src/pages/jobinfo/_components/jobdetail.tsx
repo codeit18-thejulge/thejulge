@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import IcCheck from "@/assets/svgs/ic_check.svg";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import Button from "@/components/Button";
 import ToastContainer from "@/components/Toast";
 import MessageModal from "@/components/Modal/MessageModal";
@@ -32,6 +31,7 @@ interface JobDetailProps extends GetShopNoticeDetailRequest {
 
 const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => {
   const [userId, setUserId] = useState("");
+  const [userType, setUserType] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isApply, setIsApply] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
@@ -45,7 +45,9 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   useEffect(() => {
     if (typeof document !== "undefined") {
       const id = getCookieValue(document.cookie, "userId") as string;
+      const type = getCookieValue(document.cookie, "userType") as string;
       setUserId(id);
+      setUserType(type);
     }
   }, []);
 
@@ -191,6 +193,11 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
       setIsOpen(!isOpen);
       return;
     }
+    if (userType === "employer") {
+      setModalMessage("사장님은 공고 지원이 어렵습니다");
+      setIsOpen(!isOpen);
+      return;
+    }
     if (!isProfile) {
       setModalMessage("내 프로필을 먼저 등록해주세요");
       setIsOpen(!isOpen);
@@ -208,20 +215,20 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
   return (
     <div className="py-40 tablet:py-60">
       <div>
-        <p className="text-16 font-bold text-primary">{shop.category}</p>
+        <p className="text-16 font-bold text-green-60">{shop.category}</p>
         <h2 className="text-28 font-bold text-black">{shop.name}</h2>
       </div>
       <div className="my-12 flex flex-col justify-center rounded-12 border border-gray-20 bg-white p-20 tablet:p-24 desktop:my-24 desktop:flex-row desktop:justify-between desktop:gap-x-31">
         <CardImageBox
           imageUrl={shop.imageUrl}
           name={shop.name}
-          closed={false}
+          closed={jobData.item.closed}
           startsAt={notice.startsAt}
           className="desktop:h-308"
         />
         <div className="flex flex-col justify-between desktop:w-346">
-          <div className="mb-40 desktop:mb-60">
-            <p className="pb-4 pt-16 text-16 font-bold text-primary">시급</p>
+          <div>
+            <p className="pb-4 pt-16 text-16 font-bold text-green-60">시급</p>
             <div className="flex flex-col gap-y-8 tablet:gap-y-12">
               <CardPay hourlyPay={notice.hourlyPay} originalHourlyPay={shop.originalHourlyPay} closed={notice.closed} />
               <CardTime startsAt={notice.startsAt} workhour={notice.workhour} />
@@ -237,7 +244,7 @@ const JobDetail = ({ shopId, noticeId, jobData, isPending }: JobDetailProps) => 
                 setModalMessage("신청을 취소하시겠어요?");
                 setIsOpen(!isOpen);
               }}
-              disabled={isCancelPending}
+              disabled={isCancelPending || jobData.item.closed}
             >
               취소하기
             </Button>

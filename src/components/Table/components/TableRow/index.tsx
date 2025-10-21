@@ -10,6 +10,7 @@ import { formatNoticeTime } from "@/utils/formatTime";
 import tableStyle from "@/styles/table.module.css";
 import { cn } from "@/utils";
 import { useRef, useState } from "react";
+import { isStartTimePassed } from "@/utils/formatTime";
 
 interface user {
   user: {
@@ -73,10 +74,18 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
         </td>
         <td>{formatPhoneNumber(user.item.phone || "-")}</td>
         <td>
-          {item.status === "pending" ? (
+          {item.notice.item.closed || isStartTimePassed(item.notice.item.startsAt) === true ? (
+            item.status === "pending" ? (
+              <div className="flex max-w-fit items-center overflow-hidden rounded-20 bg-gray-5 px-10 py-7 text-12-regular leading-none text-gray-30 tablet:py-8 tablet:text-14-bold">
+                마감
+              </div>
+            ) : (
+              <NormalBadge status={item.status} />
+            )
+          ) : !item.notice.item.closed && item.status === "pending" ? (
             <div className={tableStyle.btnGroup}>
               <Button
-                className={cn(BUTTON_STYLE)}
+                className={cn("border-red-30 text-red-40", BUTTON_STYLE)}
                 status={"lined"}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
@@ -119,7 +128,17 @@ const TableRow = ({ item, userType, handleRejectClick, handleAcceptClick, handle
         </td>
         <td>{notice ? notice.item.hourlyPay.toLocaleString() : "-"}</td>
         <td>
-          <NormalBadge status={item.status} />
+          {notice.item.closed || isStartTimePassed(item.notice.item.startsAt) ? (
+            item.status === "accepted" ? (
+              <NormalBadge status={item.status} />
+            ) : (
+              <div className="flex max-w-fit items-center overflow-hidden rounded-20 bg-gray-5 px-10 py-7 text-12-regular leading-none text-gray-30 tablet:py-8 tablet:text-14-bold">
+                마감
+              </div>
+            )
+          ) : (
+            <NormalBadge status={item.status} />
+          )}
         </td>
       </tr>
     );

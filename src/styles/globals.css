@@ -9,7 +9,7 @@
 :root {
   --white: #ffffff;
   --black: #111322;
-  --primary: #ea3c12;
+  --red: #ea3c12;
 
   --gray-5: #fafafa;
   --gray-10: #f2f2f3;
@@ -26,8 +26,12 @@
   --blue-10: #cce6ff;
   --blue-20: #0080ff;
 
-  --green-10: #d4f7d4;
-  --green-20: #20a81e;
+  --green-10: #e4f6f4;
+  --green-20: #daefeb;
+  --green-30: #bce4de;
+  --green-40: #94d2c9;
+  --green-50: #5caba6;
+  --green-60: #20706d;
 }
 
 @layer utilities {
@@ -35,11 +39,13 @@
     width: 2px;
   }
   .textOverScroll::-webkit-scrollbar-thumb {
-    background-color: var(--red-20);
+    background-color: var(--green-40);
   }
 
   .tableWrap {
+    overflow: hidden;
     width: 100%;
+    background-color: var(--white);
     border: 1px solid var(--gray-10);
     border-radius: 0.625rem;
     -webkit-border-radius: 0.625rem;
@@ -68,4 +74,8 @@
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }

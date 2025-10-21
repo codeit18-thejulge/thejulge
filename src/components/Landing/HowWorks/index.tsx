@@ -2,7 +2,7 @@ import { STEPS } from "@/constants/LANDING_VARIABLES";
 
 const HowWorks = () => {
   return (
-    <section className="px-16 py-96">
+    <section id="howworks" className="px-16 py-96">
       <div className="mx-auto max-w-6xl px-4 px-6 tablet:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-32 font-bold">이용 방법</h2>
@@ -15,7 +15,7 @@ const HowWorks = () => {
           {STEPS.map((step, i) => (
             <div key={step.id} className="relative">
               <div className="flex flex-col items-center gap-12 text-center">
-                <div className="mb-4 flex items-center justify-center rounded-full bg-red-10 p-16">
+                <div className="bg-secondary mb-4 flex items-center justify-center rounded-full p-16">
                   <step.icon className="h-32 w-32 text-primary" />
                 </div>
                 <h3 className="text-18-bold">{step.title}</h3>

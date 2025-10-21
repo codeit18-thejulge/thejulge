@@ -9,17 +9,22 @@ import Image from "next/image";
 const RESPONSE_TEXT = "text-14-regular tablet:text-16-regular";
 
 //가게 이미지
-interface CARD_IMAGE {
+interface CardImage {
   startsAt: string;
   imageUrl: string;
   name: string;
   closed: boolean;
-  className?: string
+  className?: string;
 }
-const CardImageBox = ({ imageUrl = "", startsAt, name = "", closed, className}: CARD_IMAGE) => {
+const CardImageBox = ({ imageUrl = "", startsAt, name = "", closed, className }: CardImage) => {
   const isPassed = isStartTimePassed(startsAt);
   return (
-    <div className={cn("relative h-177 w-full overflow-hidden rounded-12 tablet:h-360 desktop:h-full desktop:max-w-539",className)}>
+    <div
+      className={cn(
+        "relative h-177 w-full overflow-hidden rounded-12 tablet:h-360 desktop:h-full desktop:max-w-539",
+        className,
+      )}
+    >
       <Image layout="fill" objectFit="cover" src={imageUrl} alt={name} />
       {isPassed && (
         <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black opacity-70">
@@ -37,20 +42,20 @@ const CardImageBox = ({ imageUrl = "", startsAt, name = "", closed, className}: 
 };
 
 //카테고리 & 정렬기준
-interface CARD_CATEGORY {
+interface CardCategory {
   category: string;
 }
 
-const CardCategory = ({ category = "" }: CARD_CATEGORY) => {
-  return <div className="pb-4 pt-16 text-14-bold text-red-40 tablet:text-16-bold">{category}</div>;
+const CardCategory = ({ category = "" }: CardCategory) => {
+  return <div className="pb-4 pt-16 text-14-bold text-primary tablet:text-16-bold">{category}</div>;
 };
 
 //가게 이름
-interface CARD_TITLE {
+interface CardTitle {
   name: string;
 }
 
-const CardTitle = ({ name }: CARD_TITLE) => {
+const CardTitle = ({ name }: CardTitle) => {
   return (
     <div className="flex items-center gap-8">
       <h3 className="text-24-bold tablet:text-28-bold">{name}</h3>
@@ -59,30 +64,30 @@ const CardTitle = ({ name }: CARD_TITLE) => {
 };
 
 //가게 주소
-interface CARD_ADDRESS {
+interface CardAddress {
   address: string;
 }
-const CardAddress = ({ address = "" }: CARD_ADDRESS) => {
+const CardAddress = ({ address = "" }: CardAddress) => {
   return (
     <p className={cn("flex items-center gap-6 text-gray-50", RESPONSE_TEXT)}>
-      <IcAddress className={"h-16 w-13 text-red-30 tablet:h-20 tablet:w-16"} />
+      <IcAddress className={"h-16 w-13 text-primary tablet:h-20 tablet:w-16"} />
       <span className={"mt-2"}>{address}</span>
     </p>
   );
 };
 
 // 근무 시간
-interface CARD_WORK_TIME {
+interface CardWorkTime {
   startsAt: string;
   workhour: number;
 }
 
-const CardTime = ({ startsAt = "2025-10-11T21:00:00Z", workhour: workHour = 3 }: CARD_WORK_TIME) => {
+const CardTime = ({ startsAt = "2025-10-11T21:00:00Z", workhour: workHour = 3 }: CardWorkTime) => {
   formatNoticeTime(startsAt, workHour);
 
   return (
     <p className="leading-0 flex items-center gap-8 text-gray-50">
-      <IcClock className={"h-16 w-16 text-red-30 tablet:h-20 tablet:w-20"} />
+      <IcClock className={"h-16 w-16 text-primary tablet:h-20 tablet:w-20"} />
       <span>
         {formatNoticeTime(startsAt, workHour)} ({workHour}시간)
       </span>
@@ -91,13 +96,13 @@ const CardTime = ({ startsAt = "2025-10-11T21:00:00Z", workhour: workHour = 3 }:
 };
 
 //시급
-interface CARD_PAY {
+interface CardPay {
   hourlyPay: number;
   originalHourlyPay: number;
   closed: boolean;
 }
 
-const CardPay = ({ hourlyPay = 0, originalHourlyPay = 0, closed = false, ...props }: CARD_PAY) => {
+const CardPay = ({ hourlyPay = 0, originalHourlyPay = 0, closed = false, ...props }: CardPay) => {
   return (
     <div className="flex items-center gap-8">
       <p className="text-24-bold tablet:text-28-bold">{hourlyPay.toLocaleString()}원</p>
@@ -107,11 +112,11 @@ const CardPay = ({ hourlyPay = 0, originalHourlyPay = 0, closed = false, ...prop
 };
 
 //가게 설명
-interface CARD_DESCRIPTION {
+interface CardDescription {
   description?: string;
 }
 
-const CardDescription = ({ description = "", ...props }: CARD_DESCRIPTION) => {
+const CardDescription = ({ description = "", ...props }: CardDescription) => {
   return (
     <p
       className={cn(
