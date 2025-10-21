@@ -12,7 +12,7 @@ import { GetServerSidePropsContext } from "next";
 import { getCookieValue } from "@/utils/getCookie";
 import Layout from "@/components/Layout";
 import { ReactNode } from "react";
-import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
 
 const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const cookie = context.req.headers.cookie;

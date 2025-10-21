@@ -1,6 +1,5 @@
 import { cn } from "@/utils";
 import { SeoulAddress } from "@/types/global";
-import { useRouter } from "next/router";
 import PostImage from "./components/PostImage";
 import PostFooter from "./components/PostFooter";
 import PostInfo from "./components/PostInfo";
