@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import IcCheck from "@/assets/svgs/ic_check.svg";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import Button from "@/components/Button";
 import ToastContainer from "@/components/Toast";
 import MessageModal from "@/components/Modal/MessageModal";

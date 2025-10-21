@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
@@ -78,7 +78,7 @@ const Signup = () => {
 
   const renderIcon = (type: UserType) => {
     if (signupData.type === type) {
-      return <IcCheck className="text-green-60 inline-block" />;
+      return <IcCheck className="inline-block text-green-60" />;
     } else {
       return <IcCircleGray className="inline-block" />;
     }
@@ -116,7 +116,7 @@ const Signup = () => {
   return (
     <div className="mx-auto my-[15%] w-350">
       <Link href="/">
-        <Logo className="text-green-60 mx-auto mb-40 w-248" />
+        <Logo className="mx-auto mb-40 w-248 text-green-60" />
       </Link>
       <form method="post" onSubmit={handleSignupSubmit}>
         <div className="mb-28">
