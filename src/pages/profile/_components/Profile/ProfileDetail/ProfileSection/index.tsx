@@ -15,10 +15,14 @@ const ProfileSection = ({ item }: Props) => {
     router.push("/profile/register");
   };
 
+  if (!item) {
+    return <p>데이터를 불러오는 데 실패했습니다.</p>;
+  }
+
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-24 px-24 py-60 desktop:flex-row">
       <h2 className="flex-[1] text-20-bold tablet:text-28-bold">내 프로필</h2>
-      <section className="bg-third flex flex-[2] justify-between rounded-xl p-32">
+      <section className="flex flex-[2] justify-between rounded-xl bg-third p-32">
         <div className="flex flex-col gap-12">
           <p className="text-16-bold text-primary">이름</p>
           <p className="text-28-bold">{item.name}</p>
