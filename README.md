@@ -1,5 +1,5 @@
-<img width="247" height="81" alt="Image" src="https://github-production-user-asset-6210df.s3.amazonaws.com/93057916/503364858-a67411cd-e23a-437e-af78-37e756e7eada.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20251020%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251020T195739Z&X-Amz-Expires=300&X-Amz-Signature=166892405eefcf77b50cca7e03bdc5d92619115d245cb4145bdd8c41ee36e710&X-Amz-SignedHeaders=host" />
-<br><br><br><br>
+<img width="307" height="215" alt="Image" src="https://github.com/user-attachments/assets/ae79fc7f-7e68-48d9-b817-931a243c0023" />
+<br><br>
 
 # 1:1 매칭 플랫폼 THE JULGE
 
