@@ -44,7 +44,7 @@ const PayBadge = ({
       <div
         className={cn(
           "relative flex max-w-fit items-center text-12-regular leading-none tablet:text-14-bold",
-          post && closed ? "text-gray-10" : "text-red-40 tablet:text-white",
+          post && closed ? "text-gray-10" : "text-green-60 tablet:text-white",
           !post && !closed && "text-white tablet:text-white",
           !post && closed && "hidden",
         )}
@@ -56,7 +56,7 @@ const PayBadge = ({
               "absolute h-full w-full rounded-20",
               post && !closed && "hidden tablet:block",
               post && closed && "hidden tablet:block tablet:bg-gray-20",
-              !post && !closed && "bg-red-40",
+              !post && !closed && "bg-green-60",
             )}
             style={{ backgroundColor: closed ? "#e5e4e7" : opacityLevel() }}
           ></div>
