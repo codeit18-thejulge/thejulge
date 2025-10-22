@@ -4,7 +4,7 @@
 # 1:1 매칭 플랫폼 THE JULGE
 
 - 배포 URL : https://thejulge-mauve.vercel.app/
-- Test ID : 사장 a@a.com / 알바 user@email.com
+- Test ID : 사장 a@a.com / 알바 user@email.co
 - Test Pw : 사장 1 / 알바 admin@123
   <br><br>
 
